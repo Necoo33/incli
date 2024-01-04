@@ -15,7 +15,6 @@ dependencies = [
 name = "incli"
 version = "0.1.0"
 dependencies = [
- "models",
  "sys-info",
 ]
 
@@ -26,13 +25,6 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "302d7ab3130588088d277783b1e2d2e10c9e9e4a16dd9050e6ec93fb3e7048f4"
 
 [[package]]
-name = "models"
-version = "0.1.0"
-dependencies = [
- "utils",
-]
-
-[[package]]
 name = "sys-info"
 version = "0.9.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -41,7 +33,3 @@ dependencies = [
  "cc",
  "libc",
 ]
-
-[[package]]
-name = "utils"
-version = "0.1.0"

@@ -13,5 +13,4 @@ edition = "2021"
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
-models = { path = "models", version = "0.1.0"}
 sys-info = "0.9.1"

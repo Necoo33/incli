@@ -9,7 +9,6 @@ use std::os::unix::process::ExitStatusExt;
 use std::process::{Command, exit, Output, ExitStatus};
 use std::fs::File;
 use std::io::{self, BufRead};
-use std::path::Path;
 
 pub fn return_linux_dist_etc_os_release<'a>() -> &'a str {
     if let Ok(file) = File::open("/etc/os-release") {
@@ -238,7 +237,7 @@ pub fn install_rust_on_alpine_linux(){
     println!("Warning, because you're using alpine linux, you have to install build-base and gcompat packages for running rust. We'll install them first");
     println!("Be sure you're running this app with root user and you're installed sudo, otherwise this program cant't download necessary things. And installation will be aborted.");
 
-    let install_build_base = Command::new("sudo").arg("apk").arg("add").arg("build-base").output().unwrap_or_else(|e| {
+    let install_build_base = Command::new("sudo").arg("apk").arg("add").arg("build-base").output().unwrap_or_else(|_| {
         println!("Looks like you're don't have sudo, program will exit now");
 
         return Output {
@@ -360,7 +359,7 @@ pub fn install_rust_on_windows(){
     }
 }
 
-pub fn install_rust_on_mac_os(){
+pub fn _install_rust_on_mac_os(){
     // it's empty due to lack of MacOs Support
 }
 

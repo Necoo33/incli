@@ -1,21 +1,8 @@
-use std::process::{Command, exit};
-use std::fs::File;
-use std::io::{self, BufRead};
-use std::path::Path;
-
-extern crate utils;
+use crate::utils;
 
 #[derive(PartialEq, Clone)]
 pub enum CommandType {
     Version, Install, Help
-}
-
-pub enum SubCommands {
-    Release, 
-}
-
-pub enum InstallTypes {
-    Rust, Java, Go, Node, Python
 }
 
 #[derive(Clone)]
@@ -86,7 +73,7 @@ pub trait Version {
 }
 
 impl CreateAction for UserSession {
-    fn action(&self, cmd_type: String, second_arg: String, third_arg: String) -> UserAction {
+    fn action(&self, cmd_type: String, second_arg: String, _third_arg: String) -> UserAction {
         let operating_system_type;
         let command_type;
 
@@ -255,7 +242,6 @@ impl Execution for UserAction {
                     }
                 },
                 OsType::Darwin => println!("Unfortunately, we don't have Mac Os Support Yet."),
-                _ => panic!("error, operating system info missing")
                 
             }
         }

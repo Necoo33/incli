@@ -1,9 +1,10 @@
-use models::{UserAction, CreateAction, OsType, Execution, Version, Help, CommandType};
-use sys_info::{os_release, os_type};
-use std::io::{self, stdin};
-use std::env::{self, args};
+mod models;
+mod utils;
 
-extern crate models;
+use models::{CreateAction, OsType, Execution, Version, Help, CommandType};
+use sys_info::{os_release, os_type};
+use std::env::args;
+
 
 // yapılacak şeyler:
 
@@ -27,8 +28,6 @@ fn main() {
     let mut arg3 = "".to_string();
 
     for (index, argument) in args.into_iter().enumerate() {
-        println!("işde {} numaralı talimatınız: {}", index, argument);
-
         if index == 1 {
             arg1 = match argument.as_str() {
                 "help" => "help".to_string(),
