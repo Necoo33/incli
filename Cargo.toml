@@ -1,0 +1,17 @@
+[package]
+name = "incli"
+description = "Automation Tool For Installing Compilers, Sdk's and Package Managers"
+authors = ["Necdet Arda Etiman <arda_etiman_799@windowslive.com>"]
+license = "MIT"
+readme = "README.md"
+repository = "https://github.com/Necoo33/incli"
+keywords = ["cli", "cli tool", "automation tool", "installation tool", "cla"]
+categories = ["command-line-interface", "development-tools::build-utils", "Accesibility", "Configuration"]
+version = "0.1.0"
+edition = "2021"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+models = { path = "models" }
+sys-info = "0.9.1"
