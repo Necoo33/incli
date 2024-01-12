@@ -430,7 +430,7 @@ pub fn install_nodejs_on_debian_based_distros(url: &str, file_name: &str) {
 
     let line_for_append = line_for_append.as_bytes();
     
-    let mut bashrc_file = fs::OpenOptions::new().append(true).open(".bashrc");
+    let bashrc_file = fs::OpenOptions::new().append(true).open(".bashrc");
 
     match bashrc_file {
         Ok(mut file) => {
