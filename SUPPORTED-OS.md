@@ -39,9 +39,7 @@ And also don't forget to run "sudo (your package manager) update" and "sudo (you
 
 ### MacOs:
 
-* Mac Os Sierra 10.12.6 - &#10060;
-* Mac Os Ventura 13.0 - &#10060;
-* Other Mac Os Releases - &#10060;
+Not Implemented
 
 ## Go
 
@@ -52,6 +50,28 @@ Not Implemented
 Not Implemented
 
 ## Node.js
+
+### Windows:
+
+* Windows 11 - &#129300;
+* Windows 10 Home - &#10003;
+* Older Windows Releases - &#2049;
+
+### Linux:
+
+* Ubuntu 22.04 LTS - &#10003;
+* Ubuntu 22 wsl - &#129300;
+* Debian 12 wsl - &#10003;
+* Arch wsl - &#10003;
+* Kali Linux wsl - &#10003;
+* Alma Linux 9 wsl - &#10003;
+* CentOS 9 Stream - &#10003;
+* Pardus 23 XFCE - &#10003;
+* Fedora 39 Workstation - &#10003;
+* Alpine Linux wsl - &#2049;
+* Other Linux Distributions - &#10060;
+
+### MacOs:
 
 Not Implemented
 
