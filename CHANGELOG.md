@@ -11,3 +11,7 @@ Some Documentation Fixes, Nothing Changes
 # v0.2.0
 
 Added Node.js support for Windows and Linux And Some Documentation Fixes.
+
+# v0.2.1
+
+Some Documentation Fixes, Nothing Other Changed.

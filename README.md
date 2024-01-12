@@ -68,15 +68,15 @@ In Node.js, you can also specialize a third argument. If you want to install lat
 
 ### Linux:
 
-* Ubuntu 22.04 LTS - &#2049;
-* Ubuntu 22 wsl - &#2049;
-* Debian 12 wsl - &#2049;
-* Arch wsl - &#2049;
-* Kali Linux wsl - &#2049;
-* Alma Linux 9 wsl - &#2049;
-* CentOS 9 Stream - &#2049;
-* Pardus 23 XFCE - &#2049;
-* Fedora 39 Workstation - &#2049;
+* Ubuntu 22.04 LTS - &#10003;
+* Ubuntu 22 wsl - &#129300;
+* Debian 12 wsl - &#10003;
+* Arch wsl - &#10003;
+* Kali Linux wsl - &#10003;
+* Alma Linux 9 wsl - &#10003;
+* CentOS 9 Stream - &#10003;
+* Pardus 23 XFCE - &#10003;
+* Fedora 39 Workstation - &#10003;
 * Alpine Linux wsl - &#2049;
 
 ### Mac Os
