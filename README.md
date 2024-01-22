@@ -83,6 +83,33 @@ In Node.js, you can also specialize a third argument. If you want to install lat
 
 There is no implementation yet.
 
+# Bun:
+
+### Windows
+
+Because bun has not windows version, we cannot implemented that yet.
+
+### Linux
+
+In linux, that distributions are tested:
+
+* Ubuntu 22.04 LTS - &#10003;
+* Ubuntu 22 wsl - &#10003;
+* Debian 12 wsl - &#10003;
+* Arch wsl - &#10003;
+* Kali Linux wsl - &#10003;
+* Alma Linux 9 wsl - &#10003;
+* CentOS 9 Stream - &#10003;
+* Pardus 23 XFCE - &#10003;
+* Fedora 39 Workstation - &#10003;
+* Alpine Linux wsl - &#2049;
+
+You can view more detailed information on "SUPPORTED-OS.md" file about the supports.
+
+### Mac OS
+
+There is no implementation yet
+
 ## Guide
 
 You have to compile that app for specific platform that you'll use.
@@ -116,11 +143,6 @@ The roadmap of this project is this:
 I'm also open for contributions about implementing other sdk's and package managers with the test results of that codes. If you want to support that project and contribute, please check out the "CONTRIBUTION_GUIDE.md". If you like that project anyway, please check out the github repo and give a star to that project.
 
 ## Our Roadmap to Individual Releases:
-
-### v0.3.0
-
-* Bun Support
-* Restructuring the project
 
 ### v0.4.0
 

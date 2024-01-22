@@ -77,6 +77,26 @@ Not Implemented
 
 ## Bun
 
+### Windows:
+
+* Bun does not support windows yet.
+
+### Linux:
+
+* Ubuntu 22.04 LTS - &#10003;
+* Ubuntu 22 wsl - &#10003;
+* Debian 12 wsl - &#10003;
+* Arch wsl - &#10003;
+* Kali Linux wsl - &#10003;
+* Alma Linux 9 wsl - &#10003;
+* CentOS 9 Stream - &#10003;
+* Pardus 23 XFCE - &#10003;
+* Fedora 39 Workstation - &#10060;
+* Alpine Linux wsl - &#10060;
+* Other Linux Distributions - &#10060;
+
+### MacOs:
+
 Not Implemented
 
 ## Yarn

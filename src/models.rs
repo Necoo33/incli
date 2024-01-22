@@ -1,4 +1,7 @@
 use crate::utils;
+use crate::rust;
+use crate::node;
+use crate::bun;
 
 #[derive(PartialEq, Clone)]
 pub enum CommandType {
@@ -14,12 +17,14 @@ pub enum OsType {
 pub struct UserSession {
     pub os_type: String,
     pub os_release: String,
+    pub current_user: String
 }
 
 #[derive(Clone)]
 pub struct UserAction {
     pub os_type: OsType,
     pub os_release: String,
+    pub current_user: String,
     pub first_arg: CommandType,
     pub second_arg: String,
     pub third_arg: String,
@@ -105,6 +110,7 @@ impl CreateAction for UserSession {
         return UserAction {
             os_release: self.os_release.clone(),
             os_type: operating_system_type,
+            current_user: self.current_user.clone(),
             first_arg: command_type.clone(),
             second_arg: s_arg,
             third_arg: third_arg.to_string()
@@ -129,6 +135,7 @@ impl Execution for UserAction {
                 return Self {
                     os_type: self.os_type.clone(),
                     os_release: self.os_release.clone(),
+                    current_user: self.current_user.clone(),
                     first_arg: self.first_arg.clone(),
                     second_arg: self.second_arg.clone(),
                     third_arg: self.third_arg.clone()
@@ -139,6 +146,7 @@ impl Execution for UserAction {
                 return Self {
                     os_type: self.os_type.clone(),
                     os_release: self.os_release.clone(),
+                    current_user: self.current_user.clone(),
                     first_arg: self.first_arg.clone(),
                     second_arg: self.second_arg.clone(),
                     third_arg: self.third_arg.clone()
@@ -164,6 +172,7 @@ impl Execution for UserAction {
                 return Self {
                     os_type: self.os_type.clone(),
                     os_release: self.os_release.clone(),
+                    current_user: self.current_user.clone(),
                     first_arg: self.first_arg.clone(),
                     second_arg: self.second_arg.clone(),
                     third_arg: self.third_arg.clone()
@@ -173,6 +182,7 @@ impl Execution for UserAction {
                 return Self {
                     os_type: self.os_type.clone(),
                     os_release: self.os_release.clone(),
+                    current_user: self.current_user.clone(),
                     first_arg: self.first_arg.clone(),
                     second_arg: self.second_arg.clone(),
                     third_arg: self.third_arg.clone()
@@ -197,6 +207,7 @@ impl Execution for UserAction {
                 return Self {
                     os_type: self.os_type.clone(),
                     os_release: self.os_release.clone(),
+                    current_user: self.current_user.clone(),
                     first_arg: self.first_arg.clone(),
                     second_arg: self.second_arg.clone(),
                     third_arg: self.third_arg.clone()
@@ -206,6 +217,7 @@ impl Execution for UserAction {
                 return Self {
                     os_type: self.os_type.clone(),
                     os_release: self.os_release.clone(),
+                    current_user: self.current_user.clone(),
                     first_arg: self.first_arg.clone(),
                     second_arg: self.second_arg.clone(),
                     third_arg: self.third_arg.clone()
@@ -217,27 +229,27 @@ impl Execution for UserAction {
     fn install_rust(&self) -> Self {
         if self.first_arg == CommandType::Install && self.second_arg == "rust".to_string() {
             match self.os_type {
-                OsType::Windows => utils::install_rust_on_windows(),
+                OsType::Windows => rust::install_rust_on_windows(),
                 OsType::Linux => {
                     let linux_dist = utils::return_linux_dist_etc_os_release();
                     let mut null_var = "".to_string();
 
                     match linux_dist {
-                        "ubuntu" => utils::install_rust_on_debian_based_distros(),
-                        "debian" => utils::install_rust_on_debian_based_distros(),
-                        "pardus" => utils::install_rust_on_debian_based_distros(),
-                        "arch wsl" => utils::install_rust_on_arch_wsl_and_kali(),
-                        "kali linux" => utils::install_rust_on_arch_wsl_and_kali(),
-                        "fedora" => utils::install_rust_on_fedora_and_centos(),
-                        "centos" => utils::install_rust_on_fedora_and_centos(),
-                        "alma linux" => utils::install_rust_on_fedora_and_centos(),
-                        "alpine" => utils::install_rust_on_alpine_linux(),
+                        "ubuntu" => rust::install_rust_on_debian_based_distros(),
+                        "debian" => rust::install_rust_on_debian_based_distros(),
+                        "pardus" => rust::install_rust_on_debian_based_distros(),
+                        "arch wsl" => rust::install_rust_on_arch_wsl_and_kali(),
+                        "kali linux" => rust::install_rust_on_arch_wsl_and_kali(),
+                        "fedora" => rust::install_rust_on_fedora_and_centos(),
+                        "centos" => rust::install_rust_on_fedora_and_centos(),
+                        "alma linux" => rust::install_rust_on_fedora_and_centos(),
+                        "alpine" => rust::install_rust_on_alpine_linux(),
                         &_ => null_var = "none".to_string()
                     }
 
                     if null_var == "none".to_string() {
                         if utils::check_if_linux_dist_is_arch_linux() {
-                            utils::install_rust_on_arch_wsl_and_kali()
+                            rust::install_rust_on_arch_wsl_and_kali()
                         }
                     }
                 },
@@ -249,6 +261,7 @@ impl Execution for UserAction {
         return Self {
             os_type: self.os_type.clone(),
             os_release: self.os_release.clone(),
+            current_user: self.current_user.clone(),
             first_arg: self.first_arg.clone(),
             second_arg: self.second_arg.clone(),
             third_arg: self.third_arg.clone()
@@ -263,6 +276,7 @@ impl Execution for UserAction {
         return Self {
             os_type: self.os_type.clone(),
             os_release: self.os_release.clone(),
+            current_user: self.current_user.clone(),
             first_arg: self.first_arg.clone(),
             second_arg: self.second_arg.clone(),
             third_arg: self.third_arg.clone()
@@ -277,6 +291,7 @@ impl Execution for UserAction {
         return Self {
             os_type: self.os_type.clone(),
             os_release: self.os_release.clone(),
+            current_user: self.current_user.clone(),
             first_arg: self.first_arg.clone(),
             second_arg: self.second_arg.clone(),
             third_arg: self.third_arg.clone()
@@ -291,6 +306,7 @@ impl Execution for UserAction {
         return Self {
             os_type: self.os_type.clone(),
             os_release: self.os_release.clone(),
+            current_user: self.current_user.clone(),
             first_arg: self.first_arg.clone(),
             second_arg: self.second_arg.clone(),
             third_arg: self.third_arg.clone()
@@ -305,6 +321,7 @@ impl Execution for UserAction {
         return Self {
             os_type: self.os_type.clone(),
             os_release: self.os_release.clone(),
+            current_user: self.current_user.clone(),
             first_arg: self.first_arg.clone(),
             second_arg: self.second_arg.clone(),
             third_arg: self.third_arg.clone()
@@ -316,10 +333,10 @@ impl Execution for UserAction {
             match self.os_type {
                 OsType::Windows => {
                     match self.third_arg.as_str() {
-                        "lts" => utils::install_nodejs_on_windows("https://nodejs.org/dist/v20.10.0/node-v20.10.0-x64.msi", "node-v20.10.0-x64.msi"),
-                        "" => utils::install_nodejs_on_windows("https://nodejs.org/dist/v20.10.0/node-v20.10.0-x64.msi", "node-v20.10.0-x64.msi"),
-                        "latest" => utils::install_nodejs_on_windows("https://nodejs.org/dist/v21.5.0/node-v21.5.0-x64.msi", "node-v21.5.0-x64.msi"),
-                        &_ => utils::install_nodejs_error()
+                        "lts" => node::install_nodejs_on_windows("https://nodejs.org/dist/v20.10.0/node-v20.10.0-x64.msi", "node-v20.10.0-x64.msi"),
+                        "" => node::install_nodejs_on_windows("https://nodejs.org/dist/v20.10.0/node-v20.10.0-x64.msi", "node-v20.10.0-x64.msi"),
+                        "latest" => node::install_nodejs_on_windows("https://nodejs.org/dist/v21.5.0/node-v21.5.0-x64.msi", "node-v21.5.0-x64.msi"),
+                        &_ => node::install_nodejs_error()
                     };
                 },
                 OsType::Linux => {
@@ -329,75 +346,80 @@ impl Execution for UserAction {
                     match linux_dist {
                         "ubuntu" => {
                             match self.third_arg.as_str() {
-                                "lts" => utils::install_nodejs_on_debian_based_distros("https://nodejs.org/dist/v20.10.0/node-v20.10.0-linux-x64.tar.xz", "node-v20.10.0-linux-x64.tar.xz"),
-                                "" => utils::install_nodejs_on_debian_based_distros("https://nodejs.org/dist/v20.10.0/node-v20.10.0-linux-x64.tar.xz", "node-v20.10.0-linux-x64.tar.xz"),
-                                "latest" => utils::install_nodejs_on_debian_based_distros("https://nodejs.org/dist/v21.5.0/node-v21.5.0-linux-x64.tar.xz", "node-v21.5.0-linux-x64.tar.xz"),
-                                &_ => utils::install_nodejs_error()
+                                "lts" => node::install_nodejs_on_debian_based_distros("https://nodejs.org/dist/v20.10.0/node-v20.10.0-linux-x64.tar.xz", "node-v20.10.0-linux-x64.tar.xz"),
+                                "" => node::install_nodejs_on_debian_based_distros("https://nodejs.org/dist/v20.10.0/node-v20.10.0-linux-x64.tar.xz", "node-v20.10.0-linux-x64.tar.xz"),
+                                "latest" => node::install_nodejs_on_debian_based_distros("https://nodejs.org/dist/v21.5.0/node-v21.5.0-linux-x64.tar.xz", "node-v21.5.0-linux-x64.tar.xz"),
+                                &_ => node::install_nodejs_error()
                             }
                         },
                         "debian" => {
                             match self.third_arg.as_str() {
-                                "lts" => utils::install_nodejs_on_debian_based_distros("https://nodejs.org/dist/v20.10.0/node-v20.10.0-linux-x64.tar.xz", "node-v20.10.0-linux-x64.tar.xz"),
-                                "" => utils::install_nodejs_on_debian_based_distros("https://nodejs.org/dist/v20.10.0/node-v20.10.0-linux-x64.tar.xz", "node-v20.10.0-linux-x64.tar.xz"),
-                                "latest" => utils::install_nodejs_on_debian_based_distros("https://nodejs.org/dist/v21.5.0/node-v21.5.0-linux-x64.tar.xz", "node-v21.5.0-linux-x64.tar.xz"),
-                                &_ => utils::install_nodejs_error()
+                                "lts" => node::install_nodejs_on_debian_based_distros("https://nodejs.org/dist/v20.10.0/node-v20.10.0-linux-x64.tar.xz", "node-v20.10.0-linux-x64.tar.xz"),
+                                "" => node::install_nodejs_on_debian_based_distros("https://nodejs.org/dist/v20.10.0/node-v20.10.0-linux-x64.tar.xz", "node-v20.10.0-linux-x64.tar.xz"),
+                                "latest" => node::install_nodejs_on_debian_based_distros("https://nodejs.org/dist/v21.5.0/node-v21.5.0-linux-x64.tar.xz", "node-v21.5.0-linux-x64.tar.xz"),
+                                &_ => node::install_nodejs_error()
                             }
                         },
                         "pardus" => {
                             match self.third_arg.as_str() {
-                                "lts" => utils::install_nodejs_on_debian_based_distros("https://nodejs.org/dist/v20.10.0/node-v20.10.0-linux-x64.tar.xz", "node-v20.10.0-linux-x64.tar.xz"),
-                                "" => utils::install_nodejs_on_debian_based_distros("https://nodejs.org/dist/v20.10.0/node-v20.10.0-linux-x64.tar.xz", "node-v20.10.0-linux-x64.tar.xz"),
-                                "latest" => utils::install_nodejs_on_debian_based_distros("https://nodejs.org/dist/v21.5.0/node-v21.5.0-linux-x64.tar.xz", "node-v21.5.0-linux-x64.tar.xz"),
-                                &_ => utils::install_nodejs_error()
+                                "lts" => node::install_nodejs_on_debian_based_distros("https://nodejs.org/dist/v20.10.0/node-v20.10.0-linux-x64.tar.xz", "node-v20.10.0-linux-x64.tar.xz"),
+                                "" => node::install_nodejs_on_debian_based_distros("https://nodejs.org/dist/v20.10.0/node-v20.10.0-linux-x64.tar.xz", "node-v20.10.0-linux-x64.tar.xz"),
+                                "latest" => node::install_nodejs_on_debian_based_distros("https://nodejs.org/dist/v21.5.0/node-v21.5.0-linux-x64.tar.xz", "node-v21.5.0-linux-x64.tar.xz"),
+                                &_ => node::install_nodejs_error()
                             }
                         },
                         "arch wsl" => {
                             match self.third_arg.as_str() {
-                                "lts" => utils::install_nodejs_on_arch_linux("https://nodejs.org/dist/v20.10.0/node-v20.10.0-linux-x64.tar.xz", "node-v20.10.0-linux-x64.tar.xz"),
-                                "" => utils::install_nodejs_on_arch_linux("https://nodejs.org/dist/v20.10.0/node-v20.10.0-linux-x64.tar.xz", "node-v20.10.0-linux-x64.tar.xz"),
-                                "latest" => utils::install_nodejs_on_arch_linux("https://nodejs.org/dist/v21.5.0/node-v21.5.0-linux-x64.tar.xz", "node-v21.5.0-linux-x64.tar.xz"),
-                                &_ => utils::install_nodejs_error()
+                                "lts" => node::install_nodejs_on_arch_linux("https://nodejs.org/dist/v20.10.0/node-v20.10.0-linux-x64.tar.xz", "node-v20.10.0-linux-x64.tar.xz"),
+                                "" => node::install_nodejs_on_arch_linux("https://nodejs.org/dist/v20.10.0/node-v20.10.0-linux-x64.tar.xz", "node-v20.10.0-linux-x64.tar.xz"),
+                                "latest" => node::install_nodejs_on_arch_linux("https://nodejs.org/dist/v21.5.0/node-v21.5.0-linux-x64.tar.xz", "node-v21.5.0-linux-x64.tar.xz"),
+                                &_ => node::install_nodejs_error()
                             }
                         }
                         "kali linux" => {
                             match self.third_arg.as_str() {
-                                "lts" => utils::install_nodejs_on_debian_based_distros("https://nodejs.org/dist/v20.10.0/node-v20.10.0-linux-x64.tar.xz", "node-v20.10.0-linux-x64.tar.xz"),
-                                "" => utils::install_nodejs_on_debian_based_distros("https://nodejs.org/dist/v20.10.0/node-v20.10.0-linux-x64.tar.xz", "node-v20.10.0-linux-x64.tar.xz"),
-                                "latest" => utils::install_nodejs_on_debian_based_distros("https://nodejs.org/dist/v21.5.0/node-v21.5.0-linux-x64.tar.xz", "node-v21.5.0-linux-x64.tar.xz"),
-                                &_ => utils::install_nodejs_error()
+                                "lts" => node::install_nodejs_on_debian_based_distros("https://nodejs.org/dist/v20.10.0/node-v20.10.0-linux-x64.tar.xz", "node-v20.10.0-linux-x64.tar.xz"),
+                                "" => node::install_nodejs_on_debian_based_distros("https://nodejs.org/dist/v20.10.0/node-v20.10.0-linux-x64.tar.xz", "node-v20.10.0-linux-x64.tar.xz"),
+                                "latest" => node::install_nodejs_on_debian_based_distros("https://nodejs.org/dist/v21.5.0/node-v21.5.0-linux-x64.tar.xz", "node-v21.5.0-linux-x64.tar.xz"),
+                                &_ => node::install_nodejs_error()
                             }
                         },
                         "fedora" => {
                             match self.third_arg.as_str() {
-                                "lts" => utils::install_nodejs_on_centos_and_fedora("https://nodejs.org/dist/v20.10.0/node-v20.10.0-linux-x64.tar.xz", "node-v20.10.0-linux-x64.tar.xz"),
-                                "" => utils::install_nodejs_on_centos_and_fedora("https://nodejs.org/dist/v20.10.0/node-v20.10.0-linux-x64.tar.xz", "node-v20.10.0-linux-x64.tar.xz"),
-                                "latest" => utils::install_nodejs_on_centos_and_fedora("https://nodejs.org/dist/v21.5.0/node-v21.5.0-linux-x64.tar.xz", "node-v21.5.0-linux-x64.tar.xz"),
-                                &_ => utils::install_nodejs_error()
+                                "lts" => node::install_nodejs_on_centos_and_fedora("https://nodejs.org/dist/v20.10.0/node-v20.10.0-linux-x64.tar.xz", "node-v20.10.0-linux-x64.tar.xz"),
+                                "" => node::install_nodejs_on_centos_and_fedora("https://nodejs.org/dist/v20.10.0/node-v20.10.0-linux-x64.tar.xz", "node-v20.10.0-linux-x64.tar.xz"),
+                                "latest" => node::install_nodejs_on_centos_and_fedora("https://nodejs.org/dist/v21.5.0/node-v21.5.0-linux-x64.tar.xz", "node-v21.5.0-linux-x64.tar.xz"),
+                                &_ => node::install_nodejs_error()
                             }
                         },
                         "centos" => {
                             match self.third_arg.as_str() {
-                                "lts" => utils::install_nodejs_on_centos_and_fedora("https://nodejs.org/dist/v20.10.0/node-v20.10.0-linux-x64.tar.xz", "node-v20.10.0-linux-x64.tar.xz"),
-                                "" => utils::install_nodejs_on_centos_and_fedora("https://nodejs.org/dist/v20.10.0/node-v20.10.0-linux-x64.tar.xz", "node-v20.10.0-linux-x64.tar.xz"),
-                                "latest" => utils::install_nodejs_on_centos_and_fedora("https://nodejs.org/dist/v21.5.0/node-v21.5.0-linux-x64.tar.xz", "node-v21.5.0-linux-x64.tar.xz"),
-                                &_ => utils::install_nodejs_error()
+                                "lts" => node::install_nodejs_on_centos_and_fedora("https://nodejs.org/dist/v20.10.0/node-v20.10.0-linux-x64.tar.xz", "node-v20.10.0-linux-x64.tar.xz"),
+                                "" => node::install_nodejs_on_centos_and_fedora("https://nodejs.org/dist/v20.10.0/node-v20.10.0-linux-x64.tar.xz", "node-v20.10.0-linux-x64.tar.xz"),
+                                "latest" => node::install_nodejs_on_centos_and_fedora("https://nodejs.org/dist/v21.5.0/node-v21.5.0-linux-x64.tar.xz", "node-v21.5.0-linux-x64.tar.xz"),
+                                &_ => node::install_nodejs_error()
                             }
                         },
                         "alma linux" => {
                             match self.third_arg.as_str() {
-                                "lts" => utils::install_nodejs_on_alma_linux("https://nodejs.org/dist/v20.10.0/node-v20.10.0-linux-x64.tar.xz", "node-v20.10.0-linux-x64.tar.xz"),
-                                "" => utils::install_nodejs_on_alma_linux("https://nodejs.org/dist/v20.10.0/node-v20.10.0-linux-x64.tar.xz", "node-v20.10.0-linux-x64.tar.xz"),
-                                "latest" => utils::install_nodejs_on_alma_linux("https://nodejs.org/dist/v21.5.0/node-v21.5.0-linux-x64.tar.xz", "node-v21.5.0-linux-x64.tar.xz"),
-                                &_ => utils::install_nodejs_error()
+                                "lts" => node::install_nodejs_on_alma_linux("https://nodejs.org/dist/v20.10.0/node-v20.10.0-linux-x64.tar.xz", "node-v20.10.0-linux-x64.tar.xz"),
+                                "" => node::install_nodejs_on_alma_linux("https://nodejs.org/dist/v20.10.0/node-v20.10.0-linux-x64.tar.xz", "node-v20.10.0-linux-x64.tar.xz"),
+                                "latest" => node::install_nodejs_on_alma_linux("https://nodejs.org/dist/v21.5.0/node-v21.5.0-linux-x64.tar.xz", "node-v21.5.0-linux-x64.tar.xz"),
+                                &_ => node::install_nodejs_error()
                             }
                         },
-                        "alpine" => utils::install_node_on_alpine_linux(),
+                        "alpine" => node::install_node_on_alpine_linux(),
                         &_ => null_var = "none".to_string()
                     }
 
                     if null_var == "none".to_string() {
                         if utils::check_if_linux_dist_is_arch_linux() {
-                            utils::install_rust_on_arch_wsl_and_kali()
+                            match self.third_arg.as_str() {
+                                "lts" => node::install_nodejs_on_arch_linux("https://nodejs.org/dist/v20.10.0/node-v20.10.0-linux-x64.tar.xz", "node-v20.10.0-linux-x64.tar.xz"),
+                                "" => node::install_nodejs_on_arch_linux("https://nodejs.org/dist/v20.10.0/node-v20.10.0-linux-x64.tar.xz", "node-v20.10.0-linux-x64.tar.xz"),
+                                "latest" => node::install_nodejs_on_arch_linux("https://nodejs.org/dist/v21.5.0/node-v21.5.0-linux-x64.tar.xz", "node-v21.5.0-linux-x64.tar.xz"),
+                                &_ => node::install_nodejs_error()
+                            }
                         }
                     }
                 },
@@ -408,6 +430,7 @@ impl Execution for UserAction {
         return Self {
             os_type: self.os_type.clone(),
             os_release: self.os_release.clone(),
+            current_user: self.current_user.clone(),
             first_arg: self.first_arg.clone(),
             second_arg: self.second_arg.clone(),
             third_arg: self.third_arg.clone()
@@ -416,12 +439,39 @@ impl Execution for UserAction {
 
     fn install_bun(&self) -> Self {
         if self.first_arg == CommandType::Install && self.second_arg == "bun".to_string() {
-            todo!()
+            match self.os_type {
+                OsType::Windows => println!("Unfortunately, in that moment bun hasn't any windows support."),
+                OsType::Linux => {
+                    let linux_dist = utils::return_linux_dist_etc_os_release();
+                    let mut null_var = "".to_string();
+
+                    match linux_dist {
+                        "ubuntu" => bun::install_bun_on_linux(),
+                        "debian" => bun::install_bun_on_linux(),
+                        "pardus" => bun::install_bun_on_linux(),
+                        "arch wsl" => bun::install_bun_on_linux(),
+                        "kali linux" => bun::install_bun_on_linux(),
+                        "fedora" => bun::install_bun_on_linux(),
+                        "centos" => bun::install_bun_on_linux(),
+                        "alma linux" => bun::install_bun_on_linux(),
+                        "alpine linux" => bun::install_bun_on_linux(),
+                        &_ => null_var = "none".to_string() 
+                    }
+
+                    if null_var == "none".to_string() {
+                        if utils::check_if_linux_dist_is_arch_linux() {
+                            bun::install_bun_on_linux()
+                        }
+                    }
+                },
+                OsType::Darwin => println!("That's not implemented yet.")
+            }
         }
 
         return Self {
             os_type: self.os_type.clone(),
             os_release: self.os_release.clone(),
+            current_user: self.current_user.clone(),
             first_arg: self.first_arg.clone(),
             second_arg: self.second_arg.clone(),
             third_arg: self.third_arg.clone()
@@ -436,6 +486,7 @@ impl Execution for UserAction {
         return Self {
             os_type: self.os_type.clone(),
             os_release: self.os_release.clone(),
+            current_user: self.current_user.clone(),
             first_arg: self.first_arg.clone(),
             second_arg: self.second_arg.clone(),
             third_arg: self.third_arg.clone()
@@ -450,6 +501,7 @@ impl Execution for UserAction {
         return Self {
             os_type: self.os_type.clone(),
             os_release: self.os_release.clone(),
+            current_user: self.current_user.clone(),
             first_arg: self.first_arg.clone(),
             second_arg: self.second_arg.clone(),
             third_arg: self.third_arg.clone()
@@ -472,7 +524,7 @@ impl Help for UserAction {
 
             println!("Your operating system release is: {}", self.os_release);
 
-            println!("This program currently supports to install Rust language on various Windows and Linux distros and releases.");
+            println!("This program currently supports to install Rust language, Node.js and Bun Runtimes on various Windows and Linux distros and releases.");
             println!("Support for other languages will be provided on future releases. If you have any suggestion or feature request you can create an issue on https://www.github.com/Necoo33/incli .");
         } else {
             println!("error, if command type is not help, then you shouldn't run that method.")
@@ -481,6 +533,7 @@ impl Help for UserAction {
         return Self {
             os_type: self.os_type.clone(),
             os_release: self.os_release.clone(),
+            current_user: self.current_user.clone(),
             first_arg: self.first_arg.clone(),
             second_arg: self.second_arg.clone(),
             third_arg: self.third_arg.clone()
@@ -493,6 +546,7 @@ impl Help for UserAction {
         return Self {
             os_type: self.os_type.clone(),
             os_release: self.os_release.clone(),
+            current_user: self.current_user.clone(),
             first_arg: self.first_arg.clone(),
             second_arg: self.second_arg.clone(),
             third_arg: self.third_arg.clone()
@@ -511,6 +565,7 @@ impl Help for UserAction {
         return Self {
             os_type: self.os_type.clone(),
             os_release: self.os_release.clone(),
+            current_user: self.current_user.clone(),
             first_arg: self.first_arg.clone(),
             second_arg: self.second_arg.clone(),
             third_arg: self.third_arg.clone()
@@ -526,6 +581,7 @@ impl Help for UserAction {
         return Self {
             os_type: self.os_type.clone(),
             os_release: self.os_release.clone(),
+            current_user: self.current_user.clone(),
             first_arg: self.first_arg.clone(),
             second_arg: self.second_arg.clone(),
             third_arg: self.third_arg.clone()
@@ -540,6 +596,7 @@ impl Help for UserAction {
         return Self {
             os_type: self.os_type.clone(),
             os_release: self.os_release.clone(),
+            current_user: self.current_user.clone(),
             first_arg: self.first_arg.clone(),
             second_arg: self.second_arg.clone(),
             third_arg: self.third_arg.clone()
@@ -549,12 +606,13 @@ impl Help for UserAction {
     fn bun_help(&self) -> Self {
         println!("Bun is a brand new Runtime Environment for Javascript, which aims better performance than node.js and also %100 compatibility to it.");
         println!("Bun also has built-in testing, linting, packaging support. It's written with brand new low level language Zig.");
-        println!("Bun released it's first stable version on 2023. It currently supports only Mac Os and Windows.");
+        println!("Bun released it's first stable version on 2023. It currently supports only Mac Os and Linux.");
         println!("According to benchmarks, bun is 2 times faster than node.js. It's fastest web frameworks such as Elysia.js And Hono.js are competing with go and java web frameworks on performance.");
 
         return Self {
             os_type: self.os_type.clone(),
             os_release: self.os_release.clone(),
+            current_user: self.current_user.clone(),
             first_arg: self.first_arg.clone(),
             second_arg: self.second_arg.clone(),
             third_arg: self.third_arg.clone()
@@ -568,6 +626,7 @@ impl Help for UserAction {
         return Self {
             os_type: self.os_type.clone(),
             os_release: self.os_release.clone(),
+            current_user: self.current_user.clone(),
             first_arg: self.first_arg.clone(),
             second_arg: self.second_arg.clone(),
             third_arg: self.third_arg.clone()
@@ -585,6 +644,7 @@ impl Help for UserAction {
         return Self {
             os_type: self.os_type.clone(),
             os_release: self.os_release.clone(),
+            current_user: self.current_user.clone(),
             first_arg: self.first_arg.clone(),
             second_arg: self.second_arg.clone(),
             third_arg: self.third_arg.clone()
@@ -599,6 +659,7 @@ impl Help for UserAction {
         return Self {
             os_type: self.os_type.clone(),
             os_release: self.os_release.clone(),
+            current_user: self.current_user.clone(),
             first_arg: self.first_arg.clone(),
             second_arg: self.second_arg.clone(),
             third_arg: self.third_arg.clone()
@@ -611,6 +672,7 @@ impl Help for UserAction {
         return Self {
             os_type: self.os_type.clone(),
             os_release: self.os_release.clone(),
+            current_user: self.current_user.clone(),
             first_arg: self.first_arg.clone(),
             second_arg: self.second_arg.clone(),
             third_arg: self.third_arg.clone()
@@ -626,6 +688,7 @@ impl Help for UserAction {
         return Self {
             os_type: self.os_type.clone(),
             os_release: self.os_release.clone(),
+            current_user: self.current_user.clone(),
             first_arg: self.first_arg.clone(),
             second_arg: self.second_arg.clone(),
             third_arg: self.third_arg.clone()
@@ -639,11 +702,12 @@ impl Help for UserAction {
 
 impl Version for UserAction {
     fn log_version(&self) -> Self {
-        println!("You're using v0.2.0 of incli.");
+        println!("You're using v0.3.0 of incli.");
 
         return Self {
             os_type: self.os_type.clone(),
             os_release: self.os_release.clone(),
+            current_user: self.current_user.clone(),
             first_arg: self.first_arg.clone(),
             second_arg: self.second_arg.clone(),
             third_arg: self.third_arg.clone()
@@ -656,6 +720,7 @@ impl Version for UserAction {
         return Self {
             os_type: self.os_type.clone(),
             os_release: self.os_release.clone(),
+            current_user: self.current_user.clone(),
             first_arg: self.first_arg.clone(),
             second_arg: self.second_arg.clone(),
             third_arg: self.third_arg.clone()
@@ -663,11 +728,12 @@ impl Version for UserAction {
     }
 
     fn rust_version(&self) -> Self {
-        utils::log_rust_version();
+        rust::log_rust_version();
 
         return Self {
             os_type: self.os_type.clone(),
             os_release: self.os_release.clone(),
+            current_user: self.current_user.clone(),
             first_arg: self.first_arg.clone(),
             second_arg: self.second_arg.clone(),
             third_arg: self.third_arg.clone()
@@ -678,6 +744,7 @@ impl Version for UserAction {
         return Self {
             os_type: self.os_type.clone(),
             os_release: self.os_release.clone(),
+            current_user: self.current_user.clone(),
             first_arg: self.first_arg.clone(),
             second_arg: self.second_arg.clone(),
             third_arg: self.third_arg.clone()
@@ -685,11 +752,12 @@ impl Version for UserAction {
     }
 
     fn nodejs_version(&self) -> Self {
-        utils::log_node_and_npm_version();
+        node::log_node_and_npm_version();
 
         return Self {
             os_type: self.os_type.clone(),
             os_release: self.os_release.clone(),
+            current_user: self.current_user.clone(),
             first_arg: self.first_arg.clone(),
             second_arg: self.second_arg.clone(),
             third_arg: self.third_arg.clone()
@@ -697,9 +765,12 @@ impl Version for UserAction {
     }
 
     fn bun_version(&self) -> Self {
+        bun::log_bun_version();
+        
         return Self {
             os_type: self.os_type.clone(),
             os_release: self.os_release.clone(),
+            current_user: self.current_user.clone(),
             first_arg: self.first_arg.clone(),
             second_arg: self.second_arg.clone(),
             third_arg: self.third_arg.clone()
@@ -710,6 +781,7 @@ impl Version for UserAction {
         return Self {
             os_type: self.os_type.clone(),
             os_release: self.os_release.clone(),
+            current_user: self.current_user.clone(),
             first_arg: self.first_arg.clone(),
             second_arg: self.second_arg.clone(),
             third_arg: self.third_arg.clone()
@@ -720,6 +792,7 @@ impl Version for UserAction {
         return Self {
             os_type: self.os_type.clone(),
             os_release: self.os_release.clone(),
+            current_user: self.current_user.clone(),
             first_arg: self.first_arg.clone(),
             second_arg: self.second_arg.clone(),
             third_arg: self.third_arg.clone()
@@ -730,6 +803,7 @@ impl Version for UserAction {
         return Self {
             os_type: self.os_type.clone(),
             os_release: self.os_release.clone(),
+            current_user: self.current_user.clone(),
             first_arg: self.first_arg.clone(),
             second_arg: self.second_arg.clone(),
             third_arg: self.third_arg.clone()
@@ -740,6 +814,7 @@ impl Version for UserAction {
         return Self {
             os_type: self.os_type.clone(),
             os_release: self.os_release.clone(),
+            current_user: self.current_user.clone(),
             first_arg: self.first_arg.clone(),
             second_arg: self.second_arg.clone(),
             third_arg: self.third_arg.clone()
@@ -750,6 +825,7 @@ impl Version for UserAction {
         return Self {
             os_type: self.os_type.clone(),
             os_release: self.os_release.clone(),
+            current_user: self.current_user.clone(),
             first_arg: self.first_arg.clone(),
             second_arg: self.second_arg.clone(),
             third_arg: self.third_arg.clone()

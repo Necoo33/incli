@@ -1,8 +1,11 @@
 mod models;
 mod utils;
+mod rust;
+mod node;
+mod bun;
 
 use models::{CreateAction, OsType, Execution, Version, Help, CommandType};
-use sys_info::{os_release, os_type};
+use sys_info_extended::{os_release, os_type, get_current_user};
 use std::env::args;
 
 
@@ -19,6 +22,7 @@ fn main() {
     let user_session = models::UserSession {
         os_type: os_type().unwrap(),
         os_release: os_release().unwrap(),
+        current_user: get_current_user()
     };
 
     let args: Vec<String> = args().collect();
@@ -41,8 +45,12 @@ fn main() {
             arg2 = match argument.as_str() {
                 "rust" => "rust".to_string(),
                 "java" => "java".to_string(),
+                "gradle" => "gradle".to_string(),
+                "maven" => "maven".to_string(),
                 "go" => "go".to_string(),
                 "node" => "node".to_string(),
+                "bun" => "bun".to_string(),
+                "yarn" => "yarn".to_string(),
                 "python" => "python".to_string(),
                 "" => "".to_string(),
                 &_ => panic!("You're mistyped or tried to download unsupported programming language.")
