@@ -21,3 +21,7 @@ Some Documentation Fixes, Nothing Other Changed.
 Switched sys-info liblary to sys-info-extended liblary.
 Project Restructured.
 Added Bun Support For Linux Distros.
+
+## v0.3.1
+
+Node.js latest version support updated to v21.6.1 . Some other documentation changes occured.

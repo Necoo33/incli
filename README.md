@@ -23,7 +23,7 @@ If you like that program, consider to give a like on [github repo](https://githu
 
 ## Current Status
 
-In this situation, only rust and node.js are supported.
+In this situation, only rust, node.js and bun are supported.
 
 # Rust:
 
