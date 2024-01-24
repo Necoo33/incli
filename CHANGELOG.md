@@ -24,4 +24,6 @@ Added Bun Support For Linux Distros.
 
 ## v0.3.1
 
-Node.js latest version support updated to v21.6.1 . Some other documentation changes occured.
+Node.js latest version support updated to v21.6.1 . 
+Some other documentation changes occured.
+newest version of [sys-info-extended](https://crates.io/crates/sys-info-extended) package will be used now.
