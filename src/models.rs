@@ -2,6 +2,7 @@ use crate::utils;
 use crate::rust;
 use crate::node;
 use crate::bun;
+use crate::yarn;
 
 #[derive(PartialEq, Clone)]
 pub enum CommandType {
@@ -346,64 +347,64 @@ impl Execution for UserAction {
                     match linux_dist {
                         "ubuntu" => {
                             match self.third_arg.as_str() {
-                                "lts" => node::install_nodejs_on_debian_based_distros("https://nodejs.org/dist/v20.10.0/node-v20.10.0-linux-x64.tar.xz", "node-v20.10.0-linux-x64.tar.xz"),
-                                "" => node::install_nodejs_on_debian_based_distros("https://nodejs.org/dist/v20.10.0/node-v20.10.0-linux-x64.tar.xz", "node-v20.10.0-linux-x64.tar.xz"),
+                                "lts" => node::install_nodejs_on_debian_based_distros("https://nodejs.org/dist/v20.11.0/node-v20.11.0-linux-x64.tar.xz", "node-v20.11.0-linux-x64.tar.xz"),
+                                "" => node::install_nodejs_on_debian_based_distros("https://nodejs.org/dist/v20.11.0/node-v20.11.0-linux-x64.tar.xz", "node-v20.11.0-linux-x64.tar.xz"),
                                 "latest" => node::install_nodejs_on_debian_based_distros("https://nodejs.org/dist/v21.6.1/node-v21.6.1-linux-x64.tar.xz", "node-v21.6.1-linux-x64.tar.xz"),
                                 &_ => node::install_nodejs_error()
                             }
                         },
                         "debian" => {
                             match self.third_arg.as_str() {
-                                "lts" => node::install_nodejs_on_debian_based_distros("https://nodejs.org/dist/v20.10.0/node-v20.10.0-linux-x64.tar.xz", "node-v20.10.0-linux-x64.tar.xz"),
-                                "" => node::install_nodejs_on_debian_based_distros("https://nodejs.org/dist/v20.10.0/node-v20.10.0-linux-x64.tar.xz", "node-v20.10.0-linux-x64.tar.xz"),
+                                "lts" => node::install_nodejs_on_debian_based_distros("https://nodejs.org/dist/v20.11.0/node-v20.11.0-linux-x64.tar.xz", "node-v20.11.0-linux-x64.tar.xz"),
+                                "" => node::install_nodejs_on_debian_based_distros("https://nodejs.org/dist/v20.11.0/node-v20.11.0-linux-x64.tar.xz", "node-v20.11.0-linux-x64.tar.xz"),
                                 "latest" => node::install_nodejs_on_debian_based_distros("https://nodejs.org/dist/v21.6.1/node-v21.6.1-linux-x64.tar.xz", "node-v21.6.1-linux-x64.tar.xz"),
                                 &_ => node::install_nodejs_error()
                             }
                         },
                         "pardus" => {
                             match self.third_arg.as_str() {
-                                "lts" => node::install_nodejs_on_debian_based_distros("https://nodejs.org/dist/v20.10.0/node-v20.10.0-linux-x64.tar.xz", "node-v20.10.0-linux-x64.tar.xz"),
-                                "" => node::install_nodejs_on_debian_based_distros("https://nodejs.org/dist/v20.10.0/node-v20.10.0-linux-x64.tar.xz", "node-v20.10.0-linux-x64.tar.xz"),
+                                "lts" => node::install_nodejs_on_debian_based_distros("https://nodejs.org/dist/v20.11.0/node-v20.11.0-linux-x64.tar.xz", "node-v20.11.0-linux-x64.tar.xz"),
+                                "" => node::install_nodejs_on_debian_based_distros("https://nodejs.org/dist/v20.11.0/node-v20.11.0-linux-x64.tar.xz", "node-v20.11.0-linux-x64.tar.xz"),
                                 "latest" => node::install_nodejs_on_debian_based_distros("https://nodejs.org/dist/v21.6.1/node-v21.6.1-linux-x64.tar.xz", "node-v21.6.1-linux-x64.tar.xz"),
                                 &_ => node::install_nodejs_error()
                             }
                         },
                         "arch wsl" => {
                             match self.third_arg.as_str() {
-                                "lts" => node::install_nodejs_on_arch_linux("https://nodejs.org/dist/v20.10.0/node-v20.10.0-linux-x64.tar.xz", "node-v20.10.0-linux-x64.tar.xz"),
-                                "" => node::install_nodejs_on_arch_linux("https://nodejs.org/dist/v20.10.0/node-v20.10.0-linux-x64.tar.xz", "node-v20.10.0-linux-x64.tar.xz"),
+                                "lts" => node::install_nodejs_on_arch_linux("https://nodejs.org/dist/v20.11.0/node-v20.11.0-linux-x64.tar.xz", "node-v20.11.0-linux-x64.tar.xz"),
+                                "" => node::install_nodejs_on_arch_linux("https://nodejs.org/dist/v20.11.0/node-v20.11.0-linux-x64.tar.xz", "node-v20.11.0-linux-x64.tar.xz"),
                                 "latest" => node::install_nodejs_on_arch_linux("https://nodejs.org/dist/v21.6.1/node-v21.6.1-linux-x64.tar.xz", "node-v21.6.1-linux-x64.tar.xz"),
                                 &_ => node::install_nodejs_error()
                             }
                         }
                         "kali linux" => {
                             match self.third_arg.as_str() {
-                                "lts" => node::install_nodejs_on_debian_based_distros("https://nodejs.org/dist/v20.10.0/node-v20.10.0-linux-x64.tar.xz", "node-v20.10.0-linux-x64.tar.xz"),
-                                "" => node::install_nodejs_on_debian_based_distros("https://nodejs.org/dist/v20.10.0/node-v20.10.0-linux-x64.tar.xz", "node-v20.10.0-linux-x64.tar.xz"),
+                                "lts" => node::install_nodejs_on_debian_based_distros("https://nodejs.org/dist/v20.11.0/node-v20.11.0-linux-x64.tar.xz", "node-v20.11.0-linux-x64.tar.xz"),
+                                "" => node::install_nodejs_on_debian_based_distros("https://nodejs.org/dist/v20.11.0/node-v20.11.0-linux-x64.tar.xz", "node-v20.11.0-linux-x64.tar.xz"),
                                 "latest" => node::install_nodejs_on_debian_based_distros("https://nodejs.org/dist/v21.6.1/node-v21.6.1-linux-x64.tar.xz", "node-v21.6.1-linux-x64.tar.xz"),
                                 &_ => node::install_nodejs_error()
                             }
                         },
                         "fedora" => {
                             match self.third_arg.as_str() {
-                                "lts" => node::install_nodejs_on_centos_and_fedora("https://nodejs.org/dist/v20.10.0/node-v20.10.0-linux-x64.tar.xz", "node-v20.10.0-linux-x64.tar.xz"),
-                                "" => node::install_nodejs_on_centos_and_fedora("https://nodejs.org/dist/v20.10.0/node-v20.10.0-linux-x64.tar.xz", "node-v20.10.0-linux-x64.tar.xz"),
+                                "lts" => node::install_nodejs_on_centos_and_fedora("https://nodejs.org/dist/v20.11.0/node-v20.11.0-linux-x64.tar.xz", "node-v20.11.0-linux-x64.tar.xz"),
+                                "" => node::install_nodejs_on_centos_and_fedora("https://nodejs.org/dist/v20.11.0/node-v20.11.0-linux-x64.tar.xz", "node-v20.11.0-linux-x64.tar.xz"),
                                 "latest" => node::install_nodejs_on_centos_and_fedora("https://nodejs.org/dist/v21.6.1/node-v21.6.1-linux-x64.tar.xz", "node-v21.6.1-linux-x64.tar.xz"),
                                 &_ => node::install_nodejs_error()
                             }
                         },
                         "centos" => {
                             match self.third_arg.as_str() {
-                                "lts" => node::install_nodejs_on_centos_and_fedora("https://nodejs.org/dist/v20.10.0/node-v20.10.0-linux-x64.tar.xz", "node-v20.10.0-linux-x64.tar.xz"),
-                                "" => node::install_nodejs_on_centos_and_fedora("https://nodejs.org/dist/v20.10.0/node-v20.10.0-linux-x64.tar.xz", "node-v20.10.0-linux-x64.tar.xz"),
+                                "lts" => node::install_nodejs_on_centos_and_fedora("https://nodejs.org/dist/v20.11.0/node-v20.11.0-linux-x64.tar.xz", "node-v20.11.0-linux-x64.tar.xz"),
+                                "" => node::install_nodejs_on_centos_and_fedora("https://nodejs.org/dist/v20.11.0/node-v20.11.0-linux-x64.tar.xz", "node-v20.11.0-linux-x64.tar.xz"),
                                 "latest" => node::install_nodejs_on_centos_and_fedora("https://nodejs.org/dist/v21.6.1/node-v21.6.1-linux-x64.tar.xz", "node-v21.6.1-linux-x64.tar.xz"),
                                 &_ => node::install_nodejs_error()
                             }
                         },
                         "alma linux" => {
                             match self.third_arg.as_str() {
-                                "lts" => node::install_nodejs_on_alma_linux("https://nodejs.org/dist/v20.10.0/node-v20.10.0-linux-x64.tar.xz", "node-v20.10.0-linux-x64.tar.xz"),
-                                "" => node::install_nodejs_on_alma_linux("https://nodejs.org/dist/v20.10.0/node-v20.10.0-linux-x64.tar.xz", "node-v20.10.0-linux-x64.tar.xz"),
+                                "lts" => node::install_nodejs_on_alma_linux("https://nodejs.org/dist/v20.11.0/node-v20.11.0-linux-x64.tar.xz", "node-v20.11.0-linux-x64.tar.xz"),
+                                "" => node::install_nodejs_on_alma_linux("https://nodejs.org/dist/v20.11.0/node-v20.11.0-linux-x64.tar.xz", "node-v20.11.0-linux-x64.tar.xz"),
                                 "latest" => node::install_nodejs_on_alma_linux("https://nodejs.org/dist/v21.6.1/node-v21.6.1-linux-x64.tar.xz", "node-v21.6.1-linux-x64.tar.xz"),
                                 &_ => node::install_nodejs_error()
                             }
@@ -415,8 +416,8 @@ impl Execution for UserAction {
                     if null_var == "none".to_string() {
                         if utils::check_if_linux_dist_is_arch_linux() {
                             match self.third_arg.as_str() {
-                                "lts" => node::install_nodejs_on_arch_linux("https://nodejs.org/dist/v20.10.0/node-v20.10.0-linux-x64.tar.xz", "node-v20.10.0-linux-x64.tar.xz"),
-                                "" => node::install_nodejs_on_arch_linux("https://nodejs.org/dist/v20.10.0/node-v20.10.0-linux-x64.tar.xz", "node-v20.10.0-linux-x64.tar.xz"),
+                                "lts" => node::install_nodejs_on_arch_linux("https://nodejs.org/dist/v20.11.0/node-v20.11.0-linux-x64.tar.xz", "node-v20.11.0-linux-x64.tar.xz"),
+                                "" => node::install_nodejs_on_arch_linux("https://nodejs.org/dist/v20.11.0/node-v20.11.0-linux-x64.tar.xz", "node-v20.11.0-linux-x64.tar.xz"),
                                 "latest" => node::install_nodejs_on_arch_linux("https://nodejs.org/dist/v21.6.1/node-v21.6.1-linux-x64.tar.xz", "node-v21.6.1-linux-x64.tar.xz"),
                                 &_ => node::install_nodejs_error()
                             }
@@ -480,7 +481,11 @@ impl Execution for UserAction {
 
     fn install_yarn(&self) -> Self {
         if self.first_arg == CommandType::Install && self.second_arg == "yarn".to_string() {
-            todo!()
+            match self.os_type {
+                OsType::Windows => yarn::install_yarn_on_windows(),
+                OsType::Linux => yarn::install_yarn_on_linux(),
+                OsType::Darwin => println!("Not Implemented Yet.")
+            }
         }
 
         return Self {

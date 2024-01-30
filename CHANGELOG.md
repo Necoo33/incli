@@ -27,3 +27,10 @@ Added Bun Support For Linux Distros.
 Node.js latest version support updated to v21.6.1 . 
 Some other documentation changes occured.
 newest version of [sys-info-extended](https://crates.io/crates/sys-info-extended) package will be used now.
+
+## v0.4.0
+
+Added yarn support.
+Fixed Some Documentation Typos.
+Fixed a bug about node.js's installation of lts version on some linux distros.
+Supported Node.js lts version upgraded to v20.11.0 .

@@ -91,7 +91,7 @@ Not Implemented
 * Alma Linux 9 wsl - &#10003;
 * CentOS 9 Stream - &#10003;
 * Pardus 23 XFCE - &#10003;
-* Fedora 39 Workstation - &#10060;
+* Fedora 39 Workstation - &#10003;
 * Alpine Linux wsl - &#10060;
 * Other Linux Distributions - &#10060;
 
@@ -100,6 +100,27 @@ Not Implemented
 Not Implemented
 
 ## Yarn
+
+### Windows:
+
+* Windows 11 - &#10003;
+* Windows 10 Home - &#10003;
+
+### Linux:
+
+* Ubuntu 22.04 LTS - &#10003;
+* Ubuntu 22 wsl - &#10003;
+* Debian 12 wsl - &#10003;
+* Arch wsl - &#10003;
+* Kali Linux wsl - &#10003;
+* Alma Linux 9 wsl - &#10003;
+* CentOS 9 Stream - &#10003;
+* Pardus 23 XFCE - &#10003;
+* Fedora 39 Workstation - &#10003;
+* Alpine Linux wsl - &#10060;
+* Other Linux Distributions - &#10060;
+
+### MacOs:
 
 Not Implemented
 
