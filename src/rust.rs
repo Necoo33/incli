@@ -267,7 +267,7 @@ pub fn install_rust_on_windows(){
 
     let current_user = get_current_user();
 
-    let format_the_download_path = format!("C:\\Users\\{}\\rustup-init.exe", current_user);
+    let format_the_download_path = format!("C:\\Users\\{}\\Downloads\\rustup-init.exe", current_user);
 
     let download_command = Command::new("powershell")
                                     .arg("Invoke-WebRequest")
