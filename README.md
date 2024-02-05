@@ -12,18 +12,16 @@ If you like that program, consider to give a like on [github repo](https://githu
 
 ## Currently Planned to Support Package Managers and Sdk's
 
-* Rust (Cargo and Rustc)
-* Golang
+* Java - Java Development Kit
 * Java - Gradle
 * Java - Maven
 * python
-* Node.js (npm)
-* Bun
-* Yarn
 
 ## Current Status
 
-In this situation, only rust, node.js and bun are supported.
+In this situation rust, node.js, yarn, bun and golang are supported.
+
+Also we'll make minor updates for supporting new lts and latest releases for Node.js And Golang.
 
 # Rust:
 
@@ -60,7 +58,7 @@ There is no implementation yet
 
 # Node.js
 
-In Node.js, you can also specialize a third argument. If you want to install latest long term support version, you can run a command like that: `(that binary) install node lts`, or if you want to download latest version, you can run that command: `(that binary) install node latest`. If you don't specialize third argument, that'll install lts version.
+When installing Node.js, you can also specialize a third argument. If you want to install latest long term support version, you can run a command like that: `(that binary) install node lts`, or if you want to download latest version, you can run that command: `(that binary) install node latest`. If you don't specialize third argument, that'll install lts version.
 
 ### Windows:
 
@@ -138,6 +136,31 @@ You can view more detailed information on "SUPPORTED-OS.md" file about the suppo
 
 There is no implementation yet
 
+# Go
+
+When installing Go, you can also specialize a third argument. If you want to install latest long term support version, you can run a command like that: `(that binary) install go lts`, or if you want to download latest version, you can run that command: `(that binary) install go latest`. If you don't specialize third argument, that'll install lts version.
+
+### Windows:
+
+* Windows 10 Home Basic - &#10003;
+
+### Linux:
+
+* Ubuntu 22.04 LTS - &#10003;
+* Ubuntu 22 wsl - &#10003;
+* Debian 12 wsl - &#10003;
+* Arch wsl - &#10003;
+* Kali Linux wsl - &#10003;
+* Alma Linux 9 wsl - &#10003;
+* CentOS 9 Stream - &#10003;
+* Pardus 23 XFCE - &#10003;
+* Fedora 39 Workstation - &#10003;
+* Alpine Linux wsl - &#2049;
+
+### Mac Os
+
+There is no implementation yet.
+
 ## Guide
 
 You have to compile that app for specific platform that you'll use.
@@ -156,7 +179,7 @@ version command:
 
 `(That Binary) version rust` or `(That Binary) version`
 
-## Our Roadmap to First Stable Release
+## Our Roadmap to Next Releases
 
 The roadmap of this project is this:
 
@@ -170,33 +193,37 @@ The roadmap of this project is this:
 
 I'm also open for contributions about implementing other sdk's and package managers with the test results of that codes. If you want to support that project and contribute, please check out the "CONTRIBUTION_GUIDE.md". If you like that project anyway, please check out the github repo and give a star to that project.
 
-## Our Roadmap to Individual Releases:
-
-### v0.4.0
-
-* Yarn Support
-
-### v0.5.0
-
-* Go Support
-* Adding Uninstall Support
+## Our Roadmap to Individual Releases
 
 ### v0.6.0
 
-* Gradle Support
+* Including Gentoo Linux And Rocky Linux For supported linux distros.
 
 ### v0.7.0
 
-* Maven Support
+* Jdk support
 
 ### v0.8.0
 
-* Python Support
+* Gradle Support
+* Maven Support
 
 ### v0.9.0
 
-* Adding Support For Downloading Specific Versions.
+* Python Support
 
 ### v1.0.0
 
+* Adding Uninstall Support
+
+### v1.1.0
+
+* Adding support for downloading everything on demanded path.
+
+### v1.2.0
+
 * Support for adding individual sdk's to system's PATH variable.
+
+### v1.3.0
+
+* Adding Support For Downloading Specific Versions.

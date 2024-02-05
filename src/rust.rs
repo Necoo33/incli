@@ -1,4 +1,5 @@
 use std::process::{Command, Output, ExitStatus, exit};
+use sys_info_extended::get_current_user;
 
 // there is some platform-specific apis on that page:
 
@@ -261,14 +262,19 @@ pub fn install_rust_on_alpine_linux(){
 // and, if you ran "powershell" program on windows, you can't add "-y" flag as argument to terminal command.
 
 pub fn install_rust_on_windows(){
-    println!("Welcome to incli, your request to install rust on windows reached. Please wait until it finish...");
+    println!("Welcome to incli, your request to install Rust on Windows reached. Please wait until it finish...");
+    println!("Keep pressing any of your keys when you focused on your terminal in regular time period, otherwise your installation may not run correctly.");
+
+    let current_user = get_current_user();
+
+    let format_the_download_path = format!("C:\\Users\\{}\\rustup-init.exe", current_user);
 
     let download_command = Command::new("powershell")
                                     .arg("Invoke-WebRequest")
                                     .arg("-Uri")
                                     .arg("https://win.rustup.rs")
                                     .arg("-OutFile")
-                                    .arg("rustup-init.exe")
+                                    .arg(&format_the_download_path)
                                     .output()
                                     .expect("Download failed.");
 
@@ -280,7 +286,7 @@ pub fn install_rust_on_windows(){
     println!("Installation continues...");
 
     // rustup'u yükle
-    let install_command = Command::new(".\\rustup-init.exe")
+    let install_command = Command::new(format_the_download_path)
                                     .arg("-y")
                                     .output()
                                     .expect("Installation failed.");

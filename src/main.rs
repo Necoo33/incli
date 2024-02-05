@@ -4,6 +4,7 @@ mod rust;
 mod node;
 mod bun;
 mod yarn;
+mod go;
 
 use models::{CreateAction, OsType, Execution, Version, Help, CommandType};
 use sys_info_extended::{os_release, os_type, get_current_user};
@@ -71,6 +72,7 @@ fn main() {
                 "rust" => user_action.rust_help(),
                 "go" => user_action.go_help(),
                 "node" => user_action.nodejs_help(),
+                "java" => user_action.jdk_help(),
                 "bun" => user_action.bun_help(),
                 "yarn" => user_action.yarn_help(),
                 "gradle" => user_action.gradle_help(),
@@ -85,6 +87,7 @@ fn main() {
                 "rust" => user_action.rust_version(),
                 "go" => user_action.go_version(),
                 "node" => user_action.nodejs_version(),
+                "java" => user_action.jdk_version(),
                 "bun" => user_action.bun_version(),
                 "yarn" => user_action.yarn_version(),
                 "gradle" => user_action.gradle_version(),

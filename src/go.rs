@@ -5,20 +5,50 @@ use std::io;
 use std::path::Path;
 use sys_info_extended::get_current_user;
 
-// Node.js Functions ----------------------------------------------------------
-
-// url: "https://nodejs.org/dist/v20.10.0/node-v20.10.0-linux-x64.tar.xz"
-// tar.gz: node-v20.10.0-linux-x64.tar.xz
-
-// i don't know why but in arch linux we can't give 755 permissions.
-
-pub fn install_nodejs_on_debian_based_distros(url: &str, file_name: &str) {
-    println!("Welcome to incli. Your request to install Node.js on Linux Reached.");
-    println!("Be sure you have wget and xz-utils installed if you use debian and kali linux, otherwise this installation won't work.");
+pub fn install_go_on_windows(url: &str, exe_name: &str) {
+    println!("Welcome to incli, your request to install Go on Windows reached. Please wait until it finish...");
+    println!("Keep pressing any of your keys when you focused on your terminal in regular time period, otherwise your installation may not run correctly.");
 
     let current_user = get_current_user();
 
-    let slice_of_file_name = &file_name[0..file_name.len() - 7];
+    let get_downloads_path = format!("C:\\Users\\{}\\Downloads\\{}", current_user, exe_name);
+
+    let download_go = Command::new("powershell")
+                                                .arg("Invoke-WebRequest")
+                                                .arg("-Uri")
+                                                .arg(url)
+                                                .arg("-OutFile")
+                                                .arg(&get_downloads_path)
+                                                .output();
+
+    match download_go {
+        Ok(_) => println!("go setup file successfully downloaded on pc, running it..."),
+        Err(error) => {
+            eprintln!("cannot download go setup file for that reason: {}", error);
+            exit(1)
+        }
+    }
+
+    let run_go_installer = Command::new("powershell")
+                                                            .arg(get_downloads_path)
+                                                            .output();
+
+    match run_go_installer {
+        Ok(_) => {
+            println!("go installer runned, you can continue installation on that.")
+        },
+        Err(error) => {
+            eprintln!("Cannot run go installer because of that reason: {}", error);
+            exit(1)
+        }
+    }
+}
+
+pub fn install_go_on_debian_based_distros(url: &str, file_name: &str) {
+    println!("Welcome to incli. Your request to install Go on a debian based distro reached.");
+    println!("Be sure you have installed wget on your pc, otherwise installation won't work.");
+
+    let current_user = get_current_user();
 
     let user_path = format!("/home/{}", current_user);
 
@@ -32,7 +62,7 @@ pub fn install_nodejs_on_debian_based_distros(url: &str, file_name: &str) {
     match current_user.as_str() {
         "root" => {
             if !install_nodejs.status.success() {
-                println!("Couldn't install Node.js Source Files Because Of Whatever reason.");
+                println!("Couldn't install Golang Source Files Because Of Whatever reason.");
                 exit(1);
             }
     
@@ -55,87 +85,7 @@ pub fn install_nodejs_on_debian_based_distros(url: &str, file_name: &str) {
     
             let extract_tar_file = Command::new("sudo")
                                                 .arg("tar")
-                                                .arg("xvf")
-                                                .arg(&file_path)
-                                                .output();
-    
-            match extract_tar_file {
-                Ok(_) => println!("source files successfully extracted, trying to add it on env's..."),
-                Err(error) => {
-                    eprintln!("Cannot extracted source files for this reason: {}", error);
-                    exit(1)
-                }
-            }
-
-            Command::new("sudo")
-                        .arg("rm")
-                        .arg("rf")
-                        .arg(file_path)
-                        .output()
-                        .expect("cannot delete archive");
-    
-            let current_folder_again = Command::new("pwd").output().unwrap();
-    
-            let format_current_folder_again = format!("{}/{}", std::str::from_utf8(&current_folder_again.stdout).unwrap().trim(), slice_of_file_name);
-    
-            Command::new("sudo")
-                        .arg("mv")
-                        .arg(format_current_folder_again)
-                        .arg("/root")
-                        .output()
-                        .unwrap();
-    
-            let new_path = format!("/root/{}", slice_of_file_name);
-    
-            let env_path = format!("{}/bin", new_path);
-    
-            let line_for_append = format!("export PATH=\"{}:$PATH\"", env_path);
-                    
-            let line_for_append = line_for_append.as_bytes();
-                        
-            let bashrc_file = fs::OpenOptions::new().append(true).open("/root/.bashrc");
-                    
-            match bashrc_file {
-                Ok(mut file) => {
-                    let add_env = io::Write::write_all(&mut file, line_for_append);
-                    
-                    match add_env {
-                        Ok(_) => println!("Node.js successfully added on env's. You can try it by restarting your computer and typing 'node --version' on command line."),
-                        Err(error) => println!("And error occured: {}", error)
-                    }
-                },
-                Err(_) => println!("there is no .bashrc file on current folder, we cannot set env's. You can do it manually, Node.js installed on: {}", env_path)
-            }
-        },
-        &_ => {
-            if !install_nodejs.status.success() {
-                println!("Couldn't download Node.js Source Files Because Of Whatever reason.");
-                exit(1);
-            }
-    
-            let get_current_file_command = Command::new("pwd").output().unwrap();
-    
-            let file_for_moving = format!("{}/{}", std::str::from_utf8(&get_current_file_command.stdout).unwrap().trim(), file_name);
-    
-            Command::new("mv").arg(&file_for_moving).arg(&user_path).output().unwrap();
-    
-            let file_path = format!("{}/{}", user_path, file_name);
-    
-            Command::new("sudo")
-                        .arg("chmod")
-                        .arg("777")
-                        .arg(&file_path)
-                        .output()
-                        .expect("couldn't give 755 permission to source code.");
-    
-            println!("Source Files Downloaded Successfully");
-    
-            println!("your file_for_moving: {}", file_for_moving);
-            println!("your file_path: {}", file_path);
-    
-            let extract_tar_file = Command::new("sudo")
-                                                .arg("tar")
-                                                .arg("xvf")
+                                                .arg("xzvf")
                                                 .arg(&file_path)
                                                 .output();
     
@@ -156,7 +106,87 @@ pub fn install_nodejs_on_debian_based_distros(url: &str, file_name: &str) {
     
             let current_folder_again = Command::new("pwd").output().unwrap();
     
-            let format_current_folder_again = format!("{}/{}", std::str::from_utf8(&current_folder_again.stdout).unwrap().trim(), slice_of_file_name);
+            let format_current_folder_again = format!("{}/go", std::str::from_utf8(&current_folder_again.stdout).unwrap().trim());
+    
+            Command::new("sudo")
+                        .arg("mv")
+                        .arg(format_current_folder_again)
+                        .arg("/root")
+                        .output()
+                        .unwrap();
+    
+            let env_path = format!("/root/go/bin");
+    
+            let line_for_append = format!("export PATH=\"{}:$PATH\"", env_path);
+                    
+            let line_for_append = line_for_append.as_bytes();
+                        
+            let bashrc_file = fs::OpenOptions::new().append(true).open("/root/.bashrc");
+                    
+            match bashrc_file {
+                Ok(mut file) => {
+                    let add_env = io::Write::write_all(&mut file, line_for_append);
+                    
+                    match add_env {
+                        Ok(_) => println!("Go successfully added on env's. You can try it by restarting your computer and typing 'go version' on command line."),
+                        Err(error) => println!("And error occured: {}", error)
+                    }
+                },
+                Err(_) => println!("cannot installed go for that reason: {}", env_path)
+            }
+        },
+        &_ => {
+            if !install_nodejs.status.success() {
+                println!("Couldn't download Go Source Files Because Of Whatever reason.");
+                exit(1);
+            }
+    
+            let get_current_file_command = Command::new("pwd").output().unwrap();
+    
+            let file_for_moving = format!("{}/{}", std::str::from_utf8(&get_current_file_command.stdout).unwrap().trim(), file_name);
+    
+            Command::new("mv").arg(&file_for_moving).arg(&user_path).output().unwrap();
+    
+            let file_path = format!("{}/{}", user_path, file_name);
+    
+            Command::new("sudo")
+                        .arg("chmod")
+                        .arg("777")
+                        .arg(&file_path)
+                        .output()
+                        .expect("couldn't give 755 permission to source code.");
+    
+            /*println!("Source Files Downloaded Successfully");
+    
+            println!("your file_for_moving: {}", file_for_moving);
+            println!("your file_path: {}", file_path);*/
+    
+            let extract_tar_file = Command::new("sudo")
+                                                .arg("tar")
+                                                .arg("xzvf")
+                                                .arg(&file_path)
+                                                .output();
+    
+            match extract_tar_file {
+                Ok(_) => println!("source files successfully extracted, trying to add it on env's..."),
+                Err(error) => {
+                    eprintln!("Cannot extracted source files for this reason: {}", error);
+                    exit(1)
+                }
+            }
+
+            Command::new("sudo")
+                        .arg("rm")
+                        .arg("-rf")
+                        .arg(file_path)
+                        .output()
+                        .expect("cannot delete archive");
+    
+            let current_folder_again = Command::new("pwd").output().unwrap();
+    
+            let format_current_folder_again = format!("{}/go", std::str::from_utf8(&current_folder_again.stdout).unwrap().trim());
+
+            println!("your format the current folder again: {}", format_current_folder_again);
     
             Command::new("sudo")
                         .arg("chmod")
@@ -173,11 +203,9 @@ pub fn install_nodejs_on_debian_based_distros(url: &str, file_name: &str) {
                         .output()
                         .unwrap();
     
-            let new_path = format!("{}/{}", user_path, slice_of_file_name);
+            let env_path = format!("{}/go/bin", user_path);
     
-            let env_path = format!("{}/bin", new_path);
-    
-            let line_for_append = format!("\nexport PATH=\"{}:$PATH\"", env_path);
+            let line_for_append = format!("export PATH=\"{}:$PATH\"", env_path);
                     
             let line_for_append = line_for_append.as_bytes();
     
@@ -190,24 +218,22 @@ pub fn install_nodejs_on_debian_based_distros(url: &str, file_name: &str) {
                     let add_env = io::Write::write_all(&mut file, line_for_append);
                     
                     match add_env {
-                        Ok(_) => println!("Node.js successfully added on env's. You can try it by restarting your computer and typing 'node --version' on command line."),
+                        Ok(_) => println!("Golang successfully added on env's. You can try it by restarting your computer and typing 'go version' on command line."),
                         Err(error) => println!("And error occured: {}", error)
                     }
                 },
-                Err(_) => println!("there is no .bashrc file on current folder, we cannot set env's. You can do it manually, Node.js installed on: {}", env_path)
+                Err(_) => println!("cannot installed go for that reason: {}", env_path)
             }
         }
     }
 }
 
-pub fn install_nodejs_on_arch_linux(url: &str, file_name: &str){
-    println!("Welcome to incli. Your request to install Node.js on Arch Linux Reached.");
-
+pub fn install_go_on_arch_linux(url: &str, file_name: &str) {
+    println!("Welcome to incli. Your request to Install Go on Arch Linux Reached. Please wait until installation finish.");
+    
     let current_user = get_current_user();
     let env_path;
     let current_user_path;
-
-    let slice_of_file_name = &file_name[0..file_name.len() - 7];
 
     let install_nodejs = Command::new("wget")
                                                 .arg(url)
@@ -246,7 +272,7 @@ pub fn install_nodejs_on_arch_linux(url: &str, file_name: &str){
 
             let extract_the_archive = Command::new("sudo")
                                                             .arg("tar")
-                                                            .arg("xvf")
+                                                            .arg("xzvf")
                                                             .arg(&format_the_whole_file_path)
                                                             .output();
 
@@ -265,7 +291,7 @@ pub fn install_nodejs_on_arch_linux(url: &str, file_name: &str){
                         .output()
                         .unwrap();
 
-            let format_the_source_files_path = format!("{}/{}", current_folder_path, slice_of_file_name);
+            let format_the_source_files_path = format!("{}/go", current_folder_path);
 
             let move_the_source_files_to_root = Command::new("sudo")
                                                                                     .arg("mv")
@@ -281,7 +307,7 @@ pub fn install_nodejs_on_arch_linux(url: &str, file_name: &str){
                 }
             }
 
-            env_path = format!("/root/{}/bin", slice_of_file_name)
+            env_path = format!("/root/go/bin")
         },
         &_ => {
             current_user_path = format!("/home/{}", current_user);
@@ -302,7 +328,7 @@ pub fn install_nodejs_on_arch_linux(url: &str, file_name: &str){
 
             let extract_the_archive = Command::new("sudo")
                                                             .arg("tar")
-                                                            .arg("xvf")
+                                                            .arg("xzvf")
                                                             .arg(&format_the_whole_file_path)
                                                             .output();
 
@@ -321,9 +347,9 @@ pub fn install_nodejs_on_arch_linux(url: &str, file_name: &str){
                         .output()
                         .unwrap();
 
-            let format_the_source_files_path = format!("{}/{}", current_folder_path, slice_of_file_name);
+            let format_the_source_files_path = format!("{}/go", current_folder_path);
 
-            println!("source files path: {}", format_the_source_files_path);
+            //println!("source files path: {}", format_the_source_files_path);
 
             let give_permissions_to_source_files = Command::new("sudo")
                                                                                     .arg("chmod")
@@ -354,7 +380,7 @@ pub fn install_nodejs_on_arch_linux(url: &str, file_name: &str){
                 }
             }
 
-            env_path = format!("{}/{}/bin", current_user_path, slice_of_file_name)
+            env_path = format!("{}/go/bin", current_user_path)
         }
     }
 
@@ -378,36 +404,33 @@ pub fn install_nodejs_on_arch_linux(url: &str, file_name: &str){
 
     match incli_envs_file {
         Ok(mut file) => {
-            let line_for_append = format!("\nexport PATH=$PATH:{}", env_path);
+            let line_for_append = format!("export PATH=$PATH:{}", env_path);
             let line_for_append = line_for_append.as_bytes();
         
             let add_env_file_dest = io::Write::write_all(&mut file, line_for_append);
 
             match add_env_file_dest {
-                Ok(_) => println!("envs successfully added on your user."),
+                Ok(_) => {
+                    println!("envs successfully added on your user.");
+                    println!("Your installation of Go on arch linux ended successfully. You can check it via typing 'go version' later than close current terminal. If you can't see any answer, try to restart the computer and check it again.");
+                },
                 Err(err) => eprintln!("This error occured: {}", err)
             }
         },
         Err(err) => {
-            eprintln!("Cannot open incli_envs.sh file for that reason: {}", err)
+            eprintln!("Cannot open incli_envs.sh file for that reason: {}", err);
+            println!("Because of that, we cannot set env's. You can set your env's manually.");
+            exit(1)
         }
     }
-    
 }
 
-// bu dosyada "configure_incli_envs_file" ufulesini kullanarak bu dosyayı ekleyebilir ve env'leri bu vasıtayla ekleyebilirsin.
-// mesela incli-envs.sh dosyasının içine şunu yazarsan: PATH="$HOME/incli_path:$PATH" home directory'deki "incli_path" dosyasını
-// env'lere ekleyecekdir. 
-
-pub fn install_nodejs_on_alma_linux(url: &str, file_name: &str){
-    println!("Welcome to incli. Your request to install Node.js on Alma Linux Reached.");
-    println!("Be sure you have installed xz-utils in your pc, otherwise installation won't work.");
+pub fn install_go_on_alma_linux(url: &str, file_name: &str) {
+    println!("Welcome to incli. Your request to install Go on Alma Linux Reached.");
 
     let current_user = get_current_user();
     let env_path;
     let current_user_path;
-
-    let slice_of_file_name = &file_name[0..file_name.len() - 7];
 
     let install_nodejs = Command::new("wget")
                                     .arg(url)
@@ -417,7 +440,7 @@ pub fn install_nodejs_on_alma_linux(url: &str, file_name: &str){
                                     .expect("Some Error Happened");
 
     if !install_nodejs.status.success() {
-        println!("Couldn't install Node.js Source Files Because Of Whatever reason.");
+        println!("Couldn't install Go Source Files Because Of Whatever reason.");
         exit(1);
     }
 
@@ -439,7 +462,7 @@ pub fn install_nodejs_on_alma_linux(url: &str, file_name: &str){
 
             let extract_the_archive = Command::new("sudo")
                                                 .arg("tar")
-                                                .arg("xvf")
+                                                .arg("xzvf")
                                                 .arg(&format_the_whole_file_path)
                                                 .output();
 
@@ -458,7 +481,7 @@ pub fn install_nodejs_on_alma_linux(url: &str, file_name: &str){
                         .output()
                         .unwrap();
 
-            let source_files_path = format!("{}/{}", current_folder_path, slice_of_file_name);
+            let source_files_path = format!("{}/go/bin", current_folder_path);
 
             let move_the_source_files = Command::new("sudo")
                                                                         .arg("mv")
@@ -474,7 +497,7 @@ pub fn install_nodejs_on_alma_linux(url: &str, file_name: &str){
                 }
             }
 
-            env_path = format!("/root/{}/bin", slice_of_file_name);
+            env_path = "/root/go/bin".to_string();
         },
         &_ => {
             current_user_path = format!("/home/{}", current_user);
@@ -493,7 +516,7 @@ pub fn install_nodejs_on_alma_linux(url: &str, file_name: &str){
 
             let extract_the_archive = Command::new("sudo")
                                                                         .arg("tar")
-                                                                        .arg("xvf")
+                                                                        .arg("xzvf")
                                                                         .arg(&format_the_whole_file_path)
                                                                         .output();
 
@@ -512,7 +535,7 @@ pub fn install_nodejs_on_alma_linux(url: &str, file_name: &str){
                         .output()
                         .unwrap();
 
-            let source_files_path = format!("{}/{}", current_folder_path, slice_of_file_name);
+            let source_files_path = format!("{}/go", current_folder_path);
 
             let move_the_source_files = Command::new("sudo")
                                                                         .arg("mv")
@@ -528,7 +551,7 @@ pub fn install_nodejs_on_alma_linux(url: &str, file_name: &str){
                 }
             }
 
-            env_path = format!("{}/{}/bin", current_user_path, slice_of_file_name)
+            env_path = format!("{}/go/bin", current_user_path)
         }
     }
 
@@ -557,25 +580,26 @@ pub fn install_nodejs_on_alma_linux(url: &str, file_name: &str){
             let add_env_file_dest = io::Write::write_all(&mut file, line_for_append);
 
             match add_env_file_dest {
-                Ok(_) => println!("envs successfully added on your user."),
+                Ok(_) => {
+                    println!("envs successfully added on your user.");
+                    println!("You're successfully installed go. You can check it via typing 'go version' later than open a new terminal. If it doesn't work, try it later than restart your computer.")
+                },
                 Err(err) => eprintln!("This error occured: {}", err)
             }
         },
         Err(err) => {
-            eprintln!("Cannot open incli_envs.sh file for that reason: {}", err)
+            eprintln!("Cannot open incli_envs.sh file for that reason: {}", err);
+            println!("Because of that we couldn't set env's. You can set your env's manually if you want.")
         }
     }
 }
 
-pub fn install_nodejs_on_centos_and_fedora(url: &str, file_name: &str) {
-    println!("Welcome to incli. Your request to install Node.js on a Red Hat Based Distro Reached.");
-    println!("Be sure you're running that installation on your user's root directory, otherwise you have to set your env's manually.");
+pub fn install_go_on_centos_and_fedora(url: &str, file_name: &str) {
+    println!("Welcome to incli. Your request to install Go on a Red Hat Based Distro Reached.");
 
     let current_user = get_current_user();
     let env_path;
     let current_user_path;
-
-    let slice_of_file_name = &file_name[0..file_name.len() - 7];
 
     let install_nodejs = Command::new("wget")
                                                 .arg(url)
@@ -607,7 +631,7 @@ pub fn install_nodejs_on_centos_and_fedora(url: &str, file_name: &str) {
 
             let extract_the_archive = Command::new("sudo")
                                                                         .arg("tar")
-                                                                        .arg("xvf")
+                                                                        .arg("xzvf")
                                                                         .arg(&format_the_whole_file_path)
                                                                         .output();
 
@@ -626,7 +650,7 @@ pub fn install_nodejs_on_centos_and_fedora(url: &str, file_name: &str) {
                         .output()
                         .unwrap();
 
-            let source_files_path = format!("{}/{}", current_folder_path, slice_of_file_name);
+            let source_files_path = format!("{}/go", current_folder_path);
 
             let move_the_source_files = Command::new("sudo")
                                                                         .arg("mv")
@@ -642,7 +666,7 @@ pub fn install_nodejs_on_centos_and_fedora(url: &str, file_name: &str) {
                 }
             }
 
-            env_path = format!("/root/{}/bin", slice_of_file_name);
+            env_path = "/root/go/bin".to_string();
         },
         &_ => {
             current_user_path = format!("/home/{}", current_user);
@@ -661,7 +685,7 @@ pub fn install_nodejs_on_centos_and_fedora(url: &str, file_name: &str) {
 
             let extract_the_archive = Command::new("sudo")
                                                                         .arg("tar")
-                                                                        .arg("xvf")
+                                                                        .arg("xzvf")
                                                                         .arg(&format_the_whole_file_path)
                                                                         .output();
 
@@ -680,7 +704,7 @@ pub fn install_nodejs_on_centos_and_fedora(url: &str, file_name: &str) {
                         .output()
                         .unwrap();
 
-            let source_files_path = format!("{}/{}", current_folder_path, slice_of_file_name);
+            let source_files_path = format!("{}/go", current_folder_path);
 
             let move_the_source_files = Command::new("sudo")
                                                                         .arg("mv")
@@ -696,7 +720,7 @@ pub fn install_nodejs_on_centos_and_fedora(url: &str, file_name: &str) {
                 }
             }
 
-            env_path = format!("{}/{}/bin", current_user_path, slice_of_file_name);
+            env_path = format!("{}/go/bin", current_user_path);
         }
     }
 
@@ -720,100 +744,48 @@ pub fn install_nodejs_on_centos_and_fedora(url: &str, file_name: &str) {
             let add_env_file_dest = io::Write::write_all(&mut file, line_for_append);
 
             match add_env_file_dest {
-                Ok(_) => println!("envs successfully added on your user."),
+                Ok(_) => {
+                    println!("envs successfully added on your user.");
+                    println!("You're successfully installed Go on a Red Hat Based Distro. You can check it via typing 'go version' later than open a new terminal. If it doesn't work, restart your computer and type it again.");
+                },
                 Err(err) => eprintln!("This error occured: {}", err)
             }
         },
         Err(err) => {
-            eprintln!("Cannot open incli_envs.sh file for that reason: {}", err)
+            eprintln!("Cannot open incli_envs.sh file for that reason: {}", err);
+            println!("We couldn't set env's due to the previously printed reason. You can set it manually.")
         }
     }
 }
 
-pub fn install_node_on_alpine_linux() {
-    println!("Welcome to the incli. Your request to install node.js on alpine linux reached.");
-    println!("Be sure you have the root user or have sudo privileges. Otherwise Installation Won't Work.");
-    
-    let install_nodejs = Command::new("sudo")
-                                            .arg("apk")
-                                            .arg("add")
-                                            .arg("--update")
-                                            .arg("nodejs")
-                                            .arg("npm").output().expect("cannot download node.js for some reason");
+pub fn install_go_on_alpine_linux(_url: &str, _file_name: &str) {
+    println!("Incli doesn't support alpine linux downloads, exiting...");
 
-    if install_nodejs.status.success() {
-        println!("You're successfully installed node.js")
-    } else {
-        eprintln!("You couldn'y installed node.js for that reason: {:#?}", std::str::from_utf8(&install_nodejs.stderr))
+    return;
+}
+
+pub fn log_go_version() {
+    let get_go_version = Command::new("go").arg("version").output();
+
+    match get_go_version {
+        Ok(version) => {
+            let format_the_version = std::str::from_utf8(&version.stdout).unwrap();
+
+            for line in format_the_version.lines().into_iter() {
+                if line.starts_with("go version") {
+                    let split_the_go_version_output: Vec<&str> = line.split(" ").collect::<Vec<&str>>();
+
+                    println!("Your go version is: {}", split_the_go_version_output[2].strip_prefix("go").unwrap());
+                    println!("Your go's platform/architecture specification is: {}", split_the_go_version_output[3]);
+                }
+            }
+
+
+        },
+        Err(error) => eprintln!("cannot log go version because of that: {}", error)
     }
 }
 
-pub fn install_nodejs_on_windows(url: &str, exe_name: &str) {
-    println!("Welcome to incli. Your request to install Node.js on Windows Reached.");
-    println!("Keep pressing any of your keys when you focused on your terminal in regular time period, otherwise your installation may not run correctly.");
-
-    let current_user = get_current_user();
-    let get_downloads_path = format!("C:\\Users\\{}\\Downloads\\{}", current_user, exe_name);
-
-    let download_command = Command::new("powershell")
-                                        .arg("Invoke-WebRequest")
-                                        .arg("-Uri")
-                                        .arg(url)
-                                        .arg("-OutFile")
-                                        .arg(&get_downloads_path)
-                                        .output()
-                                        .expect("Download failed.");
-
-    if !download_command.status.success() {
-        eprintln!("Failed to download {} for whatever reason. Exiting.", exe_name);
-        exit(1);
-    }
-
-    println!("Download completed, you can continue installing node.js through the pop up which will open.");
-
-    let install_command = Command::new("powershell")
-                                            .arg(get_downloads_path)
-                                            .output()
-                                            .expect("Installation failed.");
-
-    if !install_command.status.success() {
-        eprintln!("Installation failed. Exiting.");
-        exit(1);
-    } else {
-        println!("Node.js installed, you can check it via opening a new terminal window and typing: 'node --version' command.")
-    }
-
-
-}
-
-pub fn install_nodejs_error() {
-    println!("Wrong third argument for installing node.js")
-}
-
-pub fn log_node_and_npm_version(){
-    let node_version_command = Command::new("node")
-                                                    .arg("--version")
-                                                    .output()
-                                                    .expect("");
-
-    if !&node_version_command.status.success() {
-        println!("Node isn't installed on your system.");
-    } 
-
-    let npm_version_command = Command::new("npm")
-                                                .arg("--version")
-                                                .output()
-                                                .expect("");
-
-    if !&npm_version_command.status.success() {
-        println!("Npm isn't installed on your system.");
-    } 
-
-    let get_node_answer_as_string = std::str::from_utf8(&node_version_command.stdout).unwrap().to_string();
-
-    println!("Your Node version is: {}", get_node_answer_as_string);
-
-    let get_npm_answer_as_string = std::str::from_utf8(&npm_version_command.stdout).unwrap().to_string();
-
-    println!("Your Npm version is: {}", get_npm_answer_as_string)
+pub fn install_go_error() {
+    println!("Wrong third argument for installing go")
 }

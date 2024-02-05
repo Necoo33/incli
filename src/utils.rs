@@ -66,10 +66,20 @@ pub fn check_if_linux_dist_is_arch_linux() -> bool {
     return false;
 }
 
-pub fn configure_incli_envs_file(){
+pub fn configure_incli_envs_file(user: &String){
+    let user_path;
+
+    if user != &"root" {
+        user_path = format!("/home/{}", user)
+    } else {
+        user_path = "/root".to_string()
+    }
+
+    let incli_paths_path = format!("{}/INCLI_PATHS", user_path);
+
     let create_incli_paths_folder = Command::new("sudo")
                                             .arg("mkdir")
-                                            .arg("INCLI_PATHS")
+                                            .arg(&incli_paths_path)
                                             .output();
 
     match create_incli_paths_folder {
@@ -80,9 +90,11 @@ pub fn configure_incli_envs_file(){
         }
     }
 
+    let incli_envs_path = format!("{}/incli-envs.sh", incli_paths_path);
+
     let create_incli_envs_file = Command::new("sudo")
                                             .arg("touch")
-                                            .arg("./INCLI_PATHS/incli-envs.sh")
+                                            .arg(&incli_envs_path)
                                             .output();
 
     match create_incli_envs_file {
@@ -97,7 +109,7 @@ pub fn configure_incli_envs_file(){
                                                                     .arg("chmod")
                                                                     .arg("777")
                                                                     .arg("-R")
-                                                                    .arg("INCLI_PATHS")
+                                                                    .arg(incli_paths_path)
                                                                     .output();
 
     match give_permission_for_incli_paths {
@@ -108,10 +120,31 @@ pub fn configure_incli_envs_file(){
         }
     }
 
+    let open_and_type_incli_envs_file = fs::OpenOptions::new().append(true).open(&incli_envs_path);
+
+    match open_and_type_incli_envs_file {
+        Ok(mut file) => {
+            let incli_envs_greeting_quote1 = "# Hello from incli-envs.sh file. This file contains environment variables that added by Incli program\n";
+            let incli_envs_greeting_quote2 = "# If you don't know what that program is, you can learn it via that addresses:\n";
+            let incli_envs_greeting_quote3 = "# github.com repo: https://github.com/Necoo33/incli\n";
+            let incli_envs_greeting_quote4 = "# crates.io page: https://crates.io/crates/incli\n";
+
+            io::Write::write_all(&mut file, incli_envs_greeting_quote1.as_bytes()).unwrap();
+            io::Write::write_all(&mut file, incli_envs_greeting_quote2.as_bytes()).unwrap();
+            io::Write::write_all(&mut file, incli_envs_greeting_quote3.as_bytes()).unwrap();
+            io::Write::write_all(&mut file, incli_envs_greeting_quote4.as_bytes()).unwrap();
+        },
+        Err(error) => {
+            eprintln!("cannot open incli-envs.sh file for that reason: {}", error);
+        }
+    }
+
+    let bashrc_path = format!("{}/.bashrc", user_path);
+
     let give_permission_to_bashrc = Command::new("sudo")
                                                         .arg("chmod")
                                                         .arg("777")
-                                                        .arg(".bashrc")
+                                                        .arg(&bashrc_path)
                                                         .output()
                                                         .expect("cannot give permission to .bashrc file");
 
@@ -119,11 +152,14 @@ pub fn configure_incli_envs_file(){
         println!("Cannot give required permissions for .bashrc, you have to add incli-envs.sh file's path on that file via that synthax for adding node.js on your user's env's: \". \"$HOME/INCLI_PATHS/incli-envs.sh\"\"")
     }
 
-    let bashrc_file = fs::OpenOptions::new().append(true).open("./.bashrc");
+    let bashrc_file = fs::OpenOptions::new().append(true).open(bashrc_path);
 
     match bashrc_file {
         Ok(mut file) => {
-            let add_env_file_dest = io::Write::write_all(&mut file, ". \"$HOME/INCLI_PATHS/incli-envs.sh\"".as_bytes());
+            let incli_envs = incli_envs_path;
+            let format_incli_envs_bytes = format!(". \"{}\"", incli_envs);
+
+            let add_env_file_dest = io::Write::write_all(&mut file, format_incli_envs_bytes.as_bytes());
 
             match add_env_file_dest {
                 Ok(_) => println!("incli-envs.sh file successfully added on .bashrc file."),

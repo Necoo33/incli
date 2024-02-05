@@ -34,3 +34,13 @@ Added yarn support.
 Fixed Some Documentation Typos.
 Fixed a bug about node.js's installation of lts version on some linux distros.
 Supported Node.js lts version upgraded to v20.11.0 .
+
+## v0.5.0
+
+Added Golang Support.
+Project structure changed, from now there is no need to be in user folder for adding node.js to env's. It both downloads it truly for root user and other users.
+Also there is no need for being in user folder for installing golang and adding env's of it.
+From now on, there is no need to be in a certain directory to make installation correctly.
+
+
+

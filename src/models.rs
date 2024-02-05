@@ -3,6 +3,7 @@ use crate::rust;
 use crate::node;
 use crate::bun;
 use crate::yarn;
+use crate::go;
 
 #[derive(PartialEq, Clone)]
 pub enum CommandType {
@@ -271,7 +272,101 @@ impl Execution for UserAction {
 
     fn install_go(&self) -> Self {
         if self.first_arg == CommandType::Install && self.second_arg == "go".to_string() {
-            todo!()
+            match self.os_type {
+                OsType::Windows => {
+                    match self.third_arg.as_str() {
+                        "lts" => go::install_go_on_windows("https://go.dev/dl/go1.21.6.windows-amd64.msi", "go1.21.6.windows-amd64.msi"),
+                        "" => go::install_go_on_windows("https://go.dev/dl/go1.21.6.windows-amd64.msi", "go1.21.6.windows-amd64.msi"),
+                        "latest" => go::install_go_on_windows("https://go.dev/dl/go1.22rc2.windows-amd64.msi", "go1.22rc2.windows-amd64.msi"),
+                        &_ => go::install_go_error()
+                    };
+                },
+                OsType::Linux => {
+                    let linux_dist = utils::return_linux_dist_etc_os_release();
+                    let mut null_var = "".to_string();
+
+                    match linux_dist {
+                        "ubuntu" => {
+                            match self.third_arg.as_str() {
+                                "lts" => go::install_go_on_debian_based_distros("https://go.dev/dl/go1.21.6.linux-amd64.tar.gz", "go1.21.6.linux-amd64.tar.gz"),
+                                "" => go::install_go_on_debian_based_distros("https://go.dev/dl/go1.21.6.linux-amd64.tar.gz", "go1.21.6.linux-amd64.tar.gz"),
+                                "latest" => go::install_go_on_debian_based_distros("https://go.dev/dl/go1.22rc2.linux-amd64.tar.gz", "go1.22rc2.linux-amd64.tar.gz"),
+                                &_ => go::install_go_error()
+                            }
+                        },
+                        "debian" => {
+                            match self.third_arg.as_str() {
+                                "lts" => go::install_go_on_debian_based_distros("https://go.dev/dl/go1.21.6.linux-amd64.tar.gz", "go1.21.6.linux-amd64.tar.gz"),
+                                "" => go::install_go_on_debian_based_distros("https://go.dev/dl/go1.21.6.linux-amd64.tar.gz", "go1.21.6.linux-amd64.tar.gz"),
+                                "latest" => go::install_go_on_debian_based_distros("https://go.dev/dl/go1.22rc2.linux-amd64.tar.gz", "go1.22rc2.linux-amd64.tar.gz"),
+                                &_ => go::install_go_error()
+                            }
+                        },
+                        "pardus" => {
+                            match self.third_arg.as_str() {
+                                "lts" => go::install_go_on_debian_based_distros("https://go.dev/dl/go1.21.6.linux-amd64.tar.gz", "go1.21.6.linux-amd64.tar.gz"),
+                                "" => go::install_go_on_debian_based_distros("https://go.dev/dl/go1.21.6.linux-amd64.tar.gz", "go1.21.6.linux-amd64.tar.gz"),
+                                "latest" => go::install_go_on_debian_based_distros("https://go.dev/dl/go1.22rc2.linux-amd64.tar.gz", "go1.22rc2.linux-amd64.tar.gz"),
+                                &_ => go::install_go_error()
+                            }
+                        },
+                        "arch wsl" => {
+                            match self.third_arg.as_str() {
+                                "lts" => go::install_go_on_arch_linux("https://go.dev/dl/go1.21.6.linux-amd64.tar.gz", "go1.21.6.linux-amd64.tar.gz"),
+                                "" => go::install_go_on_arch_linux("https://go.dev/dl/go1.21.6.linux-amd64.tar.gz", "go1.21.6.linux-amd64.tar.gz"),
+                                "latest" => go::install_go_on_arch_linux("https://go.dev/dl/go1.22rc2.linux-amd64.tar.gz", "go1.22rc2.linux-amd64.tar.gz"),
+                                &_ => go::install_go_error()
+                            }
+                        }
+                        "kali linux" => {
+                            match self.third_arg.as_str() {
+                                "lts" => go::install_go_on_debian_based_distros("https://go.dev/dl/go1.21.6.linux-amd64.tar.gz", "go1.21.6.linux-amd64.tar.gz"),
+                                "" => go::install_go_on_debian_based_distros("https://go.dev/dl/go1.21.6.linux-amd64.tar.gz", "go1.21.6.linux-amd64.tar.gz"),
+                                "latest" => go::install_go_on_debian_based_distros("https://go.dev/dl/go1.22rc2.linux-amd64.tar.gz", "go1.22rc2.linux-amd64.tar.gz"),
+                                &_ => go::install_go_error()
+                            }
+                        },
+                        "fedora" => {
+                            match self.third_arg.as_str() {
+                                "lts" => go::install_go_on_centos_and_fedora("https://go.dev/dl/go1.21.6.linux-amd64.tar.gz", "go1.21.6.linux-amd64.tar.gz"),
+                                "" => go::install_go_on_centos_and_fedora("https://go.dev/dl/go1.21.6.linux-amd64.tar.gz", "go1.21.6.linux-amd64.tar.gz"),
+                                "latest" => go::install_go_on_centos_and_fedora("https://go.dev/dl/go1.22rc2.linux-amd64.tar.gz", "go1.22rc2.linux-amd64.tar.gz"),
+                                &_ => go::install_go_error()
+                            }
+                        },
+                        "centos" => {
+                            match self.third_arg.as_str() {
+                                "lts" => go::install_go_on_centos_and_fedora("https://go.dev/dl/go1.21.6.linux-amd64.tar.gz", "go1.21.6.linux-amd64.tar.gz"),
+                                "" => go::install_go_on_centos_and_fedora("https://go.dev/dl/go1.21.6.linux-amd64.tar.gz", "go1.21.6.linux-amd64.tar.gz"),
+                                "latest" => go::install_go_on_centos_and_fedora("https://go.dev/dl/go1.22rc2.linux-amd64.tar.gz", "go1.22rc2.linux-amd64.tar.gz"),
+                                &_ => go::install_go_error()
+                            }
+                        },
+                        "alma linux" => {
+                            match self.third_arg.as_str() {
+                                "lts" => go::install_go_on_alma_linux("https://go.dev/dl/go1.21.6.linux-amd64.tar.gz", "go1.21.6.linux-amd64.tar.gz"),
+                                "" => go::install_go_on_alma_linux("https://go.dev/dl/go1.21.6.linux-amd64.tar.gz", "go1.21.6.linux-amd64.tar.gz"),
+                                "latest" => go::install_go_on_alma_linux("https://go.dev/dl/go1.22rc2.linux-amd64.tar.gz", "go1.22rc2.linux-amd64.tar.gz"),
+                                &_ => go::install_go_error()
+                            }
+                        },
+                        "alpine" => go::install_go_on_alpine_linux("https://go.dev/dl/go1.21.6.linux-amd64.tar.gz", "go1.21.6.linux-amd64.tar.gz"),
+                        &_ => null_var = "none".to_string()
+                    }
+
+                    if null_var == "none".to_string() {
+                        if utils::check_if_linux_dist_is_arch_linux() {
+                            match self.third_arg.as_str() {
+                                "lts" => go::install_go_on_arch_linux("https://go.dev/dl/go1.21.6.linux-amd64.tar.gz", "go1.21.6.linux-amd64.tar.gz"),
+                                "" => go::install_go_on_arch_linux("https://go.dev/dl/go1.21.6.linux-amd64.tar.gz", "go1.21.6.linux-amd64.tar.gz"),
+                                "latest" => go::install_go_on_arch_linux("https://go.dev/dl/go1.22rc2.linux-amd64.tar.gz", "go1.22rc2.linux-amd64.tar.gz"),
+                                &_ => go::install_go_error()
+                            }
+                        }
+                    }
+                },
+                OsType::Darwin => println!("That's not implemented yet.")
+            }
         }
 
         return Self {
@@ -285,7 +380,7 @@ impl Execution for UserAction {
     }
 
     fn install_jdk(&self) -> Self {
-        if self.first_arg == CommandType::Install && self.second_arg == "jdk".to_string() {
+        if self.first_arg == CommandType::Install && self.second_arg == "java".to_string() {
             todo!()
         }
 
@@ -643,7 +738,7 @@ impl Help for UserAction {
         println!("Java codes first compiled via Java compiler to java bytecodes then interpreted via Java Virtual Machine.");
         println!("Because of that nature, java is faster than other interpreted languages, such as javascript, python, php and ruby.");
         println!("Java is intended to be a c++ replacement for Performance-Critic Back-End due to it's safety, platform agnosticism and especially easiness of tooling relative to c++ and achieved very good success about it. It's more slower than c++ but way more easy to setup, develop and deploy all kind of apps.");        
-        println!("Later than it published, in a few years, it achieved to be de facto standard on Back-End development for performance-critic systems for decades. On these years, it's in a slow decline especially because of rise of go and rust, and maybe in future bun.");
+        println!("Later than it published, in a few years, it achieved to be de facto standard on Back-End development for performance-critic systems for decades. In current years, it's in a slow decline especially because of rise of go and rust, and maybe in future bun.");
         println!("JDK, which means Java Development Kit, includes Java Runtime Environment, Java Virtual Machine And Java Api's. It's main tooling for anything a java app needs.");
        
         return Self {
@@ -746,6 +841,8 @@ impl Version for UserAction {
     }
 
     fn go_version(&self) -> Self {
+        go::log_go_version();
+        
         return Self {
             os_type: self.os_type.clone(),
             os_release: self.os_release.clone(),
