@@ -16,6 +16,12 @@ If you like that program, consider to give a like on [github repo](https://githu
 * Java - Gradle
 * Java - Maven
 * python
+* php
+* phpmyadmin
+* laravel
+* ruby
+* ocaml
+* zig
 
 ## Current Status
 
@@ -206,11 +212,10 @@ I'm also open for contributions about implementing other sdk's and package manag
 ### v0.8.0
 
 * Gradle Support
-* Maven Support
 
 ### v0.9.0
 
-* Python Support
+* Maven Support
 
 ### v1.0.0
 
@@ -218,12 +223,39 @@ I'm also open for contributions about implementing other sdk's and package manag
 
 ### v1.1.0
 
-* Adding support for downloading everything on demanded path.
+* Python Support
 
 ### v1.2.0
 
-* Support for adding individual sdk's to system's PATH variable.
+* Adding support for downloading everything on demanded path.
 
 ### v1.3.0
 
+* Support for adding individual sdk's to system's PATH variable.
+
+### v1.4.0
+
 * Adding Support For Downloading Specific Versions.
+
+### v1.5.0
+
+* Adding Composer Support
+* Adding PhpMyAdmin Support
+
+### v1.6.0
+
+* Adding Laravel Support
+
+### v1.7.0
+
+* Adding Ruby Support
+* Adding rbenv Support
+
+### v1.8.0
+
+* Adding Zig Support
+
+### v1.9.0
+
+* Adding Ocaml Support
+
