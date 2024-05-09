@@ -444,7 +444,7 @@ impl Execution for UserAction {
                             match self.third_arg.as_str() {
                                 "lts" => node::install_nodejs_on_debian_based_distros("https://nodejs.org/dist/v20.13.1/node-v20.13.1-linux-x64.tar.xz", "node-v20.13.1-linux-x64.tar.xz"),
                                 "" => node::install_nodejs_on_debian_based_distros("https://nodejs.org/dist/v20.13.1/node-v20.13.1-linux-x64.tar.xz", "node-v20.13.1-linux-x64.tar.xz"),
-                                "latest" => node::instaahp_PSmNFZpqEv1Xj7721Qc18uvsko0ya62JB5P1ll_nodejs_on_debian_based_distros("https://nodejs.org/dist/v22.1.0/node-v22.1.0-linux-x64.tar.xz", "node-v22.1.0-linux-x64.tar.xz"),
+                                "latest" => node::install_nodejs_on_debian_based_distros("https://nodejs.org/dist/v22.1.0/node-v22.1.0-linux-x64.tar.xz", "node-v22.1.0-linux-x64.tar.xz"),
                                 &_ => node::install_nodejs_error()
                             }
                         },
