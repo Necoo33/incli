@@ -1,5 +1,8 @@
 # Incli Changelog
 
+## v0.5.9
+
+Upgraded Node.js's latest version to 22.3.0 .
 
 ## v0.5.8
 
