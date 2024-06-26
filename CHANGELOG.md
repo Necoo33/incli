@@ -1,5 +1,9 @@
 # Incli Changelog
 
+## v0.5.11
+
+Upgraded Go's latest version to v1.23rc1 .
+
 ## v0.5.10
 
 Upgraded Node.js's latest version to 20.15.0 .
