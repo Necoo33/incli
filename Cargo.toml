@@ -6,7 +6,7 @@ license = "MIT"
 readme = "README.md"
 repository = "https://github.com/Necoo33/incli"
 keywords = ["cli", "cli-tool", "automation-tool", "installation-tool", "cla"]
-categories = ["command-line-interface", "development-tools::build-utils", "accesibility", "configuration"]
+categories = ["command-line-interface", "development-tools::build-utils"]
 version = "0.5.12"
 edition = "2021"
 
