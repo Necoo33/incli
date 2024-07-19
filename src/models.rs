@@ -277,7 +277,7 @@ impl Execution for UserAction {
                     match self.third_arg.as_str() {
                         "lts" => go::install_go_on_windows("https://go.dev/dl/go1.22.5.windows-amd64.msi", "go1.22.5.windows-amd64.msi"),
                     "" => go::install_go_on_windows("https://go.dev/dl/go1.22.5.windows-amd64.msi", "go1.22.5.windows-amd64.msi"),
-                        "latest" => go::install_go_on_windows("https://go.dev/dl/go1.23rc1.windows-amd64.msi", "go1.23rc1.windows-amd64.msi"),
+                        "latest" => go::install_go_on_windows("https://go.dev/dl/go1.23rc2.windows-amd64.msi", "go1.23rc2.windows-amd64.msi"),
                         &_ => go::install_go_error()
                     };
                 },
@@ -290,7 +290,7 @@ impl Execution for UserAction {
                             match self.third_arg.as_str() {
                                 "lts" => go::install_go_on_debian_based_distros("https://go.dev/dl/go1.22.5.linux-amd64.tar.gz", "go1.22.5.linux-amd64.tar.gz"),
                                 "" => go::install_go_on_debian_based_distros("https://go.dev/dl/go1.22.5.linux-amd64.tar.gz", "go1.22.5.linux-amd64.tar.gz"),
-                                "latest" => go::install_go_on_debian_based_distros("https://go.dev/dl/go1.23rc1.linux-amd64.tar.gz", "go1.23rc1.linux-amd64.tar.gz"),
+                                "latest" => go::install_go_on_debian_based_distros("https://go.dev/dl/go1.23rc2.linux-amd64.tar.gz", "go1.23rc2.linux-amd64.tar.gz"),
                                 &_ => go::install_go_error()
                             }
                         },
@@ -298,7 +298,7 @@ impl Execution for UserAction {
                             match self.third_arg.as_str() {
                                 "lts" => go::install_go_on_debian_based_distros("https://go.dev/dl/go1.22.5.linux-amd64.tar.gz", "go1.22.5.linux-amd64.tar.gz"),
                                 "" => go::install_go_on_debian_based_distros("https://go.dev/dl/go1.22.5.linux-amd64.tar.gz", "go1.22.5.linux-amd64.tar.gz"),
-                                "latest" => go::install_go_on_debian_based_distros("https://go.dev/dl/go1.23rc1.linux-amd64.tar.gz", "go1.23rc1.linux-amd64.tar.gz"),
+                                "latest" => go::install_go_on_debian_based_distros("https://go.dev/dl/go1.23rc2.linux-amd64.tar.gz", "go1.23rc2.linux-amd64.tar.gz"),
                                 &_ => go::install_go_error()
                             }
                         },
@@ -306,7 +306,7 @@ impl Execution for UserAction {
                             match self.third_arg.as_str() {
                                 "lts" => go::install_go_on_debian_based_distros("https://go.dev/dl/go1.22.5.linux-amd64.tar.gz", "go1.22.5.linux-amd64.tar.gz"),
                                 "" => go::install_go_on_debian_based_distros("https://go.dev/dl/go1.22.5.linux-amd64.tar.gz", "go1.22.5.linux-amd64.tar.gz"),
-                                "latest" => go::install_go_on_debian_based_distros("https://go.dev/dl/go1.23rc1.linux-amd64.tar.gz", "go1.23rc1.linux-amd64.tar.gz"),
+                                "latest" => go::install_go_on_debian_based_distros("https://go.dev/dl/go1.23rc2.linux-amd64.tar.gz", "go1.23rc2.linux-amd64.tar.gz"),
                                 &_ => go::install_go_error()
                             }
                         },
@@ -314,7 +314,7 @@ impl Execution for UserAction {
                             match self.third_arg.as_str() {
                                 "lts" => go::install_go_on_arch_linux("https://go.dev/dl/go1.22.5.linux-amd64.tar.gz", "go1.22.5.linux-amd64.tar.gz"),
                                 "" => go::install_go_on_arch_linux("https://go.dev/dl/go1.22.5.linux-amd64.tar.gz", "go1.22.5.linux-amd64.tar.gz"),
-                                "latest" => go::install_go_on_arch_linux("https://go.dev/dl/go1.23rc1.linux-amd64.tar.gz", "go1.23rc1.linux-amd64.tar.gz"),
+                                "latest" => go::install_go_on_arch_linux("https://go.dev/dl/go1.23rc2.linux-amd64.tar.gz", "go1.23rc2.linux-amd64.tar.gz"),
                                 &_ => go::install_go_error()
                             }
                         }
@@ -322,7 +322,7 @@ impl Execution for UserAction {
                             match self.third_arg.as_str() {
                                 "lts" => go::install_go_on_debian_based_distros("https://go.dev/dl/go1.22.5.linux-amd64.tar.gz", "go1.22.5.linux-amd64.tar.gz"),
                                 "" => go::install_go_on_debian_based_distros("https://go.dev/dl/go1.22.5.linux-amd64.tar.gz", "go1.22.5.linux-amd64.tar.gz"),
-                                "latest" => go::install_go_on_debian_based_distros("https://go.dev/dl/go1.23rc1.linux-amd64.tar.gz", "go1.23rc1.linux-amd64.tar.gz"),
+                                "latest" => go::install_go_on_debian_based_distros("https://go.dev/dl/go1.23rc2.linux-amd64.tar.gz", "go1.23rc2.linux-amd64.tar.gz"),
                                 &_ => go::install_go_error()
                             }
                         },
@@ -330,7 +330,7 @@ impl Execution for UserAction {
                             match self.third_arg.as_str() {
                                 "lts" => go::install_go_on_centos_and_fedora("https://go.dev/dl/go1.22.5.linux-amd64.tar.gz", "go1.22.5.linux-amd64.tar.gz"),
                                 "" => go::install_go_on_centos_and_fedora("https://go.dev/dl/go1.22.5.linux-amd64.tar.gz", "go1.22.5.linux-amd64.tar.gz"),
-                                "latest" => go::install_go_on_centos_and_fedora("https://go.dev/dl/go1.23rc1.linux-amd64.tar.gz", "go1.23rc1.linux-amd64.tar.gz"),
+                                "latest" => go::install_go_on_centos_and_fedora("https://go.dev/dl/go1.23rc2.linux-amd64.tar.gz", "go1.23rc2.linux-amd64.tar.gz"),
                                 &_ => go::install_go_error()
                             }
                         },
@@ -338,7 +338,7 @@ impl Execution for UserAction {
                             match self.third_arg.as_str() {
                                 "lts" => go::install_go_on_centos_and_fedora("https://go.dev/dl/go1.22.5.linux-amd64.tar.gz", "go1.22.5.linux-amd64.tar.gz"),
                                 "" => go::install_go_on_centos_and_fedora("https://go.dev/dl/go1.22.5.linux-amd64.tar.gz", "go1.22.5.linux-amd64.tar.gz"),
-                                "latest" => go::install_go_on_centos_and_fedora("https://go.dev/dl/go1.23rc1.linux-amd64.tar.gz", "go1.23rc1.linux-amd64.tar.gz"),
+                                "latest" => go::install_go_on_centos_and_fedora("https://go.dev/dl/go1.23rc2.linux-amd64.tar.gz", "go1.23rc2.linux-amd64.tar.gz"),
                                 &_ => go::install_go_error()
                             }
                         },
@@ -346,7 +346,7 @@ impl Execution for UserAction {
                             match self.third_arg.as_str() {
                                 "lts" => go::install_go_on_alma_linux("https://go.dev/dl/go1.22.5.linux-amd64.tar.gz", "go1.22.5.linux-amd64.tar.gz"),
                                 "" => go::install_go_on_alma_linux("https://go.dev/dl/go1.22.5.linux-amd64.tar.gz", "go1.22.5.linux-amd64.tar.gz"),
-                                "latest" => go::install_go_on_alma_linux("https://go.dev/dl/go1.23rc1.linux-amd64.tar.gz", "go1.23rc1.linux-amd64.tar.gz"),
+                                "latest" => go::install_go_on_alma_linux("https://go.dev/dl/go1.23rc2.linux-amd64.tar.gz", "go1.23rc2.linux-amd64.tar.gz"),
                                 &_ => go::install_go_error()
                             }
                         },
@@ -359,7 +359,7 @@ impl Execution for UserAction {
                             match self.third_arg.as_str() {
                                 "lts" => go::install_go_on_arch_linux("https://go.dev/dl/go1.22.5.linux-amd64.tar.gz", "go1.22.5.linux-amd64.tar.gz"),
                                 "" => go::install_go_on_arch_linux("https://go.dev/dl/go1.22.5.linux-amd64.tar.gz", "go1.22.5.linux-amd64.tar.gz"),
-                                "latest" => go::install_go_on_arch_linux("https://go.dev/dl/go1.23rc1.linux-amd64.tar.gz", "go1.23rc1.linux-amd64.tar.gz"),
+                                "latest" => go::install_go_on_arch_linux("https://go.dev/dl/go1.23rc2.linux-amd64.tar.gz", "go1.23rc2.linux-amd64.tar.gz"),
                                 &_ => go::install_go_error()
                             }
                         }
@@ -431,7 +431,7 @@ impl Execution for UserAction {
                     match self.third_arg.as_str() {
                         "lts" => node::install_nodejs_on_windows("https://nodejs.org/dist/v20.15.1/node-v20.15.1-x64.msi", "node-v20.15.1-x64.msi"),
                         "" => node::install_nodejs_on_windows("https://nodejs.org/dist/v20.15.1/node-v20.15.1-x64.msi", "node-v20.15.1-x64.msi"),
-                        "latest" => node::install_nodejs_on_windows("https://nodejs.org/dist/v22.4.1/node-v22.4.1-x64.msi", "node-v22.4.1-x64.msi"),
+                        "latest" => node::install_nodejs_on_windows("https://nodejs.org/dist/v22.5.0/node-v22.5.0-x64.msi", "node-v22.5.0-x64.msi"),
                         &_ => node::install_nodejs_error()
                     };
                 },
@@ -444,7 +444,7 @@ impl Execution for UserAction {
                             match self.third_arg.as_str() {
                                 "lts" => node::install_nodejs_on_debian_based_distros("https://nodejs.org/dist/v20.15.1/node-v20.15.1-linux-x64.tar.xz", "node-v20.15.1-linux-x64.tar.xz"),
                                 "" => node::install_nodejs_on_debian_based_distros("https://nodejs.org/dist/v20.15.1/node-v20.15.1-linux-x64.tar.xz", "node-v20.15.1-linux-x64.tar.xz"),
-                                "latest" => node::install_nodejs_on_debian_based_distros("https://nodejs.org/dist/v22.4.1/node-v22.4.1-linux-x64.tar.xz", "node-v22.4.1-linux-x64.tar.xz"),
+                                "latest" => node::install_nodejs_on_debian_based_distros("https://nodejs.org/dist/v22.5.0/node-v22.5.0-linux-x64.tar.xz", "node-v22.5.0-linux-x64.tar.xz"),
                                 &_ => node::install_nodejs_error()
                             }
                         },
@@ -452,7 +452,7 @@ impl Execution for UserAction {
                             match self.third_arg.as_str() {
                                 "lts" => node::install_nodejs_on_debian_based_distros("https://nodejs.org/dist/v20.15.1/node-v20.15.1-linux-x64.tar.xz", "node-v20.15.1-linux-x64.tar.xz"),
                                 "" => node::install_nodejs_on_debian_based_distros("https://nodejs.org/dist/v20.15.1/node-v20.15.1-linux-x64.tar.xz", "node-v20.15.1-linux-x64.tar.xz"),
-                                "latest" => node::install_nodejs_on_debian_based_distros("https://nodejs.org/dist/v22.4.1/node-v22.4.1-linux-x64.tar.xz", "node-v22.4.1-linux-x64.tar.xz"),
+                                "latest" => node::install_nodejs_on_debian_based_distros("https://nodejs.org/dist/v22.5.0/node-v22.5.0-linux-x64.tar.xz", "node-v22.5.0-linux-x64.tar.xz"),
                                 &_ => node::install_nodejs_error()
                             }
                         },
@@ -460,7 +460,7 @@ impl Execution for UserAction {
                             match self.third_arg.as_str() {
                                 "lts" => node::install_nodejs_on_debian_based_distros("https://nodejs.org/dist/v20.15.1/node-v20.15.1-linux-x64.tar.xz", "node-v20.15.1-linux-x64.tar.xz"),
                                 "" => node::install_nodejs_on_debian_based_distros("https://nodejs.org/dist/v20.15.1/node-v20.15.1-linux-x64.tar.xz", "node-v20.15.1-linux-x64.tar.xz"),
-                                "latest" => node::install_nodejs_on_debian_based_distros("https://nodejs.org/dist/v22.4.1/node-v22.4.1-linux-x64.tar.xz", "node-v22.4.1-linux-x64.tar.xz"),
+                                "latest" => node::install_nodejs_on_debian_based_distros("https://nodejs.org/dist/v22.5.0/node-v22.5.0-linux-x64.tar.xz", "node-v22.5.0-linux-x64.tar.xz"),
                                 &_ => node::install_nodejs_error()
                             }
                         },
@@ -468,7 +468,7 @@ impl Execution for UserAction {
                             match self.third_arg.as_str() {
                                 "lts" => node::install_nodejs_on_arch_linux("https://nodejs.org/dist/v20.15.1/node-v20.15.1-linux-x64.tar.xz", "node-v20.15.1-linux-x64.tar.xz"),
                                 "" => node::install_nodejs_on_arch_linux("https://nodejs.org/dist/v20.15.1/node-v20.15.1-linux-x64.tar.xz", "node-v20.15.1-linux-x64.tar.xz"),
-                                "latest" => node::install_nodejs_on_arch_linux("https://nodejs.org/dist/v22.4.1/node-v22.4.1-linux-x64.tar.xz", "node-v22.4.1-linux-x64.tar.xz"),
+                                "latest" => node::install_nodejs_on_arch_linux("https://nodejs.org/dist/v22.5.0/node-v22.5.0-linux-x64.tar.xz", "node-v22.5.0-linux-x64.tar.xz"),
                                 &_ => node::install_nodejs_error()
                             }
                         }
@@ -476,7 +476,7 @@ impl Execution for UserAction {
                             match self.third_arg.as_str() {
                                 "lts" => node::install_nodejs_on_debian_based_distros("https://nodejs.org/dist/v20.15.1/node-v20.15.1-linux-x64.tar.xz", "node-v20.15.1-linux-x64.tar.xz"),
                                 "" => node::install_nodejs_on_debian_based_distros("https://nodejs.org/dist/v20.15.1/node-v20.15.1-linux-x64.tar.xz", "node-v20.15.1-linux-x64.tar.xz"),
-                                "latest" => node::install_nodejs_on_debian_based_distros("https://nodejs.org/dist/v22.4.1/node-v22.4.1-linux-x64.tar.xz", "node-v22.4.1-linux-x64.tar.xz"),
+                                "latest" => node::install_nodejs_on_debian_based_distros("https://nodejs.org/dist/v22.5.0/node-v22.5.0-linux-x64.tar.xz", "node-v22.5.0-linux-x64.tar.xz"),
                                 &_ => node::install_nodejs_error()
                             }
                         },
@@ -484,7 +484,7 @@ impl Execution for UserAction {
                             match self.third_arg.as_str() {
                                 "lts" => node::install_nodejs_on_centos_and_fedora("https://nodejs.org/dist/v20.15.1/node-v20.15.1-linux-x64.tar.xz", "node-v20.15.1-linux-x64.tar.xz"),
                                 "" => node::install_nodejs_on_centos_and_fedora("https://nodejs.org/dist/v20.15.1/node-v20.15.1-linux-x64.tar.xz", "node-v20.15.1-linux-x64.tar.xz"),
-                                "latest" => node::install_nodejs_on_centos_and_fedora("https://nodejs.org/dist/v22.4.1/node-v22.4.1-linux-x64.tar.xz", "node-v22.4.1-linux-x64.tar.xz"),
+                                "latest" => node::install_nodejs_on_centos_and_fedora("https://nodejs.org/dist/v22.5.0/node-v22.5.0-linux-x64.tar.xz", "node-v22.5.0-linux-x64.tar.xz"),
                                 &_ => node::install_nodejs_error()
                             }
                         },
@@ -492,7 +492,7 @@ impl Execution for UserAction {
                             match self.third_arg.as_str() {
                                 "lts" => node::install_nodejs_on_centos_and_fedora("https://nodejs.org/dist/v20.15.1/node-v20.15.1-linux-x64.tar.xz", "node-v20.15.1-linux-x64.tar.xz"),
                                 "" => node::install_nodejs_on_centos_and_fedora("https://nodejs.org/dist/v20.15.1/node-v20.15.1-linux-x64.tar.xz", "node-v20.15.1-linux-x64.tar.xz"),
-                                "latest" => node::install_nodejs_on_centos_and_fedora("https://nodejs.org/dist/v22.4.1/node-v22.4.1-linux-x64.tar.xz", "node-v22.4.1-linux-x64.tar.xz"),
+                                "latest" => node::install_nodejs_on_centos_and_fedora("https://nodejs.org/dist/v22.5.0/node-v22.5.0-linux-x64.tar.xz", "node-v22.5.0-linux-x64.tar.xz"),
                                 &_ => node::install_nodejs_error()
                             }
                         },
@@ -500,7 +500,7 @@ impl Execution for UserAction {
                             match self.third_arg.as_str() {
                                 "lts" => node::install_nodejs_on_alma_linux("https://nodejs.org/dist/v20.15.1/node-v20.15.1-linux-x64.tar.xz", "node-v20.15.1-linux-x64.tar.xz"),
                                 "" => node::install_nodejs_on_alma_linux("https://nodejs.org/dist/v20.15.1/node-v20.15.1-linux-x64.tar.xz", "node-v20.15.1-linux-x64.tar.xz"),
-                                "latest" => node::install_nodejs_on_alma_linux("https://nodejs.org/dist/v22.4.1/node-v22.4.1-linux-x64.tar.xz", "node-v22.4.1-linux-x64.tar.xz"),
+                                "latest" => node::install_nodejs_on_alma_linux("https://nodejs.org/dist/v22.5.0/node-v22.5.0-linux-x64.tar.xz", "node-v22.5.0-linux-x64.tar.xz"),
                                 &_ => node::install_nodejs_error()
                             }
                         },
@@ -513,7 +513,7 @@ impl Execution for UserAction {
                             match self.third_arg.as_str() {
                                 "lts" => node::install_nodejs_on_arch_linux("https://nodejs.org/dist/v20.15.1/node-v20.15.1-linux-x64.tar.xz", "node-v20.15.1-linux-x64.tar.xz"),
                                 "" => node::install_nodejs_on_arch_linux("https://nodejs.org/dist/v20.15.1/node-v20.15.1-linux-x64.tar.xz", "node-v20.15.1-linux-x64.tar.xz"),
-                                "latest" => node::install_nodejs_on_arch_linux("https://nodejs.org/dist/v22.4.1/node-v22.4.1-linux-x64.tar.xz", "node-v22.4.1-linux-x64.tar.xz"),
+                                "latest" => node::install_nodejs_on_arch_linux("https://nodejs.org/dist/v22.5.0/node-v22.5.0-linux-x64.tar.xz", "node-v22.5.0-linux-x64.tar.xz"),
                                 &_ => node::install_nodejs_error()
                             }
                         }
