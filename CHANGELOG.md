@@ -1,5 +1,11 @@
 # Incli Changelog
 
+## v0.6.0
+
+Added Rocky Linux To Supported Distros .
+Upgraded Node.js's latest version to 22.7.0 .
+Upgraded Node.js's lts version to 20.17.0 .
+
 ## v0.5.16
 
 Upgraded Node.js's latest version to 22.6.0 .

@@ -201,10 +201,6 @@ I'm also open for contributions about implementing other sdk's and package manag
 
 ## Our Roadmap to Individual Releases
 
-### v0.6.0
-
-* Including Gentoo Linux And Rocky Linux For supported linux distros.
-
 ### v0.7.0
 
 * Jdk support

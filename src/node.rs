@@ -368,7 +368,7 @@ pub fn install_nodejs_on_arch_linux(url: &str, file_name: &str){
         Ok(_) => (),
         Err(_) => {
             println!("You don't have incli_envs.sh file yet. We're configuring it...");
-            utils::configure_incli_envs_file(&current_user)
+            utils::configure_incli_envs_file(&current_user, true)
         }
     }
 
@@ -542,7 +542,7 @@ pub fn install_nodejs_on_alma_linux(url: &str, file_name: &str){
     let check_if_incli_paths_exist = Path::new(&incli_paths_path);
 
     if !check_if_incli_paths_exist.exists() {
-        utils::configure_incli_envs_file(&current_user)
+        utils::configure_incli_envs_file(&current_user, true)
     }
 
     let incli_envs_path = format!("{}/incli-envs.sh", incli_paths_path);
@@ -705,7 +705,7 @@ pub fn install_nodejs_on_centos_and_fedora(url: &str, file_name: &str) {
     let check_if_incli_paths_exist = Path::new(&incli_paths_path);
 
     if !check_if_incli_paths_exist.exists() {
-        utils::configure_incli_envs_file(&current_user)
+        utils::configure_incli_envs_file(&current_user, true)
     }
 
     let incli_envs_path = format!("{}/incli-envs.sh", incli_paths_path);
@@ -715,6 +715,161 @@ pub fn install_nodejs_on_centos_and_fedora(url: &str, file_name: &str) {
     match incli_envs_file {
         Ok(mut file) => {
             let line_for_append = format!("\nexport PATH=\"{}:$PATH\"", env_path);
+            let line_for_append = line_for_append.as_bytes();
+        
+            let add_env_file_dest = io::Write::write_all(&mut file, line_for_append);
+
+            match add_env_file_dest {
+                Ok(_) => println!("envs successfully added on your user."),
+                Err(err) => eprintln!("This error occured: {}", err)
+            }
+        },
+        Err(err) => {
+            eprintln!("Cannot open incli_envs.sh file for that reason: {}", err)
+        }
+    }
+}
+
+pub fn install_nodejs_on_rocky_linux(url: &str, file_name: &str) {
+    println!("Welcome to incli. Your request to install Node.js on a Red Hat Based Distro Reached.");
+    println!("Be sure you're running that installation on your user's root directory, otherwise you have to set your env's manually.");
+
+    let current_user = get_current_user();
+    let env_path;
+    let current_user_path;
+
+    let slice_of_file_name = &file_name[0..file_name.len() - 7];
+
+    let install_nodejs = Command::new("wget")
+                                                .arg(url)
+                                                .arg("-O")
+                                                .arg(file_name)
+                                                .output()
+                                                .expect("Some Error Happened");
+
+    if !install_nodejs.status.success() {
+        println!("Couldn't install Node.js Source Files Because Of Whatever reason.");
+        exit(1);
+    }
+
+    match current_user.as_str() {
+        "root" => {
+            current_user_path = "/root".to_string();
+
+            let current_folder_path = Command::new("pwd").output().unwrap();
+            let current_folder_path = std::str::from_utf8(&current_folder_path.stdout).unwrap().trim();
+
+            let format_the_whole_file_path = format!("{}/{}", current_folder_path, file_name);
+
+            Command::new("chmod")
+                        .arg("755")
+                        .arg(&format_the_whole_file_path)
+                        .output()
+                        .expect("couldn't give 755 permission to source code.");
+
+            let extract_the_archive = Command::new("tar")
+                                                                        .arg("xvf")
+                                                                        .arg(&format_the_whole_file_path)
+                                                                        .output();
+
+            match extract_the_archive {
+                Ok(_) => println!("archive file successfully extracted"),
+                Err(error) => {
+                    println!("that error occured when extracting archive file: {}", error);
+                    exit(1)
+                }
+            }
+                                                            
+            Command::new("rm")
+                        .arg("-rf")
+                        .arg(format_the_whole_file_path)
+                        .output()
+                        .unwrap();
+
+            let source_files_path = format!("{}/{}", current_folder_path, slice_of_file_name);
+
+            let move_the_source_files = Command::new("mv")
+                                                                        .arg(source_files_path)
+                                                                        .arg(&current_user_path)
+                                                                        .output();
+
+            match move_the_source_files {
+                Ok(_) => (),
+                Err(error) => {
+                    eprintln!("cannot move the source file for this reason: {}", error);
+                    exit(1)
+                }
+            }
+
+            env_path = format!("/root/{}/bin", slice_of_file_name);
+        },
+        &_ => {
+            current_user_path = format!("/home/{}", current_user);
+
+            let current_folder_path = Command::new("pwd").output().unwrap();
+            let current_folder_path = std::str::from_utf8(&current_folder_path.stdout).unwrap().trim();
+
+            let format_the_whole_file_path = format!("{}/{}", current_folder_path, file_name);
+
+            Command::new("chmod")
+                        .arg("755")
+                        .arg(&format_the_whole_file_path)
+                        .output()
+                        .expect("couldn't give 755 permission to source code.");
+
+            let extract_the_archive = Command::new("tar")
+                                                                        .arg("xvf")
+                                                                        .arg(&format_the_whole_file_path)
+                                                                        .output();
+
+            match extract_the_archive {
+                Ok(_) => println!("archive file successfully extracted"),
+                Err(error) => {
+                    println!("that error occured when extracting archive file: {}", error);
+                    exit(1)
+                }
+            }
+                                                            
+            Command::new("rm")
+                        .arg("-rf")
+                        .arg(format_the_whole_file_path)
+                        .output()
+                        .unwrap();
+
+            let source_files_path = format!("{}/{}", current_folder_path, slice_of_file_name);
+
+            let move_the_source_files = Command::new("mv")
+                                                                        .arg(source_files_path)
+                                                                        .arg(&current_user_path)
+                                                                        .output();
+
+            match move_the_source_files {
+                Ok(_) => (),
+                Err(error) => {
+                    eprintln!("cannot move the source file for this reason: {}", error);
+                    exit(1)
+                }
+            }
+
+            env_path = format!("{}/{}/bin", current_user_path, slice_of_file_name);
+        }
+    }
+
+    let incli_paths_path = format!("{}/INCLI_PATHS", current_user_path);
+
+    let check_if_incli_paths_exist = Path::new(&incli_paths_path);
+
+    if !check_if_incli_paths_exist.exists() {
+        utils::configure_incli_envs_file(&current_user, true)
+    }
+
+    let incli_envs_path = format!("{}/incli-envs.sh", incli_paths_path);
+
+    let incli_envs_file = fs::OpenOptions::new().append(true).open(incli_envs_path);
+
+    match incli_envs_file {
+        Ok(mut file) => {
+            let line_for_append = format!("\nexport PATH=\"$PATH:{}\"", env_path);
             let line_for_append = line_for_append.as_bytes();
         
             let add_env_file_dest = io::Write::write_all(&mut file, line_for_append);

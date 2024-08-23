@@ -13,7 +13,7 @@ dependencies = [
 
 [[package]]
 name = "incli"
-version = "0.5.3"
+version = "0.6.0"
 dependencies = [
  "sys-info-extended",
 ]
@@ -26,15 +26,15 @@ checksum = "9c198f91728a82281a64e1f4f9eeb25d82cb32a5de251c6bd1b5154d63a8e7bd"
 
 [[package]]
 name = "palin"
-version = "0.3.0"
+version = "0.4.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "b08b08d532d5ae6e81f024362e252ec866b9d948424f75706212786483a67bbc"
+checksum = "4f0f65d29a75f7c61d7f07ec3eac992e9903c03c1fef894588e4a51fc2f710d4"
 
 [[package]]
 name = "sys-info-extended"
-version = "0.3.0"
+version = "0.4.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "35670aba951d801924170fa23ca5cb52cc695e1faf82f5740d5ecec766b52170"
+checksum = "199713be514b9c0fedbdef6f3e3044290bca8eb6993abafae5c2025fee0c789e"
 dependencies = [
  "cc",
  "libc",

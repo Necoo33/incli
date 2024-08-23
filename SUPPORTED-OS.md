@@ -34,14 +34,11 @@ And also don't forget to run "sudo (your package manager) update" and "sudo (you
 * CentOS 9 Stream - &#10003;
 * Pardus 23 XFCE - &#10003;
 * Fedora 39 Workstation - &#10003;
+* Rocky Linux 9.4 - &#10003;
 * Alpine Linux wsl - &#2049;
 * Other Linux Distributions - &#10060;
 
 ### MacOs:
-
-Not Implemented
-
-## Go
 
 Not Implemented
 
@@ -68,6 +65,7 @@ Not Implemented
 * CentOS 9 Stream - &#10003;
 * Pardus 23 XFCE - &#10003;
 * Fedora 39 Workstation - &#10003;
+* Rocky Linux 9.4 - &#10003;
 * Alpine Linux wsl - &#2049;
 * Other Linux Distributions - &#10060;
 
@@ -92,6 +90,7 @@ Not Implemented
 * CentOS 9 Stream - &#10003;
 * Pardus 23 XFCE - &#10003;
 * Fedora 39 Workstation - &#10003;
+* Rocky Linux 9.4 - &#10003;
 * Alpine Linux wsl - &#10060;
 * Other Linux Distributions - &#10060;
 
@@ -117,6 +116,7 @@ Not Implemented
 * CentOS 9 Stream - &#10003;
 * Pardus 23 XFCE - &#10003;
 * Fedora 39 Workstation - &#10003;
+* Rocky Linux 9.4 - &#10003;
 * Alpine Linux wsl - &#10060;
 * Other Linux Distributions - &#10060;
 
@@ -141,6 +141,7 @@ Not Implemented
 * CentOS 9 Stream - &#10003;
 * Pardus 23 XFCE - &#10003;
 * Fedora 39 Workstation - &#10003;
+* Rocky Linux 9.4 - &#10003;
 * Alpine Linux wsl - &#2049;
 
 ### Mac Os

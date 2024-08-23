@@ -32,6 +32,10 @@ pub fn return_linux_dist_etc_os_release<'a>() -> &'a str {
                         return "centos"                        
                     }
 
+                    if line.contains("Rocky") {
+                        return "rocky"                        
+                    }
+
                     if line.contains("Pardus") {
                         return "pardus"
                     }
@@ -66,7 +70,7 @@ pub fn check_if_linux_dist_is_arch_linux() -> bool {
     return false;
 }
 
-pub fn configure_incli_envs_file(user: &String){
+pub fn configure_incli_envs_file(user: &String, run_commands_as_root: bool){
     let user_path;
 
     if user != &"root" {
@@ -77,10 +81,16 @@ pub fn configure_incli_envs_file(user: &String){
 
     let incli_paths_path = format!("{}/INCLI_PATHS", user_path);
 
-    let create_incli_paths_folder = Command::new("sudo")
-                                            .arg("mkdir")
-                                            .arg(&incli_paths_path)
-                                            .output();
+
+    let create_incli_paths_folder = match run_commands_as_root {
+        true => Command::new("sudo")
+                            .arg("mkdir")
+                            .arg(&incli_paths_path)
+                            .output(),
+        false => Command::new("mkdir")
+                            .arg(&incli_paths_path)
+                            .output()
+    };
 
     match create_incli_paths_folder {
         Ok(_) => (),
@@ -92,10 +102,15 @@ pub fn configure_incli_envs_file(user: &String){
 
     let incli_envs_path = format!("{}/incli-envs.sh", incli_paths_path);
 
-    let create_incli_envs_file = Command::new("sudo")
-                                            .arg("touch")
-                                            .arg(&incli_envs_path)
-                                            .output();
+    let create_incli_envs_file = match run_commands_as_root {
+        true => Command::new("sudo")
+                            .arg("touch")
+                            .arg(&incli_envs_path)
+                            .output(),
+        false => Command::new("touch")
+                            .arg(&incli_envs_path)
+                            .output() 
+    };
 
     match create_incli_envs_file {
         Ok(_) => (),
@@ -105,12 +120,19 @@ pub fn configure_incli_envs_file(user: &String){
         }
     }
 
-    let give_permission_for_incli_paths = Command::new("sudo")
-                                                                    .arg("chmod")
-                                                                    .arg("777")
-                                                                    .arg("-R")
-                                                                    .arg(incli_paths_path)
-                                                                    .output();
+    let give_permission_for_incli_paths = match run_commands_as_root {
+        true => Command::new("sudo")
+                            .arg("chmod")
+                            .arg("777")
+                            .arg("-R")
+                            .arg(incli_paths_path)
+                            .output(),
+        false => Command::new("chmod")
+                            .arg("777")
+                            .arg("-R")
+                            .arg(incli_paths_path)
+                            .output()
+    };
 
     match give_permission_for_incli_paths {
         Ok(_) => (),
@@ -141,12 +163,19 @@ pub fn configure_incli_envs_file(user: &String){
 
     let bashrc_path = format!("{}/.bashrc", user_path);
 
-    let give_permission_to_bashrc = Command::new("sudo")
-                                                        .arg("chmod")
-                                                        .arg("777")
-                                                        .arg(&bashrc_path)
-                                                        .output()
-                                                        .expect("cannot give permission to .bashrc file");
+    let give_permission_to_bashrc = match run_commands_as_root {
+        true => Command::new("sudo")
+                            .arg("chmod")
+                            .arg("777")
+                            .arg(&bashrc_path)
+                            .output()
+                            .expect("cannot give permission to .bashrc file"),
+        false => Command::new("chmod")
+                            .arg("777")
+                            .arg(&bashrc_path)
+                            .output()
+                            .expect("cannot give permission to .bashrc file")
+    };
 
     if !give_permission_to_bashrc.status.success() {
         println!("Cannot give required permissions for .bashrc, you have to add incli-envs.sh file's path on that file via that synthax for adding node.js on your user's env's: \". \"$HOME/INCLI_PATHS/incli-envs.sh\"\"")
