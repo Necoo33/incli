@@ -54,6 +54,7 @@ In linux, that distributions are tested:
 * CentOS 9 Stream - &#10003;
 * Pardus 23 XFCE - &#10003;
 * Fedora 39 Workstation - &#10003;
+* Rocky Linux 9.4 - &#10003;
 * Alpine Linux wsl - &#2049;
 
 You can view more detailed information on "SUPPORTED-OS.md" file about the supports.
@@ -81,6 +82,7 @@ When installing Node.js, you can also specialize a third argument. If you want t
 * CentOS 9 Stream - &#10003;
 * Pardus 23 XFCE - &#10003;
 * Fedora 39 Workstation - &#10003;
+* Rocky Linux 9.4 - &#10003;
 * Alpine Linux wsl - &#2049;
 
 ### Mac Os
@@ -106,6 +108,7 @@ In linux, that distributions are tested:
 * CentOS 9 Stream - &#10003;
 * Pardus 23 XFCE - &#10003;
 * Fedora 39 Workstation - &#10003;
+* Rocky Linux 9.4 - &#10003;
 * Alpine Linux wsl - &#2049;
 
 You can view more detailed information on "SUPPORTED-OS.md" file about the supports.
@@ -134,6 +137,7 @@ In linux, that distributions are tested:
 * CentOS 9 Stream - &#10003;
 * Pardus 23 XFCE - &#10003;
 * Fedora 39 Workstation - &#10003;
+* Rocky Linux 9.4 - &#10003;
 * Alpine Linux wsl - &#2049;
 
 You can view more detailed information on "SUPPORTED-OS.md" file about the supports.
@@ -161,6 +165,7 @@ When installing Go, you can also specialize a third argument. If you want to ins
 * CentOS 9 Stream - &#10003;
 * Pardus 23 XFCE - &#10003;
 * Fedora 39 Workstation - &#10003;
+* Rocky Linux 9.4 - &#10003;
 * Alpine Linux wsl - &#2049;
 
 ### Mac Os

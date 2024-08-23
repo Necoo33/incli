@@ -1,5 +1,9 @@
 # Incli Changelog
 
+## v0.6.1
+
+README.md file updated as well.
+
 ## v0.6.0
 
 Added Rocky Linux To Supported Distros .
