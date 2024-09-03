@@ -124,7 +124,7 @@ Not Implemented
 
 Not Implemented
 
-# Go
+## Go
 
 ### Windows:
 
@@ -152,11 +152,13 @@ There is no implementation yet.
 
 ### Windows:
 
+* Windows 11 - &#129300;
 * Windows 10 Home Basic - &#10003;
 
 ### Linux:
 
 * Ubuntu 24.04 LTS - &#10003;
+* Ubuntu 22.04 LTS - &#129300;
 * Ubuntu 22 wsl - &#10003;
 * Debian 12 wsl - &#10003;
 * Arch wsl - &#10003;

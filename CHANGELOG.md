@@ -1,5 +1,10 @@
 # Incli Changelog
 
+## v0.7.1
+
+README.md and SUPPORTED-OS.md files updated.
+Upgraded Node.js's latest version to 22.8.0 .
+
 ## v0.7.0
 
 Added Java Virtual Machine Support.

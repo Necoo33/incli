@@ -12,9 +12,8 @@ If you like that program, consider to give a like on [github repo](https://githu
 
 ## Currently Planned to Support Package Managers and Sdk's
 
-* Java - Java Development Kit
-* Java - Gradle
-* Java - Maven
+* Gradle
+* Maven
 * python
 * php
 * phpmyadmin
