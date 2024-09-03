@@ -173,7 +173,7 @@ There is no implementation yet.
 
 # Java
 
-You can install pretty much every open jdk versions that released from 8 to 24, which in early access. If you want to download Java 8, you also have to specialize a third argument, like so: `(that binary) install java 8 ('jre' or 'jdk')` this is because in Java 8 the Java Development Kit doesn't include Java Runtime Environment and you also have to download it seperately, which ultimately means you have to make 2 installation. In newer versions you just use this synthax: `(that binary) install java (version number)`. If you don't specify third argument, it'll install the latest lts version, which is 21.
+You can install pretty much every open jdk versions that released from 8 to 24, which in early access. If you want to download Java 8 on windows, you also have to specialize a third argument, like so: `(that binary) install java 8 ('jre' or 'jdk')` this is because in Java 8 the Java Development Kit doesn't include Java Runtime Environment and you also have to download it seperately, which ultimately means you have to make 2 installation, and you can install it on every linux system without fourth command if it's installable. In newer versions you just use this synthax: `(that binary) install java (version number)`. If you don't specify third argument, it'll install the latest lts version, which is 21.
 
 ### Windows:
 

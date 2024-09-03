@@ -1,5 +1,9 @@
 # Incli Changelog
 
+## v0.7.2
+
+Fixed some documentation typos.
+
 ## v0.7.1
 
 README.md and SUPPORTED-OS.md files updated.
