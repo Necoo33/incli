@@ -172,6 +172,32 @@ When installing Go, you can also specialize a third argument. If you want to ins
 
 There is no implementation yet.
 
+# Java
+
+You can install pretty much every open jdk versions that released from 8 to 24, which in early access. If you want to download Java 8, you also have to specialize a third argument, like so: `(that binary) install java 8 ('jre' or 'jdk')` this is because in Java 8 the Java Development Kit doesn't include Java Runtime Environment and you also have to download it seperately, which ultimately means you have to make 2 installation. In newer versions you just use this synthax: `(that binary) install java (version number)`. If you don't specify third argument, it'll install the latest lts version, which is 21.
+
+### Windows:
+
+* Windows 10 Home Basic - &#10003;
+
+### Linux:
+
+* Ubuntu 24.04 LTS - &#10003;
+* Ubuntu 22 wsl - &#10003;
+* Debian 12 wsl - &#10003;
+* Arch wsl - &#10003;
+* Kali Linux wsl - &#10003;
+* Alma Linux 9 wsl - &#10003;
+* CentOS 9 Stream - &#10003;
+* Pardus 23 XFCE - &#10003;
+* Fedora 39 Workstation - &#10003;
+* Rocky Linux 9.4 - 
+* Alpine Linux wsl - &#2049;
+
+### Mac Os
+
+There is no implementation yet.
+
 ## Guide
 
 You have to compile that app for specific platform that you'll use.

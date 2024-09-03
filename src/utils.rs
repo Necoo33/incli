@@ -1,6 +1,7 @@
 use std::process::Command;
 use std::fs::{File, self};
-use std::io::{self, BufRead};
+use std::io::{self, BufRead, Error, Read};
+use sys_info_extended;
 
 pub fn return_linux_dist_etc_os_release<'a>() -> &'a str {
     if let Ok(file) = File::open("/etc/os-release") {
@@ -142,19 +143,25 @@ pub fn configure_incli_envs_file(user: &String, run_commands_as_root: bool){
         }
     }
 
-    let open_and_type_incli_envs_file = fs::OpenOptions::new().append(true).open(&incli_envs_path);
+    let open_and_type_incli_envs_file = fs::OpenOptions::new().append(true).read(true).open(&incli_envs_path);
 
     match open_and_type_incli_envs_file {
         Ok(mut file) => {
-            let incli_envs_greeting_quote1 = "# Hello from incli-envs.sh file. This file contains environment variables that added by Incli program\n";
-            let incli_envs_greeting_quote2 = "# If you don't know what that program is, you can learn it via that addresses:\n";
-            let incli_envs_greeting_quote3 = "# github.com repo: https://github.com/Necoo33/incli\n";
-            let incli_envs_greeting_quote4 = "# crates.io page: https://crates.io/crates/incli\n";
+            let mut buffer = vec![];
+            file.read_to_end(&mut buffer).unwrap();
+            let quotes = String::from_utf8_lossy(&buffer);
 
-            io::Write::write_all(&mut file, incli_envs_greeting_quote1.as_bytes()).unwrap();
-            io::Write::write_all(&mut file, incli_envs_greeting_quote2.as_bytes()).unwrap();
-            io::Write::write_all(&mut file, incli_envs_greeting_quote3.as_bytes()).unwrap();
-            io::Write::write_all(&mut file, incli_envs_greeting_quote4.as_bytes()).unwrap();
+            if !quotes.contains("# Hello from incli-envs.sh file.") {
+                let incli_envs_greeting_quote1 = "# Hello from incli-envs.sh file. This file contains environment variables that added by Incli program\n";
+                let incli_envs_greeting_quote2 = "# If you don't know what that program is, you can learn it via that addresses:\n";
+                let incli_envs_greeting_quote3 = "# github.com repo: https://github.com/Necoo33/incli\n";
+                let incli_envs_greeting_quote4 = "# crates.io page: https://crates.io/crates/incli\n";
+    
+                io::Write::write_all(&mut file, incli_envs_greeting_quote1.as_bytes()).unwrap();
+                io::Write::write_all(&mut file, incli_envs_greeting_quote2.as_bytes()).unwrap();
+                io::Write::write_all(&mut file, incli_envs_greeting_quote3.as_bytes()).unwrap();
+                io::Write::write_all(&mut file, incli_envs_greeting_quote4.as_bytes()).unwrap();
+            }
         },
         Err(error) => {
             eprintln!("cannot open incli-envs.sh file for that reason: {}", error);
@@ -199,6 +206,24 @@ pub fn configure_incli_envs_file(user: &String, run_commands_as_root: bool){
             eprintln!("cannot find .bashrc file in this folder, you have to set env's manually.");
             eprintln!("an error occured: {}", err)
         }
+    }
+}
+
+pub fn append_env_to_system_path_on_windows(new_path: &str) {
+    let system_path = sys_info_extended::get_system_env_var("PATH").unwrap();
+
+    let appended_path = format!("{};{}", system_path, new_path);
+
+    let format_the_command = format!("[System.Environment]::SetEnvironmentVariable('Path', '{}', 'Machine')", appended_path);
+
+    let execute_appending = Command::new("powershell.exe")
+                                                        .arg("-Command")
+                                                        .arg(format_the_command)
+                                                        .output();
+
+    match execute_appending {
+        Ok(_) => println!("System's PATH env successfully updated."),
+        Err(error) => println!("That Error Occured When we updating the System's PATH Env: {}", error)
     }
 }
 

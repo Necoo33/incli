@@ -5,6 +5,7 @@ mod node;
 mod bun;
 mod yarn;
 mod go;
+mod java;
 
 use models::{CreateAction, OsType, Execution, Version, Help, CommandType};
 use sys_info_extended::{os_release, os_type, get_current_user};
@@ -32,9 +33,10 @@ fn main() {
     let mut arg1 = "".to_string();
     let mut arg2 = "".to_string();
     let mut arg3 = "".to_string();
+    let mut arg4 = "".to_string();
 
     for (index, argument) in args.into_iter().enumerate() {
-        if index == 1 {
+        /*if index == 1 {
             arg1 = match argument.as_str() {
                 "help" => "help".to_string(),
                 "install" => "install".to_string(),
@@ -60,13 +62,42 @@ fn main() {
         }
 
         if index == 3 {
-            arg3 = argument;
+            arg3 = &argument;
+        }
+
+        if index == 4 {
+            arg4 = &argument;
+        }*/
+
+        match index {
+            1 => arg1 = match argument.as_str() {
+                "help" => "help".to_string(),
+                "install" => "install".to_string(),
+                "version" => "version".to_string(),
+                &_ => panic!("Invalid argument, you have to type either 'help', 'install' or 'version'")
+            },
+            2 => arg2 = match argument.as_str() {
+                "rust" => "rust".to_string(),
+                "java" => "java".to_string(),
+                "gradle" => "gradle".to_string(),
+                "maven" => "maven".to_string(),
+                "go" => "go".to_string(),
+                "node" => "node".to_string(),
+                "bun" => "bun".to_string(),
+                "yarn" => "yarn".to_string(),
+                "python" => "python".to_string(),
+                "" => "".to_string(),
+                &_ => panic!("You're mistyped or tried to download unsupported programming language.")
+            },
+            3 => arg3 = argument,
+            4 => arg4 = argument,
+            _ => ()
         }
     };
 
-    let user_action = user_session.action(arg1, arg2, arg3); 
+    let user_action = user_session.action(arg1, arg2, arg3, arg4); 
 
-    match  user_action.first_arg {
+    match user_action.first_arg {
         CommandType::Help => {
             match user_action.second_arg.as_str() {
                 "rust" => user_action.rust_help(),

@@ -52,20 +52,20 @@ pub fn install_go_on_debian_based_distros(url: &str, file_name: &str) {
 
     let user_path = format!("/home/{}", current_user);
 
-    let install_nodejs = Command::new("wget")
+    let install_go = Command::new("wget")
                                     .arg(url)
                                     .arg("-O")
                                     .arg(file_name)
                                     .output()
                                     .expect("Some Error Happened");
 
+    if !install_go.status.success() {
+        println!("Couldn't download Go Source Files Because Of Whatever reason.");
+        exit(1);
+    }
+
     match current_user.as_str() {
         "root" => {
-            if !install_nodejs.status.success() {
-                println!("Couldn't install Golang Source Files Because Of Whatever reason.");
-                exit(1);
-            }
-    
             let get_current_file_command = Command::new("pwd").output().unwrap();
     
             let file_for_moving = format!("{}/{}", std::str::from_utf8(&get_current_file_command.stdout).unwrap().trim(), file_name);
@@ -136,11 +136,6 @@ pub fn install_go_on_debian_based_distros(url: &str, file_name: &str) {
             }
         },
         &_ => {
-            if !install_nodejs.status.success() {
-                println!("Couldn't download Go Source Files Because Of Whatever reason.");
-                exit(1);
-            }
-    
             let get_current_file_command = Command::new("pwd").output().unwrap();
     
             let file_for_moving = format!("{}/{}", std::str::from_utf8(&get_current_file_command.stdout).unwrap().trim(), file_name);
@@ -155,11 +150,6 @@ pub fn install_go_on_debian_based_distros(url: &str, file_name: &str) {
                         .arg(&file_path)
                         .output()
                         .expect("couldn't give 755 permission to source code.");
-    
-            /*println!("Source Files Downloaded Successfully");
-    
-            println!("your file_for_moving: {}", file_for_moving);
-            println!("your file_path: {}", file_path);*/
     
             let extract_tar_file = Command::new("sudo")
                                                 .arg("tar")
@@ -235,14 +225,14 @@ pub fn install_go_on_arch_linux(url: &str, file_name: &str) {
     let env_path;
     let current_user_path;
 
-    let install_nodejs = Command::new("wget")
+    let install_go = Command::new("wget")
                                                 .arg(url)
                                                 .arg("-O")
                                                 .arg(file_name)
                                                 .output()
                                                 .expect("Some Error Happened");
 
-    if !install_nodejs.status.success() {
+    if !install_go.status.success() {
         println!("Couldn't install Node.js Source Files Because Of Whatever reason.");
         exit(1);
     }
@@ -432,14 +422,14 @@ pub fn install_go_on_alma_linux(url: &str, file_name: &str) {
     let env_path;
     let current_user_path;
 
-    let install_nodejs = Command::new("wget")
+    let install_go = Command::new("wget")
                                     .arg(url)
                                     .arg("-O")
                                     .arg(file_name)
                                     .output()
                                     .expect("Some Error Happened");
 
-    if !install_nodejs.status.success() {
+    if !install_go.status.success() {
         println!("Couldn't install Go Source Files Because Of Whatever reason.");
         exit(1);
     }
@@ -481,7 +471,7 @@ pub fn install_go_on_alma_linux(url: &str, file_name: &str) {
                         .output()
                         .unwrap();
 
-            let source_files_path = format!("{}/go/bin", current_folder_path);
+            let source_files_path = format!("{}/go", current_folder_path);
 
             let move_the_source_files = Command::new("sudo")
                                                                         .arg("mv")
@@ -601,14 +591,14 @@ pub fn install_go_on_centos_and_fedora(url: &str, file_name: &str) {
     let env_path;
     let current_user_path;
 
-    let install_nodejs = Command::new("wget")
+    let install_go = Command::new("wget")
                                                 .arg(url)
                                                 .arg("-O")
                                                 .arg(file_name)
                                                 .output()
                                                 .expect("Some Error Happened");
 
-    if !install_nodejs.status.success() {
+    if !install_go.status.success() {
         println!("Couldn't install Node.js Source Files Because Of Whatever reason.");
         exit(1);
     }
@@ -757,111 +747,6 @@ pub fn install_go_on_centos_and_fedora(url: &str, file_name: &str) {
         }
     }
 }
-
-/*pub fn install_go_on_rocky_linux(url: &str, file_name: &str) {
-    println!("Welcome to incli. Your request to install Go on a Rocky Linux Reached.");
-    println!("Be sure you're running that installation not by root user, otherwise your installation will fail.");
-
-    let current_user = get_current_user();
-
-    if &current_user == "root" {
-        println!("In rocky linux you shouldn't do that installation with root user, exiting...");
-        exit(1)
-    }
-
-    let env_path;
-    let current_user_path;
-
-    let install_go = Command::new("wget")
-                                                .arg(url)
-                                                .arg("-O")
-                                                .arg(file_name)
-                                                .output()
-                                                .expect("Some Error Happened");
-
-    if !install_go.status.success() {
-        println!("Couldn't install Go Source Files Because Of Whatever reason.");
-        exit(1);
-    }
-
-    current_user_path = format!("/home/{}", current_user);
-
-    let current_folder_path = Command::new("pwd").output().unwrap();
-    let current_folder_path = std::str::from_utf8(&current_folder_path.stdout).unwrap().trim();
-
-    let format_the_whole_file_path = format!("{}/{}", current_folder_path, file_name);
-
-    Command::new("chmod")
-                .arg("777")
-                .arg(&format_the_whole_file_path)
-                .output()
-                .expect("couldn't give 755 permission to source code.");
-
-    let extract_the_archive = Command::new("tar")
-                                                                .arg("xzvf")
-                                                                .arg(&format_the_whole_file_path)
-                                                                .output();
-
-    match extract_the_archive {
-        Ok(_) => println!("archive file successfully extracted"),
-        Err(error) => {
-            println!("that error occured when extracting archive file: {}", error);
-            exit(1)
-        }
-    }
-                                                            
-    Command::new("rm")
-                .arg("-rf")
-                .arg(format_the_whole_file_path)
-                .output()
-                .unwrap();
-
-    let source_files_path = format!("{}/go", current_folder_path);
-
-    let move_the_source_files = Command::new("mv")
-                                                                .arg(source_files_path)
-                                                                .arg(&current_user_path)
-                                                                .output();
-
-    match move_the_source_files {
-        Ok(_) => (),
-        Err(error) => {
-            eprintln!("cannot move the source file for this reason: {}", error);
-            exit(1)
-        }
-    }
-
-    env_path = format!("{}/go/bin", current_user_path);
-
-    let incli_paths_path = format!("{}/INCLI_PATHS", current_user_path);
-
-    let check_if_incli_paths_exist = Path::new(&incli_paths_path);
-
-    if !check_if_incli_paths_exist.exists() {
-        utils::configure_incli_envs_file(&current_user, false)
-    }
-
-    let incli_envs_path = format!("{}/incli-envs.sh", incli_paths_path);
-
-    let incli_envs_file = fs::OpenOptions::new().append(true).open(incli_envs_path);
-
-    match incli_envs_file {
-        Ok(mut file) => {
-            let line_for_append = format!("\nexport PATH=\"$PATH:{}\"", env_path);
-            let line_for_append = line_for_append.as_bytes();
-        
-            let add_env_file_dest = io::Write::write_all(&mut file, line_for_append);
-
-            match add_env_file_dest {
-                Ok(_) => println!("envs successfully added on your user."),
-                Err(err) => eprintln!("This error occured: {}", err)
-            }
-        },
-        Err(err) => {
-            eprintln!("Cannot open incli_envs.sh file for that reason: {}", err)
-        }
-    }
-}*/
 
 pub fn install_go_on_rocky_linux(url: &str, file_name: &str) {
     println!("Welcome to incli. Your request to install Go on Rocky Linux Reached.");

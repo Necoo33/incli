@@ -148,6 +148,26 @@ Not Implemented
 
 There is no implementation yet.
 
-## Python
+## Java
 
-Not Implemented
+### Windows:
+
+* Windows 10 Home Basic - &#10003;
+
+### Linux:
+
+* Ubuntu 24.04 LTS - &#10003;
+* Ubuntu 22 wsl - &#10003;
+* Debian 12 wsl - &#10003;
+* Arch wsl - &#10003;
+* Kali Linux wsl - &#10003;
+* Alma Linux 9 wsl - &#10003;
+* CentOS 9 Stream - &#10003;
+* Pardus 23 XFCE - &#10003;
+* Fedora 39 Workstation - &#10003;
+* Rocky Linux 9.4 - 
+* Alpine Linux wsl - &#2049;
+
+### Mac Os
+
+There is no implementation yet.
