@@ -1,5 +1,10 @@
 # Incli Changelog
 
+## v0.7.3
+
+Upgraded Go's lts version to 1.23.1 .
+sys-info-extended liblary version upgraded to 0.6.0 .
+
 ## v0.7.2
 
 Fixed some documentation typos.
@@ -13,7 +18,7 @@ Upgraded Node.js's latest version to 22.8.0 .
 
 Added Java Virtual Machine Support.
 Upgraded Go's lts version to 1.23.0 .
-sys-info-extended liblary version upgraded to 0.5.0
+sys-info-extended liblary version upgraded to 0.5.0 .
 
 ## v0.6.1
 
