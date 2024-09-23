@@ -3,6 +3,7 @@
 ## v0.7.4
 
 Upgraded Node.js's latest version to 22.9.0 .
+Fixed Some Documentation Typos.
 
 ## v0.7.3
 

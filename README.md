@@ -191,7 +191,7 @@ You can install pretty much every open jdk versions that released from 8 to 24, 
 * CentOS 9 Stream - &#10003;
 * Pardus 23 XFCE - &#10003;
 * Fedora 39 Workstation - &#10003;
-* Rocky Linux 9.4 - 
+* Rocky Linux 9.4 - &#10003;
 * Alpine Linux wsl - &#2049;
 
 ### Mac Os
@@ -231,10 +231,6 @@ The roadmap of this project is this:
 I'm also open for contributions about implementing other sdk's and package managers with the test results of that codes. If you want to support that project and contribute, please check out the "CONTRIBUTION_GUIDE.md". If you like that project anyway, please check out the github repo and give a star to that project.
 
 ## Our Roadmap to Individual Releases
-
-### v0.7.0
-
-* Jdk support
 
 ### v0.8.0
 
