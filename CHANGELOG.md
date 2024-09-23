@@ -1,5 +1,9 @@
 # Incli Changelog
 
+## v0.7.4
+
+Upgraded Node.js's latest version to 22.9.0 .
+
 ## v0.7.3
 
 Upgraded Go's lts version to 1.23.1 .
