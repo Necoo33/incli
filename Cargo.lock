@@ -4,31 +4,31 @@ version = 3
 
 [[package]]
 name = "cc"
-version = "1.1.19"
+version = "1.1.24"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "2d74707dde2ba56f86ae90effb3b43ddd369504387e718014de010cec7959800"
+checksum = "812acba72f0a070b003d3697490d2b55b837230ae7c6c6497f05cc2ddbb8d938"
 dependencies = [
  "shlex",
 ]
 
 [[package]]
 name = "incli"
-version = "0.7.4"
+version = "0.7.5"
 dependencies = [
  "sys-info-extended",
 ]
 
 [[package]]
 name = "libc"
-version = "0.2.158"
+version = "0.2.159"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "d8adc4bb1803a324070e64a98ae98f38934d91957a99cfb3a43dcbc01bc56439"
+checksum = "561d97a539a36e26a9a5fad1ea11a3039a67714694aaa379433e580854bc3dc5"
 
 [[package]]
 name = "palin"
-version = "0.4.0"
+version = "0.7.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "4f0f65d29a75f7c61d7f07ec3eac992e9903c03c1fef894588e4a51fc2f710d4"
+checksum = "a35367691a905cd6c8ea60c1835ad1e9a6f7404b7247e6e646f61ee612906639"
 
 [[package]]
 name = "shlex"
@@ -38,9 +38,9 @@ checksum = "0fda2ff0d084019ba4d7c6f371c95d8fd75ce3524c3cb8fb653a3023f6323e64"
 
 [[package]]
 name = "sys-info-extended"
-version = "0.6.0"
+version = "0.7.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "87add80089e337334610be6eba25f9f539d46718e8ef3ef9d7040dd9273bd0f2"
+checksum = "d1cd87fab1dc4be5103d91cdbf344293bacfb4b34e43d70dfb935685af830ee4"
 dependencies = [
  "cc",
  "libc",

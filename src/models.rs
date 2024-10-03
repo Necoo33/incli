@@ -286,8 +286,8 @@ impl Execution for UserAction {
             match self.os_type {
                 OsType::Windows => {
                     match self.third_arg.as_str() {
-                        "lts" => go::install_go_on_windows("https://go.dev/dl/go1.23.1.windows-amd64.msi", "go1.23.1.windows-amd64.msi"),
-                        "" => go::install_go_on_windows("https://go.dev/dl/go1.23.1.windows-amd64.msi", "go1.23.1.windows-amd64.msi"),
+                        "lts" => go::install_go_on_windows("https://go.dev/dl/go1.23.2.windows-amd64.msi", "go1.23.2.windows-amd64.msi"),
+                        "" => go::install_go_on_windows("https://go.dev/dl/go1.23.2.windows-amd64.msi", "go1.23.2.windows-amd64.msi"),
                         "latest" => go::install_go_on_windows("https://go.dev/dl/go1.23rc2.windows-amd64.msi", "go1.23rc2.windows-amd64.msi"),
                         &_ => go::install_go_error()
                     };
@@ -299,85 +299,85 @@ impl Execution for UserAction {
                     match linux_dist {
                         "ubuntu" => {
                             match self.third_arg.as_str() {
-                                "lts" => go::install_go_on_debian_based_distros("https://go.dev/dl/go1.23.1.linux-amd64.tar.gz", "go1.23.1.linux-amd64.tar.gz"),
-                                "" => go::install_go_on_debian_based_distros("https://go.dev/dl/go1.23.1.linux-amd64.tar.gz", "go1.23.1.linux-amd64.tar.gz"),
+                                "lts" => go::install_go_on_debian_based_distros("https://go.dev/dl/go1.23.2.linux-amd64.tar.gz", "go1.23.2.linux-amd64.tar.gz"),
+                                "" => go::install_go_on_debian_based_distros("https://go.dev/dl/go1.23.2.linux-amd64.tar.gz", "go1.23.2.linux-amd64.tar.gz"),
                                 "latest" => go::install_go_on_debian_based_distros("https://go.dev/dl/go1.23rc2.linux-amd64.tar.gz", "go1.23rc2.linux-amd64.tar.gz"),
                                 &_ => go::install_go_error()
                             }
                         },
                         "debian" => {
                             match self.third_arg.as_str() {
-                                "lts" => go::install_go_on_debian_based_distros("https://go.dev/dl/go1.23.1.linux-amd64.tar.gz", "go1.23.1.linux-amd64.tar.gz"),
-                                "" => go::install_go_on_debian_based_distros("https://go.dev/dl/go1.23.1.linux-amd64.tar.gz", "go1.23.1.linux-amd64.tar.gz"),
+                                "lts" => go::install_go_on_debian_based_distros("https://go.dev/dl/go1.23.2.linux-amd64.tar.gz", "go1.23.2.linux-amd64.tar.gz"),
+                                "" => go::install_go_on_debian_based_distros("https://go.dev/dl/go1.23.2.linux-amd64.tar.gz", "go1.23.2.linux-amd64.tar.gz"),
                                 "latest" => go::install_go_on_debian_based_distros("https://go.dev/dl/go1.23rc2.linux-amd64.tar.gz", "go1.23rc2.linux-amd64.tar.gz"),
                                 &_ => go::install_go_error()
                             }
                         },
                         "pardus" => {
                             match self.third_arg.as_str() {
-                                "lts" => go::install_go_on_debian_based_distros("https://go.dev/dl/go1.23.1.linux-amd64.tar.gz", "go1.23.1.linux-amd64.tar.gz"),
-                                "" => go::install_go_on_debian_based_distros("https://go.dev/dl/go1.23.1.linux-amd64.tar.gz", "go1.23.1.linux-amd64.tar.gz"),
+                                "lts" => go::install_go_on_debian_based_distros("https://go.dev/dl/go1.23.2.linux-amd64.tar.gz", "go1.23.2.linux-amd64.tar.gz"),
+                                "" => go::install_go_on_debian_based_distros("https://go.dev/dl/go1.23.2.linux-amd64.tar.gz", "go1.23.2.linux-amd64.tar.gz"),
                                 "latest" => go::install_go_on_debian_based_distros("https://go.dev/dl/go1.23rc2.linux-amd64.tar.gz", "go1.23rc2.linux-amd64.tar.gz"),
                                 &_ => go::install_go_error()
                             }
                         },
                         "arch wsl" => {
                             match self.third_arg.as_str() {
-                                "lts" => go::install_go_on_arch_linux("https://go.dev/dl/go1.23.1.linux-amd64.tar.gz", "go1.23.1.linux-amd64.tar.gz"),
-                                "" => go::install_go_on_arch_linux("https://go.dev/dl/go1.23.1.linux-amd64.tar.gz", "go1.23.1.linux-amd64.tar.gz"),
+                                "lts" => go::install_go_on_arch_linux("https://go.dev/dl/go1.23.2.linux-amd64.tar.gz", "go1.23.2.linux-amd64.tar.gz"),
+                                "" => go::install_go_on_arch_linux("https://go.dev/dl/go1.23.2.linux-amd64.tar.gz", "go1.23.2.linux-amd64.tar.gz"),
                                 "latest" => go::install_go_on_arch_linux("https://go.dev/dl/go1.23rc2.linux-amd64.tar.gz", "go1.23rc2.linux-amd64.tar.gz"),
                                 &_ => go::install_go_error()
                             }
                         }
                         "kali linux" => {
                             match self.third_arg.as_str() {
-                                "lts" => go::install_go_on_debian_based_distros("https://go.dev/dl/go1.23.1.linux-amd64.tar.gz", "go1.23.1.linux-amd64.tar.gz"),
-                                "" => go::install_go_on_debian_based_distros("https://go.dev/dl/go1.23.1.linux-amd64.tar.gz", "go1.23.1.linux-amd64.tar.gz"),
+                                "lts" => go::install_go_on_debian_based_distros("https://go.dev/dl/go1.23.2.linux-amd64.tar.gz", "go1.23.2.linux-amd64.tar.gz"),
+                                "" => go::install_go_on_debian_based_distros("https://go.dev/dl/go1.23.2.linux-amd64.tar.gz", "go1.23.2.linux-amd64.tar.gz"),
                                 "latest" => go::install_go_on_debian_based_distros("https://go.dev/dl/go1.23rc2.linux-amd64.tar.gz", "go1.23rc2.linux-amd64.tar.gz"),
                                 &_ => go::install_go_error()
                             }
                         },
                         "fedora" => {
                             match self.third_arg.as_str() {
-                                "lts" => go::install_go_on_centos_and_fedora("https://go.dev/dl/go1.23.1.linux-amd64.tar.gz", "go1.23.1.linux-amd64.tar.gz"),
-                                "" => go::install_go_on_centos_and_fedora("https://go.dev/dl/go1.23.1.linux-amd64.tar.gz", "go1.23.1.linux-amd64.tar.gz"),
+                                "lts" => go::install_go_on_centos_and_fedora("https://go.dev/dl/go1.23.2.linux-amd64.tar.gz", "go1.23.2.linux-amd64.tar.gz"),
+                                "" => go::install_go_on_centos_and_fedora("https://go.dev/dl/go1.23.2.linux-amd64.tar.gz", "go1.23.2.linux-amd64.tar.gz"),
                                 "latest" => go::install_go_on_centos_and_fedora("https://go.dev/dl/go1.23rc2.linux-amd64.tar.gz", "go1.23rc2.linux-amd64.tar.gz"),
                                 &_ => go::install_go_error()
                             }
                         },
                         "centos" => {
                             match self.third_arg.as_str() {
-                                "lts" => go::install_go_on_centos_and_fedora("https://go.dev/dl/go1.23.1.linux-amd64.tar.gz", "go1.23.1.linux-amd64.tar.gz"),
-                                "" => go::install_go_on_centos_and_fedora("https://go.dev/dl/go1.23.1.linux-amd64.tar.gz", "go1.23.1.linux-amd64.tar.gz"),
+                                "lts" => go::install_go_on_centos_and_fedora("https://go.dev/dl/go1.23.2.linux-amd64.tar.gz", "go1.23.2.linux-amd64.tar.gz"),
+                                "" => go::install_go_on_centos_and_fedora("https://go.dev/dl/go1.23.2.linux-amd64.tar.gz", "go1.23.2.linux-amd64.tar.gz"),
                                 "latest" => go::install_go_on_centos_and_fedora("https://go.dev/dl/go1.23rc2.linux-amd64.tar.gz", "go1.23rc2.linux-amd64.tar.gz"),
                                 &_ => go::install_go_error()
                             }
                         },
                         "rocky" => {
                             match self.third_arg.as_str() {
-                                "lts" => go::install_go_on_rocky_linux("https://go.dev/dl/go1.23.1.linux-amd64.tar.gz", "go1.23.1.linux-amd64.tar.gz"),
-                                "" => go::install_go_on_rocky_linux("https://go.dev/dl/go1.23.1.linux-amd64.tar.gz", "go1.23.1.linux-amd64.tar.gz"),
+                                "lts" => go::install_go_on_rocky_linux("https://go.dev/dl/go1.23.2.linux-amd64.tar.gz", "go1.23.2.linux-amd64.tar.gz"),
+                                "" => go::install_go_on_rocky_linux("https://go.dev/dl/go1.23.2.linux-amd64.tar.gz", "go1.23.2.linux-amd64.tar.gz"),
                                 "latest" => go::install_go_on_rocky_linux("https://go.dev/dl/go1.23rc2.linux-amd64.tar.gz", "go1.23rc2.linux-amd64.tar.gz"),
                                 &_ => go::install_go_error()
                             }
                         }
                         "alma linux" => {
                             match self.third_arg.as_str() {
-                                "lts" => go::install_go_on_alma_linux("https://go.dev/dl/go1.23.1.linux-amd64.tar.gz", "go1.23.1.linux-amd64.tar.gz"),
-                                "" => go::install_go_on_alma_linux("https://go.dev/dl/go1.23.1.linux-amd64.tar.gz", "go1.23.1.linux-amd64.tar.gz"),
+                                "lts" => go::install_go_on_alma_linux("https://go.dev/dl/go1.23.2.linux-amd64.tar.gz", "go1.23.2.linux-amd64.tar.gz"),
+                                "" => go::install_go_on_alma_linux("https://go.dev/dl/go1.23.2.linux-amd64.tar.gz", "go1.23.2.linux-amd64.tar.gz"),
                                 "latest" => go::install_go_on_alma_linux("https://go.dev/dl/go1.23rc2.linux-amd64.tar.gz", "go1.23rc2.linux-amd64.tar.gz"),
                                 &_ => go::install_go_error()
                             }
                         },
-                        "alpine" => go::install_go_on_alpine_linux("https://go.dev/dl/go1.23.1.linux-amd64.tar.gz", "go1.23.1.linux-amd64.tar.gz"),
+                        "alpine" => go::install_go_on_alpine_linux("https://go.dev/dl/go1.23.2.linux-amd64.tar.gz", "go1.23.2.linux-amd64.tar.gz"),
                         &_ => null_var = "none".to_string()
                     }
 
                     if null_var == "none".to_string() {
                         if utils::check_if_linux_dist_is_arch_linux() {
                             match self.third_arg.as_str() {
-                                "lts" => go::install_go_on_arch_linux("https://go.dev/dl/go1.23.1.linux-amd64.tar.gz", "go1.23.1.linux-amd64.tar.gz"),
-                                "" => go::install_go_on_arch_linux("https://go.dev/dl/go1.23.1.linux-amd64.tar.gz", "go1.23.1.linux-amd64.tar.gz"),
+                                "lts" => go::install_go_on_arch_linux("https://go.dev/dl/go1.23.2.linux-amd64.tar.gz", "go1.23.2.linux-amd64.tar.gz"),
+                                "" => go::install_go_on_arch_linux("https://go.dev/dl/go1.23.2.linux-amd64.tar.gz", "go1.23.2.linux-amd64.tar.gz"),
                                 "latest" => go::install_go_on_arch_linux("https://go.dev/dl/go1.23rc2.linux-amd64.tar.gz", "go1.23rc2.linux-amd64.tar.gz"),
                                 &_ => go::install_go_error()
                             }

@@ -1,5 +1,10 @@
 # Incli Changelog
 
+## v0.7.5
+
+Upgraded Go's lts version to 1.23.2 .
+sys-info-extended liblary version upgraded to 0.7.0 .
+
 ## v0.7.4
 
 Upgraded Node.js's latest version to 22.9.0 .
