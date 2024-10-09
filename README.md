@@ -24,7 +24,7 @@ If you like that program, consider to give a like on [github repo](https://githu
 
 ## Current Status
 
-In this situation rust, node.js, yarn, bun and golang are supported.
+In this situation rust, node.js, yarn, bun, golang, jvm and gradle are supported.
 
 Also we'll make minor updates for supporting new lts and latest releases for Node.js And Golang.
 
@@ -198,6 +198,33 @@ You can install pretty much every open jdk versions that released from 8 to 24, 
 
 There is no implementation yet.
 
+# Gradle
+
+You can install every gradle version that available on gradle's official website. Incli downloads the binary version of gradle. You can download it via typing `(that binary) install gradle (version number)`. You can install every version if it's file name ends with "bin" before .zip extension. For example that command installs the gradle 8.10.2: `(that binary) install gradle 8.10.2`. If you want, you can install milestone versions too, like that: `(that binary) install gradle 8.10.2-milestone-1`.
+
+### Windows:
+
+* Windows 11 Pro - &#10003;
+
+### Linux:
+
+* Ubuntu 24.04 LTS - &#129300;
+* Ubuntu 22.04 LTS - &#129300;
+* Ubuntu 22 wsl - &#10003;
+* Debian 12 wsl - &#10003;
+* Arch wsl - &#10003;
+* Kali Linux wsl - &#10003;
+* Alma Linux 9 wsl - &#10003;
+* CentOS 9 Stream - &#10003;
+* Pardus 23 XFCE - &#10003;
+* Fedora 39 Workstation - &#10003;
+* Rocky Linux 9.4 - &#10003;
+* Alpine Linux wsl - &#2049;
+
+### Mac Os
+
+There is no implementation yet.
+
 ## Guide
 
 You have to compile that app for specific platform that you'll use.
@@ -267,7 +294,7 @@ I'm also open for contributions about implementing other sdk's and package manag
 
 ### v1.6.0
 
-* Adding Laravel Support
+* Adding Android Support
 
 ### v1.7.0
 

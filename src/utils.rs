@@ -1,6 +1,7 @@
-use std::process::Command;
+use std::process::{Command, ExitStatus, Output};
 use std::fs::{File, self};
-use std::io::{self, BufRead, Error, Read};
+use std::io::{self, BufRead, BufReader, Error, Read};
+use zip::read::ZipArchive;
 use sys_info_extended;
 
 pub fn return_linux_dist_etc_os_release<'a>() -> &'a str {
@@ -188,18 +189,24 @@ pub fn configure_incli_envs_file(user: &String, run_commands_as_root: bool){
         println!("Cannot give required permissions for .bashrc, you have to add incli-envs.sh file's path on that file via that synthax for adding node.js on your user's env's: \". \"$HOME/INCLI_PATHS/incli-envs.sh\"\"")
     }
 
-    let bashrc_file = fs::OpenOptions::new().append(true).open(bashrc_path);
+    let bashrc_file = fs::OpenOptions::new().append(true).read(true).open(bashrc_path);
 
     match bashrc_file {
         Ok(mut file) => {
-            let incli_envs = incli_envs_path;
-            let format_incli_envs_bytes = format!(". \"{}\"", incli_envs);
+            let mut buffer = vec![];
+            file.read_to_end(&mut buffer).unwrap();
+            let quotes = String::from_utf8_lossy(&buffer);
 
-            let add_env_file_dest = io::Write::write_all(&mut file, format_incli_envs_bytes.as_bytes());
-
-            match add_env_file_dest {
-                Ok(_) => println!("incli-envs.sh file successfully added on .bashrc file."),
-                Err(err) => eprintln!("An Error occured when incli-envs.sh file about to write on .bashrc file: {}", err)
+            if !quotes.contains("incli-envs.sh") {
+                let incli_envs = incli_envs_path;
+                let format_incli_envs_bytes = format!(". \"{}\"", incli_envs);
+    
+                let add_env_file_dest = io::Write::write_all(&mut file, format_incli_envs_bytes.as_bytes());
+    
+                match add_env_file_dest {
+                    Ok(_) => println!("incli-envs.sh file successfully added on .bashrc file."),
+                    Err(err) => eprintln!("An Error occured when incli-envs.sh file about to write on .bashrc file: {}", err)
+                }
             }
         },
         Err(err) => {
@@ -227,3 +234,25 @@ pub fn append_env_to_system_path_on_windows(new_path: &str) {
     }
 }
 
+pub fn unzip(zip_path: &str, dest: &str) -> zip::result::ZipResult<()> {
+    let zip_file = File::open(zip_path)?;
+    let mut archive = ZipArchive::new(BufReader::new(zip_file))?;
+
+    for i in 0..archive.len() {
+        let mut file = archive.by_index(i)?;
+        let outpath = std::path::Path::new(dest).join(file.name());
+
+        if file.name().ends_with('/') {
+            std::fs::create_dir_all(&outpath)?;
+        } else {
+            if let Some(p) = outpath.parent() {
+                if !p.exists() {
+                    std::fs::create_dir_all(p)?;
+                }
+            }
+            let mut outfile = File::create(&outpath)?;
+            std::io::copy(&mut file, &mut outfile)?;
+        }
+    }
+    Ok(())
+}

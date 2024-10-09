@@ -6,6 +6,7 @@ mod bun;
 mod yarn;
 mod go;
 mod java;
+mod gradle;
 
 use models::{CreateAction, OsType, Execution, Version, Help, CommandType};
 use sys_info_extended::{os_release, os_type, get_current_user};
@@ -36,39 +37,6 @@ fn main() {
     let mut arg4 = "".to_string();
 
     for (index, argument) in args.into_iter().enumerate() {
-        /*if index == 1 {
-            arg1 = match argument.as_str() {
-                "help" => "help".to_string(),
-                "install" => "install".to_string(),
-                "version" => "version".to_string(),
-                &_ => panic!("Invalid argument, you have to type either 'help', 'install' or 'version'")
-            }
-        }
-
-        if index == 2 {
-            arg2 = match argument.as_str() {
-                "rust" => "rust".to_string(),
-                "java" => "java".to_string(),
-                "gradle" => "gradle".to_string(),
-                "maven" => "maven".to_string(),
-                "go" => "go".to_string(),
-                "node" => "node".to_string(),
-                "bun" => "bun".to_string(),
-                "yarn" => "yarn".to_string(),
-                "python" => "python".to_string(),
-                "" => "".to_string(),
-                &_ => panic!("You're mistyped or tried to download unsupported programming language.")
-            }
-        }
-
-        if index == 3 {
-            arg3 = &argument;
-        }
-
-        if index == 4 {
-            arg4 = &argument;
-        }*/
-
         match index {
             1 => arg1 = match argument.as_str() {
                 "help" => "help".to_string(),
@@ -89,8 +57,8 @@ fn main() {
                 "" => "".to_string(),
                 &_ => panic!("You're mistyped or tried to download unsupported programming language.")
             },
-            3 => arg3 = argument,
-            4 => arg4 = argument,
+            3 => arg3 = argument.trim().to_string(),
+            4 => arg4 = argument.trim().to_string(),
             _ => ()
         }
     };

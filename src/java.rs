@@ -280,7 +280,7 @@ pub fn install_java_on_debian_based_distros(url: &str, file_name: &str, version:
             
                     let env_path = format!("/root/{}/bin", format_jvm_folder_name);
             
-                    let line_for_append = format!("export PATH=\"{}:$PATH\"", env_path);
+                    let line_for_append = format!("export PATH=\"{}:$PATH\"\n", env_path);
                             
                     let line_for_append = line_for_append.as_bytes();
                                 
@@ -368,7 +368,7 @@ pub fn install_java_on_debian_based_distros(url: &str, file_name: &str, version:
             
                     let env_path = format!("{}/{}/bin", user_path, format_jvm_folder_name);
             
-                    let line_for_append = format!("export PATH=\"{}:$PATH\"", env_path);
+                    let line_for_append = format!("export PATH=\"{}:$PATH\"\n", env_path);
                             
                     let line_for_append = line_for_append.as_bytes();
             
@@ -588,7 +588,7 @@ pub fn install_java_on_arch_linux(url: &str, file_name: &str, version: &str) {
 
     match incli_envs_file {
         Ok(mut file) => {
-            let line_for_append = format!("export PATH=$PATH:{}", env_path);
+            let line_for_append = format!("export PATH=$PATH:{}\n", env_path);
             let line_for_append = line_for_append.as_bytes();
         
             let add_env_file_dest = io::Write::write_all(&mut file, line_for_append);
@@ -814,7 +814,7 @@ pub fn install_java_on_alma_linux(url: &str, file_name: &str, version: &str) {
         
             match incli_envs_file {
                 Ok(mut file) => {
-                    let line_for_append = format!("\nPATH=\"{}:$PATH\"", env_path);
+                    let line_for_append = format!("\nPATH=\"{}:$PATH\"\n", env_path);
                     let line_for_append = line_for_append.as_bytes();
                 
                     let add_env_file_dest = io::Write::write_all(&mut file, line_for_append);
@@ -1049,7 +1049,7 @@ pub fn install_java_on_centos_and_fedora(url: &str, file_name: &str, version: &s
         
             match incli_envs_file {
                 Ok(mut file) => {
-                    let line_for_append = format!("\nexport PATH=\"{}:$PATH\"", env_path);
+                    let line_for_append = format!("\nexport PATH=\"{}:$PATH\"\n", env_path);
                     let line_for_append = line_for_append.as_bytes();
                 
                     let add_env_file_dest = io::Write::write_all(&mut file, line_for_append);
@@ -1276,7 +1276,7 @@ pub fn install_java_on_rocky_linux(url: &str, file_name: &str, version: &str) {
         
             match incli_envs_file {
                 Ok(mut file) => {
-                    let line_for_append = format!("\nexport PATH=\"{}:$PATH\"", env_path);
+                    let line_for_append = format!("\nexport PATH=\"{}:$PATH\"\n", env_path);
                     let line_for_append = line_for_append.as_bytes();
                 
                     let add_env_file_dest = io::Write::write_all(&mut file, line_for_append);

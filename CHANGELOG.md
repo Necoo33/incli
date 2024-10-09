@@ -1,5 +1,12 @@
 # Incli Changelog
 
+## v0.8.0
+
+Added Gradle Support.
+Added zip liblary on dependencies for extracting .zip files.
+Some bugs about configuration of incli_envs.sh file debugged.
+Upgraded Node.js's lts version to 20.18.0 .
+
 ## v0.7.5
 
 Upgraded Go's lts version to 1.23.2 .
