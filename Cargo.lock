@@ -254,7 +254,7 @@ dependencies = [
 
 [[package]]
 name = "incli"
-version = "0.8.0"
+version = "0.8.1"
 dependencies = [
  "sys-info-extended",
  "zip",
@@ -490,9 +490,9 @@ dependencies = [
 
 [[package]]
 name = "sys-info-extended"
-version = "0.7.0"
+version = "0.8.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "d1cd87fab1dc4be5103d91cdbf344293bacfb4b34e43d70dfb935685af830ee4"
+checksum = "ed678b13bbc49bfd26ade034a94994ddfd542a04d3b818949ed527e66012a21e"
 dependencies = [
  "cc",
  "libc",

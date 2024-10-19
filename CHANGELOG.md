@@ -1,5 +1,10 @@
 # Incli Changelog
 
+## v0.8.1
+
+Upgraded Node.js's latest version to 23.0.0 .
+sys-info-extended version upgraded to 0.8.1
+
 ## v0.8.0
 
 Added Gradle Support.

@@ -754,7 +754,7 @@ impl Execution for UserAction {
                     match self.third_arg.as_str() {
                         "lts" => node::install_nodejs_on_windows("https://nodejs.org/dist/v20.18.0/node-v20.18.0-x64.msi", "node-v20.18.0-x64.msi"),
                         "" => node::install_nodejs_on_windows("https://nodejs.org/dist/v20.18.0/node-v20.18.0-x64.msi", "node-v20.18.0-x64.msi"),
-                        "latest" => node::install_nodejs_on_windows("https://nodejs.org/dist/v22.9.0/node-v22.9.0-x64.msi", "node-v22.9.0-x64.msi"),
+                        "latest" => node::install_nodejs_on_windows("https://nodejs.org/dist/v23.0.0/node-v23.0.0-x64.msi", "node-v23.0.0-x64.msi"),
                         &_ => node::install_nodejs_error()
                     };
                 },
@@ -767,7 +767,7 @@ impl Execution for UserAction {
                             match self.third_arg.as_str() {
                                 "lts" => node::install_nodejs_on_debian_based_distros("https://nodejs.org/dist/v20.18.0/node-v20.18.0-linux-x64.tar.xz", "node-v20.18.0-linux-x64.tar.xz"),
                                 "" => node::install_nodejs_on_debian_based_distros("https://nodejs.org/dist/v20.18.0/node-v20.18.0-linux-x64.tar.xz", "node-v20.18.0-linux-x64.tar.xz"),
-                                "latest" => node::install_nodejs_on_debian_based_distros("https://nodejs.org/dist/v22.9.0/node-v22.9.0-linux-x64.tar.xz", "node-v22.9.0-linux-x64.tar.xz"),
+                                "latest" => node::install_nodejs_on_debian_based_distros("https://nodejs.org/dist/v23.0.0/node-v23.0.0-linux-x64.tar.xz", "node-v23.0.0-linux-x64.tar.xz"),
                                 &_ => node::install_nodejs_error()
                             }
                         },
@@ -775,7 +775,7 @@ impl Execution for UserAction {
                             match self.third_arg.as_str() {
                                 "lts" => node::install_nodejs_on_debian_based_distros("https://nodejs.org/dist/v20.18.0/node-v20.18.0-linux-x64.tar.xz", "node-v20.18.0-linux-x64.tar.xz"),
                                 "" => node::install_nodejs_on_debian_based_distros("https://nodejs.org/dist/v20.18.0/node-v20.18.0-linux-x64.tar.xz", "node-v20.18.0-linux-x64.tar.xz"),
-                                "latest" => node::install_nodejs_on_debian_based_distros("https://nodejs.org/dist/v22.9.0/node-v22.9.0-linux-x64.tar.xz", "node-v22.9.0-linux-x64.tar.xz"),
+                                "latest" => node::install_nodejs_on_debian_based_distros("https://nodejs.org/dist/v23.0.0/node-v23.0.0-linux-x64.tar.xz", "node-v23.0.0-linux-x64.tar.xz"),
                                 &_ => node::install_nodejs_error()
                             }
                         },
@@ -783,7 +783,7 @@ impl Execution for UserAction {
                             match self.third_arg.as_str() {
                                 "lts" => node::install_nodejs_on_debian_based_distros("https://nodejs.org/dist/v20.18.0/node-v20.18.0-linux-x64.tar.xz", "node-v20.18.0-linux-x64.tar.xz"),
                                 "" => node::install_nodejs_on_debian_based_distros("https://nodejs.org/dist/v20.18.0/node-v20.18.0-linux-x64.tar.xz", "node-v20.18.0-linux-x64.tar.xz"),
-                                "latest" => node::install_nodejs_on_debian_based_distros("https://nodejs.org/dist/v22.9.0/node-v22.9.0-linux-x64.tar.xz", "node-v22.9.0-linux-x64.tar.xz"),
+                                "latest" => node::install_nodejs_on_debian_based_distros("https://nodejs.org/dist/v23.0.0/node-v23.0.0-linux-x64.tar.xz", "node-v23.0.0-linux-x64.tar.xz"),
                                 &_ => node::install_nodejs_error()
                             }
                         },
@@ -791,7 +791,7 @@ impl Execution for UserAction {
                             match self.third_arg.as_str() {
                                 "lts" => node::install_nodejs_on_arch_linux("https://nodejs.org/dist/v20.18.0/node-v20.18.0-linux-x64.tar.xz", "node-v20.18.0-linux-x64.tar.xz"),
                                 "" => node::install_nodejs_on_arch_linux("https://nodejs.org/dist/v20.18.0/node-v20.18.0-linux-x64.tar.xz", "node-v20.18.0-linux-x64.tar.xz"),
-                                "latest" => node::install_nodejs_on_arch_linux("https://nodejs.org/dist/v22.9.0/node-v22.9.0-linux-x64.tar.xz", "node-v22.9.0-linux-x64.tar.xz"),
+                                "latest" => node::install_nodejs_on_arch_linux("https://nodejs.org/dist/v23.0.0/node-v23.0.0-linux-x64.tar.xz", "node-v23.0.0-linux-x64.tar.xz"),
                                 &_ => node::install_nodejs_error()
                             }
                         }
@@ -799,7 +799,7 @@ impl Execution for UserAction {
                             match self.third_arg.as_str() {
                                 "lts" => node::install_nodejs_on_debian_based_distros("https://nodejs.org/dist/v20.18.0/node-v20.18.0-linux-x64.tar.xz", "node-v20.18.0-linux-x64.tar.xz"),
                                 "" => node::install_nodejs_on_debian_based_distros("https://nodejs.org/dist/v20.18.0/node-v20.18.0-linux-x64.tar.xz", "node-v20.18.0-linux-x64.tar.xz"),
-                                "latest" => node::install_nodejs_on_debian_based_distros("https://nodejs.org/dist/v22.9.0/node-v22.9.0-linux-x64.tar.xz", "node-v22.9.0-linux-x64.tar.xz"),
+                                "latest" => node::install_nodejs_on_debian_based_distros("https://nodejs.org/dist/v23.0.0/node-v23.0.0-linux-x64.tar.xz", "node-v23.0.0-linux-x64.tar.xz"),
                                 &_ => node::install_nodejs_error()
                             }
                         },
@@ -807,7 +807,7 @@ impl Execution for UserAction {
                             match self.third_arg.as_str() {
                                 "lts" => node::install_nodejs_on_centos_and_fedora("https://nodejs.org/dist/v20.18.0/node-v20.18.0-linux-x64.tar.xz", "node-v20.18.0-linux-x64.tar.xz"),
                                 "" => node::install_nodejs_on_centos_and_fedora("https://nodejs.org/dist/v20.18.0/node-v20.18.0-linux-x64.tar.xz", "node-v20.18.0-linux-x64.tar.xz"),
-                                "latest" => node::install_nodejs_on_centos_and_fedora("https://nodejs.org/dist/v22.9.0/node-v22.9.0-linux-x64.tar.xz", "node-v22.9.0-linux-x64.tar.xz"),
+                                "latest" => node::install_nodejs_on_centos_and_fedora("https://nodejs.org/dist/v23.0.0/node-v23.0.0-linux-x64.tar.xz", "node-v23.0.0-linux-x64.tar.xz"),
                                 &_ => node::install_nodejs_error()
                             }
                         },
@@ -815,7 +815,7 @@ impl Execution for UserAction {
                             match self.third_arg.as_str() {
                                 "lts" => node::install_nodejs_on_centos_and_fedora("https://nodejs.org/dist/v20.18.0/node-v20.18.0-linux-x64.tar.xz", "node-v20.18.0-linux-x64.tar.xz"),
                                 "" => node::install_nodejs_on_centos_and_fedora("https://nodejs.org/dist/v20.18.0/node-v20.18.0-linux-x64.tar.xz", "node-v20.18.0-linux-x64.tar.xz"),
-                                "latest" => node::install_nodejs_on_centos_and_fedora("https://nodejs.org/dist/v22.9.0/node-v22.9.0-linux-x64.tar.xz", "node-v22.9.0-linux-x64.tar.xz"),
+                                "latest" => node::install_nodejs_on_centos_and_fedora("https://nodejs.org/dist/v23.0.0/node-v23.0.0-linux-x64.tar.xz", "node-v23.0.0-linux-x64.tar.xz"),
                                 &_ => node::install_nodejs_error()
                             }
                         },
@@ -823,7 +823,7 @@ impl Execution for UserAction {
                             match self.third_arg.as_str() {
                                 "lts" => node::install_nodejs_on_rocky_linux("https://nodejs.org/dist/v20.18.0/node-v20.18.0-linux-x64.tar.xz", "node-v20.18.0-linux-x64.tar.xz"),
                                 "" => node::install_nodejs_on_rocky_linux("https://nodejs.org/dist/v20.18.0/node-v20.18.0-linux-x64.tar.xz", "node-v20.18.0-linux-x64.tar.xz"),
-                                "latest" => node::install_nodejs_on_rocky_linux("https://nodejs.org/dist/v22.9.0/node-v22.9.0-linux-x64.tar.xz", "node-v22.9.0-linux-x64.tar.xz"),
+                                "latest" => node::install_nodejs_on_rocky_linux("https://nodejs.org/dist/v23.0.0/node-v23.0.0-linux-x64.tar.xz", "node-v23.0.0-linux-x64.tar.xz"),
                                 &_ => node::install_nodejs_error()
                             }
                         },
@@ -831,7 +831,7 @@ impl Execution for UserAction {
                             match self.third_arg.as_str() {
                                 "lts" => node::install_nodejs_on_alma_linux("https://nodejs.org/dist/v20.18.0/node-v20.18.0-linux-x64.tar.xz", "node-v20.18.0-linux-x64.tar.xz"),
                                 "" => node::install_nodejs_on_alma_linux("https://nodejs.org/dist/v20.18.0/node-v20.18.0-linux-x64.tar.xz", "node-v20.18.0-linux-x64.tar.xz"),
-                                "latest" => node::install_nodejs_on_alma_linux("https://nodejs.org/dist/v22.9.0/node-v22.9.0-linux-x64.tar.xz", "node-v22.9.0-linux-x64.tar.xz"),
+                                "latest" => node::install_nodejs_on_alma_linux("https://nodejs.org/dist/v23.0.0/node-v23.0.0-linux-x64.tar.xz", "node-v23.0.0-linux-x64.tar.xz"),
                                 &_ => node::install_nodejs_error()
                             }
                         },
@@ -844,7 +844,7 @@ impl Execution for UserAction {
                             match self.third_arg.as_str() {
                                 "lts" => node::install_nodejs_on_arch_linux("https://nodejs.org/dist/v20.18.0/node-v20.18.0-linux-x64.tar.xz", "node-v20.18.0-linux-x64.tar.xz"),
                                 "" => node::install_nodejs_on_arch_linux("https://nodejs.org/dist/v20.18.0/node-v20.18.0-linux-x64.tar.xz", "node-v20.18.0-linux-x64.tar.xz"),
-                                "latest" => node::install_nodejs_on_arch_linux("https://nodejs.org/dist/v22.9.0/node-v22.9.0-linux-x64.tar.xz", "node-v22.9.0-linux-x64.tar.xz"),
+                                "latest" => node::install_nodejs_on_arch_linux("https://nodejs.org/dist/v23.0.0/node-v23.0.0-linux-x64.tar.xz", "node-v23.0.0-linux-x64.tar.xz"),
                                 &_ => node::install_nodejs_error()
                             }
                         }
