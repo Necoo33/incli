@@ -1,5 +1,9 @@
 # Incli Changelog
 
+## v0.8.2
+
+Upgraded Node.js's latest version to 23.1.0 .
+
 ## v0.8.1
 
 Upgraded Node.js's latest version to 23.0.0 .
