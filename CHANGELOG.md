@@ -1,5 +1,10 @@
 # Incli Changelog
 
+## v0.8.5
+
+Upgraded Node.js's latest version to 23.3.0 .
+Upgraded zip's version to 2.2.1 .
+
 ## v0.8.4
 
 Upgraded Node.js's latest version to 23.2.0 .
