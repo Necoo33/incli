@@ -335,10 +335,10 @@ pub fn install_java_on_debian_based_distros(url: &str, file_name: &str, version:
             
                     let env_path = format!("/root/{}", format_jvm_folder_name);
             
-                    let line_for_append_1 = format!("export PATH=\"{}/bin:$PATH\"\n", env_path);
+                    let line_for_append_1 = format!("\nexport PATH=\"{}/bin:$PATH\"\n", env_path);
                     let line_for_append_1 = line_for_append_1.as_bytes();
 
-                    let line_for_append_2 = format!("\nexport JAVA_HOME=\"{}\"", env_path);
+                    let line_for_append_2 = format!("\nexport JAVA_HOME=\"{}\"\n", env_path);
                     let line_for_append_2 = line_for_append_2.as_bytes();
                                 
                     let bashrc_file = fs::OpenOptions::new().append(true).open("/root/.bashrc");
@@ -432,10 +432,10 @@ pub fn install_java_on_debian_based_distros(url: &str, file_name: &str, version:
             
                     let env_path = format!("{}/{}", user_path, format_jvm_folder_name);
             
-                    let line_for_append_1 = format!("export PATH=\"{}/bin:$PATH\"\n", env_path);
+                    let line_for_append_1 = format!("\nexport PATH=\"{}/bin:$PATH\"\n", env_path);
                     let line_for_append_1 = line_for_append_1.as_bytes();
 
-                    let line_for_append_2 = format!("\nexport JAVA_HOME=\"{}\"", env_path);
+                    let line_for_append_2 = format!("\nexport JAVA_HOME=\"{}\"\n", env_path);
                     let line_for_append_2 = line_for_append_2.as_bytes();
             
                     let create_bashrc_path = format!("{}/.bashrc", user_path);
@@ -661,7 +661,7 @@ pub fn install_java_on_arch_linux(url: &str, file_name: &str, version: &str) {
 
     match incli_envs_file {
         Ok(mut file) => {
-            let line_for_append_2 = format!("export JAVA_HOME={}\n", env_path);
+            let line_for_append_2 = format!("\nexport JAVA_HOME={}\n", env_path);
             let line_for_append_2 = line_for_append_2.as_bytes();
 
             let add_java_home_env_file_dest = io::Write::write_all(&mut file, line_for_append_2);
@@ -671,7 +671,7 @@ pub fn install_java_on_arch_linux(url: &str, file_name: &str, version: &str) {
                 Err(error) => println!("An error occured when we try to add JAVA_HOME env to your user's env's: {}", error)
             }
 
-            let line_for_append_1 = format!("export PATH=$PATH:{}/bin\n", env_path);
+            let line_for_append_1 = format!("\nexport PATH=$PATH:{}/bin\n", env_path);
             let line_for_append_1 = line_for_append_1.as_bytes();
         
             let add_env_file_dest = io::Write::write_all(&mut file, line_for_append_1);
@@ -1142,7 +1142,7 @@ pub fn install_java_on_centos_and_fedora(url: &str, file_name: &str, version: &s
         
             match incli_envs_file {
                 Ok(mut file) => {
-                    let line_for_append_2 = format!("\nexport JAVA_HOME=\"{}\"", env_path);
+                    let line_for_append_2 = format!("\nexport JAVA_HOME=\"{}\"\n", env_path);
                     let line_for_append_2 = line_for_append_2.as_bytes();
 
                     let add_env_file_dest = io::Write::write_all(&mut file, line_for_append_2);

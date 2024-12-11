@@ -1,5 +1,9 @@
 # Incli Changelog
 
+## v0.9.1
+
+A potential bug were fixed on various installations of java on linux.
+
 ## v0.9.0
 
 All Java installation functions updated. Now, all java installations add `JAVA_HOME` environment variable to the system on windows and user on linux. Since our next program to support, maven needs to work with that env, it'd be a better behavior to adding that env on the moment of installation of java. But we'll check if `JAVA_HOME` env exist in the moment of installation of maven, so that'll be backward compatible. So, this release is kind of a preparation release to support maven better.
