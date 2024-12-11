@@ -3,7 +3,7 @@ use std::process::{Command, exit};
 use std::fs;
 use std::io;
 use std::path::Path;
-use sys_info_extended::get_current_user;
+use sys_info_extended::{get_current_user, set_env, EnvOptions};
 
 pub fn install_java_on_windows(url: &str, file_name: &str, version: &str) {
     println!("Welcome to incli, your request to install Java on Windows reached. Please wait until it finish...");
@@ -94,27 +94,82 @@ pub fn install_java_on_windows(url: &str, file_name: &str, version: &str) {
                 Err(error) => println!("That error occured when we extracting the zip file: {}", error)
             }
 
-            let mut env_path = String::new();
+            let mut java_home_env_path = String::new();
+            let mut bin_env_path = String::new();
 
             match version {
-                "11" => env_path = "C:\\Incli Downloads\\jdk-11.0.2\\bin".to_string(),
-                "12" => env_path = "C:\\Incli Downloads\\jdk-12.0.2\\bin".to_string(),
-                "13" => env_path = "C:\\Incli Downloads\\jdk-13.0.2\\bin".to_string(),
-                "14" => env_path = "C:\\Incli Downloads\\jdk-14.0.2\\bin".to_string(),
-                "15" => env_path = "C:\\Incli Downloads\\jdk-15.0.2\\bin".to_string(),
-                "16" => env_path = "C:\\Incli Downloads\\jdk-16.0.2\\bin".to_string(),
-                "17" => env_path = "C:\\Incli Downloads\\jdk-17.0.2\\bin".to_string(),
-                "18" => env_path = "C:\\Incli Downloads\\jdk-18.0.2\\bin".to_string(),
-                "19" => env_path = "C:\\Incli Downloads\\jdk-19.0.1\\bin".to_string(),
-                "20" => env_path = "C:\\Incli Downloads\\jdk-20.0.2\\bin".to_string(),
-                "21" => env_path = "C:\\Incli Downloads\\jdk-21.0.2\\bin".to_string(),
-                "22" => env_path = "C:\\Incli Downloads\\jdk-22.0.1\\bin".to_string(),
-                "23" => env_path = "C:\\Incli Downloads\\jdk-23\\bin".to_string(),
-                "24" => env_path = "C:\\Incli Downloads\\jdk-24\\bin".to_string(),
+                "11" => {
+                    java_home_env_path = "C:\\Incli Downloads\\jdk-11.0.2".to_string();
+                    bin_env_path = "C:\\Incli Downloads\\jdk-11.0.2\\bin".to_string();
+
+                },
+                "12" => {
+                    java_home_env_path = "C:\\Incli Downloads\\jdk-12.0.2".to_string();
+                    bin_env_path = "C:\\Incli Downloads\\jdk-12.0.2\\bin".to_string(); 
+                }
+                "13" => {
+                    java_home_env_path = "C:\\Incli Downloads\\jdk-13.0.2".to_string();
+                    bin_env_path = "C:\\Incli Downloads\\jdk-13.0.2\\bin".to_string();
+                },
+                "14" => {
+                    java_home_env_path = "C:\\Incli Downloads\\jdk-14.0.2".to_string();
+                    bin_env_path = "C:\\Incli Downloads\\jdk-14.0.2\\bin".to_string();
+                },
+                "15" => {
+                    java_home_env_path = "C:\\Incli Downloads\\jdk-15.0.2".to_string();
+                    bin_env_path = "C:\\Incli Downloads\\jdk-15.0.2\\bin".to_string();
+                },
+                "16" => {
+                    java_home_env_path = "C:\\Incli Downloads\\jdk-16.0.2".to_string();
+                    bin_env_path = "C:\\Incli Downloads\\jdk-16.0.2\\bin".to_string();
+                },
+                "17" => {
+                    java_home_env_path = "C:\\Incli Downloads\\jdk-17.0.2".to_string();
+                    bin_env_path = "C:\\Incli Downloads\\jdk-17.0.2\\bin".to_string();
+                },
+                "18" => {
+                    java_home_env_path = "C:\\Incli Downloads\\jdk-18.0.2".to_string();
+                    bin_env_path = "C:\\Incli Downloads\\jdk-18.0.2\\bin".to_string();
+                },
+                "19" => {
+                    java_home_env_path = "C:\\Incli Downloads\\jdk-19.0.1".to_string();
+                    bin_env_path = "C:\\Incli Downloads\\jdk-19.0.1\\bin".to_string();
+                },
+                "20" => {
+                    java_home_env_path = "C:\\Incli Downloads\\jdk-20.0.2".to_string();
+                    bin_env_path = "C:\\Incli Downloads\\jdk-20.0.2\\bin".to_string();
+                },
+                "21" => {
+                    java_home_env_path = "C:\\Incli Downloads\\jdk-21.0.2".to_string();
+                    bin_env_path = "C:\\Incli Downloads\\jdk-21.0.2\\bin".to_string();
+                },
+                "22" => {
+                    java_home_env_path = "C:\\Incli Downloads\\jdk-22.0.1".to_string();
+                    bin_env_path = "C:\\Incli Downloads\\jdk-22.0.1\\bin".to_string();
+                },
+                "23" => {
+                    java_home_env_path = "C:\\Incli Downloads\\jdk-23".to_string();
+                    bin_env_path = "C:\\Incli Downloads\\jdk-23\\bin".to_string();
+                }
+                "24" => {
+                    java_home_env_path = "C:\\Incli Downloads\\jdk-24".to_string();
+                    bin_env_path = "C:\\Incli Downloads\\jdk-24\\bin".to_string();
+                },
                 &_ => ()
             }
 
-            utils::append_env_to_system_path_on_windows(&env_path);
+            let env_options = EnvOptions {
+                name: "JAVA_HOME".to_string(),
+                value: java_home_env_path,
+                level: sys_info_extended::EnvLevel::Machine
+            };
+
+            match set_env(env_options) {
+                Ok(_) => println!("JAVA_HOME variable added to the system Successfully."),
+                Err(error) => println!("We cannot add JAVA_HOME variable for that reason: {}", error)
+            }
+
+            utils::append_env_to_system_path_on_windows(&bin_env_path);
 
             println!("Jvm {} successfully installed on your computer.", version);
 
@@ -278,17 +333,26 @@ pub fn install_java_on_debian_based_distros(url: &str, file_name: &str, version:
                                 .output()
                                 .unwrap();
             
-                    let env_path = format!("/root/{}/bin", format_jvm_folder_name);
+                    let env_path = format!("/root/{}", format_jvm_folder_name);
             
-                    let line_for_append = format!("export PATH=\"{}:$PATH\"\n", env_path);
-                            
-                    let line_for_append = line_for_append.as_bytes();
+                    let line_for_append_1 = format!("export PATH=\"{}/bin:$PATH\"\n", env_path);
+                    let line_for_append_1 = line_for_append_1.as_bytes();
+
+                    let line_for_append_2 = format!("\nexport JAVA_HOME=\"{}\"", env_path);
+                    let line_for_append_2 = line_for_append_2.as_bytes();
                                 
                     let bashrc_file = fs::OpenOptions::new().append(true).open("/root/.bashrc");
                             
                     match bashrc_file {
                         Ok(mut file) => {
-                            let add_env = io::Write::write_all(&mut file, line_for_append);
+                            let add_env = io::Write::write_all(&mut file, line_for_append_2);
+
+                            match add_env {
+                                Ok(_) => println!("JAVA_HOME env successfully added on your user's envs."),
+                                Err(error) => println!("An error ocured when we try to set JAVA_HOME env: {}", error)
+                            }
+
+                            let add_env = io::Write::write_all(&mut file, line_for_append_1);
                             
                             match add_env {
                                 Ok(_) => println!("Java successfully added on env's. You can try it by restarting your computer and typing 'java -version' on command line."),
@@ -366,11 +430,13 @@ pub fn install_java_on_debian_based_distros(url: &str, file_name: &str, version:
                                 .output()
                                 .unwrap();
             
-                    let env_path = format!("{}/{}/bin", user_path, format_jvm_folder_name);
+                    let env_path = format!("{}/{}", user_path, format_jvm_folder_name);
             
-                    let line_for_append = format!("export PATH=\"{}:$PATH\"\n", env_path);
-                            
-                    let line_for_append = line_for_append.as_bytes();
+                    let line_for_append_1 = format!("export PATH=\"{}/bin:$PATH\"\n", env_path);
+                    let line_for_append_1 = line_for_append_1.as_bytes();
+
+                    let line_for_append_2 = format!("\nexport JAVA_HOME=\"{}\"", env_path);
+                    let line_for_append_2 = line_for_append_2.as_bytes();
             
                     let create_bashrc_path = format!("{}/.bashrc", user_path);
                                 
@@ -378,7 +444,14 @@ pub fn install_java_on_debian_based_distros(url: &str, file_name: &str, version:
                             
                     match bashrc_file {
                         Ok(mut file) => {
-                            let add_env = io::Write::write_all(&mut file, line_for_append);
+                            let add_env = io::Write::write_all(&mut file, line_for_append_2);
+
+                            match add_env {
+                                Ok(_) => println!("JAVA_HOME env successfully added on your user's envs."),
+                                Err(error) => println!("An error ocured when we try to set JAVA_HOME env: {}", error)
+                            }
+
+                            let add_env = io::Write::write_all(&mut file, line_for_append_1);
                             
                             match add_env {
                                 Ok(_) => println!("Java successfully added on env's. You can try it by restarting your computer and typing 'java -version' on command line."),
@@ -491,7 +564,7 @@ pub fn install_java_on_arch_linux(url: &str, file_name: &str, version: &str) {
                 }
             }
 
-            env_path = format!("/root/{}/bin", format_jvm_folder_name)
+            env_path = format!("/root/{}", format_jvm_folder_name)
         },
         &_ => {
             current_user_path = format!("/home/{}", current_user);
@@ -564,7 +637,7 @@ pub fn install_java_on_arch_linux(url: &str, file_name: &str, version: &str) {
                 }
             }
 
-            env_path = format!("{}/{}/bin", current_user_path, format_jvm_folder_name)
+            env_path = format!("{}/{}", current_user_path, format_jvm_folder_name)
         }
     }
 
@@ -588,10 +661,20 @@ pub fn install_java_on_arch_linux(url: &str, file_name: &str, version: &str) {
 
     match incli_envs_file {
         Ok(mut file) => {
-            let line_for_append = format!("export PATH=$PATH:{}\n", env_path);
-            let line_for_append = line_for_append.as_bytes();
+            let line_for_append_2 = format!("export JAVA_HOME={}\n", env_path);
+            let line_for_append_2 = line_for_append_2.as_bytes();
+
+            let add_java_home_env_file_dest = io::Write::write_all(&mut file, line_for_append_2);
+
+            match add_java_home_env_file_dest {
+                Ok(_) => println!("JAVA_HOME env successfully installed on your env's"),
+                Err(error) => println!("An error occured when we try to add JAVA_HOME env to your user's env's: {}", error)
+            }
+
+            let line_for_append_1 = format!("export PATH=$PATH:{}/bin\n", env_path);
+            let line_for_append_1 = line_for_append_1.as_bytes();
         
-            let add_env_file_dest = io::Write::write_all(&mut file, line_for_append);
+            let add_env_file_dest = io::Write::write_all(&mut file, line_for_append_1);
 
             match add_env_file_dest {
                 Ok(_) => {
@@ -737,7 +820,7 @@ pub fn install_java_on_alma_linux(url: &str, file_name: &str, version: &str) {
                         }
                     }
         
-                    env_path = format!("/root/{}/bin", format_jvm_folder_name);
+                    env_path = format!("/root/{}", format_jvm_folder_name);
                 },
                 &_ => {
                     current_user_path = format!("/home/{}", current_user);
@@ -791,7 +874,7 @@ pub fn install_java_on_alma_linux(url: &str, file_name: &str, version: &str) {
                         }
                     }
         
-                    env_path = format!("{}/{}/bin", current_user_path, format_jvm_folder_name)
+                    env_path = format!("{}/{}", current_user_path, format_jvm_folder_name)
                 }
             }
         
@@ -814,10 +897,20 @@ pub fn install_java_on_alma_linux(url: &str, file_name: &str, version: &str) {
         
             match incli_envs_file {
                 Ok(mut file) => {
-                    let line_for_append = format!("\nPATH=\"{}:$PATH\"\n", env_path);
-                    let line_for_append = line_for_append.as_bytes();
+                    let line_for_append_2 = format!("\nJAVA_HOME=\"{}\"\n", env_path);
+                    let line_for_append_2 = line_for_append_2.as_bytes();
+
+                    let line_for_append_1 = format!("\nPATH=\"{}/bin:$PATH\"\n", env_path);
+                    let line_for_append_1 = line_for_append_1.as_bytes();
+
+                    let add_env_file_dest = io::Write::write_all(&mut file, line_for_append_2);
+        
+                    match add_env_file_dest {
+                        Ok(_) => println!("JAVA_HOME env successfully added on your user."),
+                        Err(err) => eprintln!("This error occured when we try to set JAVA_HOME env: {}", err)
+                    }
                 
-                    let add_env_file_dest = io::Write::write_all(&mut file, line_for_append);
+                    let add_env_file_dest = io::Write::write_all(&mut file, line_for_append_1);
         
                     match add_env_file_dest {
                         Ok(_) => {
@@ -977,7 +1070,7 @@ pub fn install_java_on_centos_and_fedora(url: &str, file_name: &str, version: &s
                         }
                     }
         
-                    env_path = format!("/root/{}/bin", format_jvm_folder_name)
+                    env_path = format!("/root/{}", format_jvm_folder_name)
                 },
                 &_ => {
                     current_user_path = format!("/home/{}", current_user);
@@ -1031,7 +1124,7 @@ pub fn install_java_on_centos_and_fedora(url: &str, file_name: &str, version: &s
                         }
                     }
         
-                    env_path = format!("{}/{}/bin", current_user_path, format_jvm_folder_name);
+                    env_path = format!("{}/{}", current_user_path, format_jvm_folder_name);
                 }
             }
         
@@ -1049,15 +1142,25 @@ pub fn install_java_on_centos_and_fedora(url: &str, file_name: &str, version: &s
         
             match incli_envs_file {
                 Ok(mut file) => {
-                    let line_for_append = format!("\nexport PATH=\"{}:$PATH\"\n", env_path);
-                    let line_for_append = line_for_append.as_bytes();
+                    let line_for_append_2 = format!("\nexport JAVA_HOME=\"{}\"", env_path);
+                    let line_for_append_2 = line_for_append_2.as_bytes();
+
+                    let add_env_file_dest = io::Write::write_all(&mut file, line_for_append_2);
+        
+                    match add_env_file_dest {
+                        Ok(_) => println!("JAVA_HOME env successfully added on your user's env's."),
+                        Err(err) => eprintln!("This error occured when we try to set JAVA_HOME env's: {}", err)
+                    }
+
+                    let line_for_append_1 = format!("\nexport PATH=\"{}/bin:$PATH\"\n", env_path);
+                    let line_for_append_1 = line_for_append_1.as_bytes();
                 
-                    let add_env_file_dest = io::Write::write_all(&mut file, line_for_append);
+                    let add_env_file_dest = io::Write::write_all(&mut file, line_for_append_1);
         
                     match add_env_file_dest {
                         Ok(_) => {
                             println!("envs successfully added on your user.");
-                            println!("You're successfully installed Go on a Red Hat Based Distro. You can check it via typing 'go version' later than open a new terminal. If it doesn't work, restart your computer and type it again.");
+                            println!("You're successfully installed Java on a Red Hat Based Distro. You can check it via typing 'java -version' later than open a new terminal. If it doesn't work, restart your computer and type it again.");
                         },
                         Err(err) => eprintln!("This error occured: {}", err)
                     }
@@ -1208,7 +1311,7 @@ pub fn install_java_on_rocky_linux(url: &str, file_name: &str, version: &str) {
                         }
                     }
         
-                    env_path = format!("/root/{}/bin", format_jvm_folder_name);
+                    env_path = format!("/root/{}", format_jvm_folder_name);
                 },
                 &_ => {
                     current_user_path = format!("/home/{}", current_user);
@@ -1258,7 +1361,7 @@ pub fn install_java_on_rocky_linux(url: &str, file_name: &str, version: &str) {
                         }
                     }
         
-                    env_path = format!("{}/{}/bin", current_user_path, format_jvm_folder_name);
+                    env_path = format!("{}/{}", current_user_path, format_jvm_folder_name);
                 }
             }
         
@@ -1276,10 +1379,20 @@ pub fn install_java_on_rocky_linux(url: &str, file_name: &str, version: &str) {
         
             match incli_envs_file {
                 Ok(mut file) => {
-                    let line_for_append = format!("\nexport PATH=\"{}:$PATH\"\n", env_path);
-                    let line_for_append = line_for_append.as_bytes();
+                    let line_for_append_2 = format!("\nexport JAVA_HOME=\"{}\"", env_path);
+                    let line_for_append_2 = line_for_append_2.as_bytes();
+
+                    let add_env_file_dest = io::Write::write_all(&mut file, line_for_append_2);
+        
+                    match add_env_file_dest {
+                        Ok(_) => println!("JAVA_HOME env successfully added on your user's env's."),
+                        Err(err) => eprintln!("This error occured when we try to set JAVA_HOME env: {}", err)
+                    }
+
+                    let line_for_append_1 = format!("\nexport PATH=\"{}/bin:$PATH\"\n", env_path);
+                    let line_for_append_1 = line_for_append_1.as_bytes();
                 
-                    let add_env_file_dest = io::Write::write_all(&mut file, line_for_append);
+                    let add_env_file_dest = io::Write::write_all(&mut file, line_for_append_1);
         
                     match add_env_file_dest {
                         Ok(_) => {

@@ -8,11 +8,25 @@ It has 3 different command types for now:
 * help: it is for giving general informations.
 * version: it is for writing the version of incli.
 
+## Announcement, Roadmap to v1.0.0
+
+Incli is released almost a year ago, and in that timespan both algorithm and range of installation options has took a long way. In the moment, i'm pretty more confident my program works just well on more user's computers than the moment i was started that project.
+
+The 1.0 release will be a great milestone for Incli, especially for robustness of that project. Up until 1.0, when we install programs on your computer, we've done many assumptions, and 2 of them is:
+
+1 - Your home directory is always either "/root", if you're installing it with root user or "/home/(username)" if you're just another user. Which they are default configurations of linux distros but some of the linux nerds and system admins could want to change that thing.
+
+2 - Your shell is always bash, which is not true always.
+
+Since we were able to successfully implement to get user's home directory and shell informations on my other big liblary, [sys-info-extended](https://crates.io/crates/sys-info-extended), on 1.0 release we'll implement to use that abilities to find your home directory and shell
+dynamically, so you can use that program with custom shell and home directory configurations.
+
+My goal is make that program as comprehensive and robust as possible to be able to install any program you could want on your development processes in every linux distro and windows. Since it's very abstract goal, we wouldn't be able to totally achieve that but, we want to implement it on most used programs and systems. We have a long way to achieve that and too many work to do. Our biggest lack is lack of support for Darwin ecosystem and since i don't have any Mac computer, i couldn't provide that support in that moment.
+
 If you like that program, consider to give a like on [github repo](https://github.com/Necoo33/incli)
 
 ## Currently Planned to Support Package Managers and Sdk's
 
-* Gradle
 * Maven
 * python
 * php
@@ -249,21 +263,13 @@ The roadmap of this project is this:
 
 * Up until 1.0 release, implement all currently planned sdk's for at least 1 release and distribution.
 
-* Adding support for installing specific versions of sdk's.
-
-* Support for option for adding that program directly to env's when it executed first time
-
 * adding "uninstall" command support and deleting downloaded tools.
 
 I'm also open for contributions about implementing other sdk's and package managers with the test results of that codes. If you want to support that project and contribute, please check out the "CONTRIBUTION_GUIDE.md". If you like that project anyway, please check out the github repo and give a star to that project.
 
 ## Our Roadmap to Individual Releases
 
-### v0.8.0
-
-* Gradle Support
-
-### v0.9.0
+### v0.10.0
 
 * Maven Support
 

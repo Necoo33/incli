@@ -72,9 +72,9 @@ dependencies = [
 
 [[package]]
 name = "cc"
-version = "1.1.28"
+version = "1.2.3"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "2e80e3b6a3ab07840e1cae9b0666a63970dc28e8ed5ffbcdacbfc760c281bfc1"
+checksum = "27f657647bcff5394bf56c7317665bbf790a137a50eaaa5c6bfbb9e27a518f2d"
 dependencies = [
  "jobserver",
  "libc",
@@ -254,7 +254,7 @@ dependencies = [
 
 [[package]]
 name = "incli"
-version = "0.8.6"
+version = "0.9.0"
 dependencies = [
  "sys-info-extended",
  "zip",
@@ -290,9 +290,9 @@ dependencies = [
 
 [[package]]
 name = "libc"
-version = "0.2.159"
+version = "0.2.168"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "561d97a539a36e26a9a5fad1ea11a3039a67714694aaa379433e580854bc3dc5"
+checksum = "5aaeb2981e0606ca11d79718f8bb01164f1d6ed75080182d3abf017e6d244b6d"
 
 [[package]]
 name = "lockfree-object-pool"
@@ -490,9 +490,9 @@ dependencies = [
 
 [[package]]
 name = "sys-info-extended"
-version = "0.8.1"
+version = "0.9.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "ed678b13bbc49bfd26ade034a94994ddfd542a04d3b818949ed527e66012a21e"
+checksum = "633135676a0d8ba053b0749d1c085816f2ac03197656c976c14481d9bb664b58"
 dependencies = [
  "cc",
  "libc",
