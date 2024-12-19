@@ -186,7 +186,7 @@ pub fn configure_incli_envs_file(user: &String, run_commands_as_root: bool){
     };
 
     if !give_permission_to_bashrc.status.success() {
-        println!("Cannot give required permissions for .bashrc, you have to add incli-envs.sh file's path on that file via that synthax for adding node.js on your user's env's: \". \"$HOME/INCLI_PATHS/incli-envs.sh\"\"")
+        println!("Cannot give required permissions for .bashrc, you have to add incli-envs.sh file's path on that file via that synthax for adding your program on your user's env's: \". \"$HOME/INCLI_PATHS/incli-envs.sh\"\"")
     }
 
     let bashrc_file = fs::OpenOptions::new().append(true).read(true).open(bashrc_path);

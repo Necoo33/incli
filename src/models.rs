@@ -6,6 +6,7 @@ use crate::yarn;
 use crate::go;
 use crate::java;
 use crate::gradle;
+use crate::maven;
 
 #[derive(PartialEq, Clone)]
 pub enum CommandType {
@@ -455,9 +456,11 @@ impl Execution for UserAction {
                                 "20" => java::install_java_on_debian_based_distros("https://download.java.net/java/GA/jdk20.0.2/6e380f22cbe7469fa75fb448bd903d8e/9/GPL/openjdk-20.0.2_linux-x64_bin.tar.gz", "jdk-20.tar.gz", "20"),
                                 "21" => java::install_java_on_debian_based_distros("https://download.java.net/java/GA/jdk21.0.2/f2283984656d49d69e91c558476027ac/13/GPL/openjdk-21.0.2_linux-x64_bin.tar.gz", "jdk-21.tar.gz", "21"),
                                 "" => java::install_java_on_debian_based_distros("https://download.java.net/java/GA/jdk21.0.2/f2283984656d49d69e91c558476027ac/13/GPL/openjdk-21.0.2_linux-x64_bin.tar.gz", "jdk-21.tar.gz", "21"),
+                                "lts" => java::install_java_on_debian_based_distros("https://download.java.net/java/GA/jdk21.0.2/f2283984656d49d69e91c558476027ac/13/GPL/openjdk-21.0.2_linux-x64_bin.tar.gz", "jdk-21.tar.gz", "21"),
                                 "22" => java::install_java_on_debian_based_distros("https://download.java.net/java/GA/jdk22.0.1/c7ec1332f7bb44aeba2eb341ae18aca4/8/GPL/openjdk-22.0.1_linux-x64_bin.tar.gz", "jdk-22.tar.gz", "22"),
                                 "23" => java::install_java_on_debian_based_distros("https://download.java.net/java/GA/jdk23/3c5b90190c68498b986a97f276efd28a/37/GPL/openjdk-23_linux-x64_bin.tar.gz", "jdk-23.tar.gz", "23"),
                                 "24" => java::install_java_on_debian_based_distros("https://download.java.net/java/early_access/jdk24/13/GPL/openjdk-24-ea+13_linux-x64_bin.tar.gz", "java-24-ea.tar.gz", "24"),
+                                "latest" => java::install_java_on_debian_based_distros("https://download.java.net/java/GA/jdk21.0.2/f2283984656d49d69e91c558476027ac/13/GPL/openjdk-21.0.2_linux-x64_bin.tar.gz", "jdk-21.tar.gz", "21"),
                                 &_ => ()
                             }
                         },
@@ -478,9 +481,11 @@ impl Execution for UserAction {
                                 "20" => java::install_java_on_debian_based_distros("https://download.java.net/java/GA/jdk20.0.2/6e380f22cbe7469fa75fb448bd903d8e/9/GPL/openjdk-20.0.2_linux-x64_bin.tar.gz", "jdk-20.tar.gz", "20"),
                                 "21" => java::install_java_on_debian_based_distros("https://download.java.net/java/GA/jdk21.0.2/f2283984656d49d69e91c558476027ac/13/GPL/openjdk-21.0.2_linux-x64_bin.tar.gz", "jdk-21.tar.gz", "21"),
                                 "" => java::install_java_on_debian_based_distros("https://download.java.net/java/GA/jdk21.0.2/f2283984656d49d69e91c558476027ac/13/GPL/openjdk-21.0.2_linux-x64_bin.tar.gz", "jdk-21.tar.gz", "21"),
+                                "lts" => java::install_java_on_debian_based_distros("https://download.java.net/java/GA/jdk21.0.2/f2283984656d49d69e91c558476027ac/13/GPL/openjdk-21.0.2_linux-x64_bin.tar.gz", "jdk-21.tar.gz", "21"),
                                 "22" => java::install_java_on_debian_based_distros("https://download.java.net/java/GA/jdk22.0.1/c7ec1332f7bb44aeba2eb341ae18aca4/8/GPL/openjdk-22.0.1_linux-x64_bin.tar.gz", "jdk-22.tar.gz", "22"),
                                 "23" => java::install_java_on_debian_based_distros("https://download.java.net/java/GA/jdk23/3c5b90190c68498b986a97f276efd28a/37/GPL/openjdk-23_linux-x64_bin.tar.gz", "jdk-23.tar.gz", "23"),
                                 "24" => java::install_java_on_debian_based_distros("https://download.java.net/java/early_access/jdk24/13/GPL/openjdk-24-ea+13_linux-x64_bin.tar.gz", "java-24-ea.tar.gz", "24"),
+                                "latest" => java::install_java_on_debian_based_distros("https://download.java.net/java/GA/jdk21.0.2/f2283984656d49d69e91c558476027ac/13/GPL/openjdk-21.0.2_linux-x64_bin.tar.gz", "jdk-21.tar.gz", "21"),
                                 &_ => ()
                             }
                         },
@@ -501,9 +506,11 @@ impl Execution for UserAction {
                                 "20" => java::install_java_on_debian_based_distros("https://download.java.net/java/GA/jdk20.0.2/6e380f22cbe7469fa75fb448bd903d8e/9/GPL/openjdk-20.0.2_linux-x64_bin.tar.gz", "jdk-20.tar.gz", "20"),
                                 "21" => java::install_java_on_debian_based_distros("https://download.java.net/java/GA/jdk21.0.2/f2283984656d49d69e91c558476027ac/13/GPL/openjdk-21.0.2_linux-x64_bin.tar.gz", "jdk-21.tar.gz", "21"),
                                 "" => java::install_java_on_debian_based_distros("https://download.java.net/java/GA/jdk21.0.2/f2283984656d49d69e91c558476027ac/13/GPL/openjdk-21.0.2_linux-x64_bin.tar.gz", "jdk-21.tar.gz", "21"),
+                                "lts" => java::install_java_on_debian_based_distros("https://download.java.net/java/GA/jdk21.0.2/f2283984656d49d69e91c558476027ac/13/GPL/openjdk-21.0.2_linux-x64_bin.tar.gz", "jdk-21.tar.gz", "21"),
                                 "22" => java::install_java_on_debian_based_distros("https://download.java.net/java/GA/jdk22.0.1/c7ec1332f7bb44aeba2eb341ae18aca4/8/GPL/openjdk-22.0.1_linux-x64_bin.tar.gz", "jdk-22.tar.gz", "22"),
                                 "23" => java::install_java_on_debian_based_distros("https://download.java.net/java/GA/jdk23/3c5b90190c68498b986a97f276efd28a/37/GPL/openjdk-23_linux-x64_bin.tar.gz", "jdk-23.tar.gz", "23"),
                                 "24" => java::install_java_on_debian_based_distros("https://download.java.net/java/early_access/jdk24/13/GPL/openjdk-24-ea+13_linux-x64_bin.tar.gz", "java-24-ea.tar.gz", "24"),
+                                "latest" => java::install_java_on_debian_based_distros("https://download.java.net/java/GA/jdk21.0.2/f2283984656d49d69e91c558476027ac/13/GPL/openjdk-21.0.2_linux-x64_bin.tar.gz", "jdk-21.tar.gz", "21"),
                                 &_ => ()
                             }
                         },
@@ -524,9 +531,11 @@ impl Execution for UserAction {
                                 "20" => java::install_java_on_debian_based_distros("https://download.java.net/java/GA/jdk20.0.2/6e380f22cbe7469fa75fb448bd903d8e/9/GPL/openjdk-20.0.2_linux-x64_bin.tar.gz", "jdk-20.tar.gz", "20"),
                                 "21" => java::install_java_on_debian_based_distros("https://download.java.net/java/GA/jdk21.0.2/f2283984656d49d69e91c558476027ac/13/GPL/openjdk-21.0.2_linux-x64_bin.tar.gz", "jdk-21.tar.gz", "21"),
                                 "" => java::install_java_on_debian_based_distros("https://download.java.net/java/GA/jdk21.0.2/f2283984656d49d69e91c558476027ac/13/GPL/openjdk-21.0.2_linux-x64_bin.tar.gz", "jdk-21.tar.gz", "21"),
+                                "lts" => java::install_java_on_debian_based_distros("https://download.java.net/java/GA/jdk21.0.2/f2283984656d49d69e91c558476027ac/13/GPL/openjdk-21.0.2_linux-x64_bin.tar.gz", "jdk-21.tar.gz", "21"),
                                 "22" => java::install_java_on_debian_based_distros("https://download.java.net/java/GA/jdk22.0.1/c7ec1332f7bb44aeba2eb341ae18aca4/8/GPL/openjdk-22.0.1_linux-x64_bin.tar.gz", "jdk-22.tar.gz", "22"),
                                 "23" => java::install_java_on_debian_based_distros("https://download.java.net/java/GA/jdk23/3c5b90190c68498b986a97f276efd28a/37/GPL/openjdk-23_linux-x64_bin.tar.gz", "jdk-23.tar.gz", "23"),
                                 "24" => java::install_java_on_debian_based_distros("https://download.java.net/java/early_access/jdk24/13/GPL/openjdk-24-ea+13_linux-x64_bin.tar.gz", "java-24-ea.tar.gz", "24"),
+                                "latest" => java::install_java_on_debian_based_distros("https://download.java.net/java/GA/jdk21.0.2/f2283984656d49d69e91c558476027ac/13/GPL/openjdk-21.0.2_linux-x64_bin.tar.gz", "jdk-21.tar.gz", "21"),
                                 &_ => ()
                             }
                         },
@@ -547,9 +556,11 @@ impl Execution for UserAction {
                                 "20" => java::install_java_on_arch_linux("https://download.java.net/java/GA/jdk20.0.2/6e380f22cbe7469fa75fb448bd903d8e/9/GPL/openjdk-20.0.2_linux-x64_bin.tar.gz", "jdk-20.tar.gz", "20"),
                                 "21" => java::install_java_on_arch_linux("https://download.java.net/java/GA/jdk21.0.2/f2283984656d49d69e91c558476027ac/13/GPL/openjdk-21.0.2_linux-x64_bin.tar.gz", "jdk-21.tar.gz", "21"),
                                 "" => java::install_java_on_arch_linux("https://download.java.net/java/GA/jdk21.0.2/f2283984656d49d69e91c558476027ac/13/GPL/openjdk-21.0.2_linux-x64_bin.tar.gz", "jdk-21.tar.gz", "21"),
+                                "lts" => java::install_java_on_arch_linux("https://download.java.net/java/GA/jdk21.0.2/f2283984656d49d69e91c558476027ac/13/GPL/openjdk-21.0.2_linux-x64_bin.tar.gz", "jdk-21.tar.gz", "21"),
                                 "22" => java::install_java_on_arch_linux("https://download.java.net/java/GA/jdk22.0.1/c7ec1332f7bb44aeba2eb341ae18aca4/8/GPL/openjdk-22.0.1_linux-x64_bin.tar.gz", "jdk-22.tar.gz", "22"),
                                 "23" => java::install_java_on_arch_linux("https://download.java.net/java/GA/jdk23/3c5b90190c68498b986a97f276efd28a/37/GPL/openjdk-23_linux-x64_bin.tar.gz", "jdk-23.tar.gz", "23"),
                                 "24" => java::install_java_on_arch_linux("https://download.java.net/java/early_access/jdk24/13/GPL/openjdk-24-ea+13_linux-x64_bin.tar.gz", "java-24-ea.tar.gz", "24"),
+                                "latest" => java::install_java_on_arch_linux("https://download.java.net/java/early_access/jdk24/13/GPL/openjdk-24-ea+13_linux-x64_bin.tar.gz", "java-24-ea.tar.gz", "24"),
                                 &_ => ()
                             }
                         },
@@ -570,9 +581,11 @@ impl Execution for UserAction {
                                 "20" => java::install_java_on_centos_and_fedora("https://download.java.net/java/GA/jdk20.0.2/6e380f22cbe7469fa75fb448bd903d8e/9/GPL/openjdk-20.0.2_linux-x64_bin.tar.gz", "jdk-20.tar.gz", "20"),
                                 "21" => java::install_java_on_centos_and_fedora("https://download.java.net/java/GA/jdk21.0.2/f2283984656d49d69e91c558476027ac/13/GPL/openjdk-21.0.2_linux-x64_bin.tar.gz", "jdk-21.tar.gz", "21"),
                                 "" => java::install_java_on_centos_and_fedora("https://download.java.net/java/GA/jdk21.0.2/f2283984656d49d69e91c558476027ac/13/GPL/openjdk-21.0.2_linux-x64_bin.tar.gz", "jdk-21.tar.gz", "21"),
+                                "lts" => java::install_java_on_centos_and_fedora("https://download.java.net/java/GA/jdk21.0.2/f2283984656d49d69e91c558476027ac/13/GPL/openjdk-21.0.2_linux-x64_bin.tar.gz", "jdk-21.tar.gz", "21"),
                                 "22" => java::install_java_on_centos_and_fedora("https://download.java.net/java/GA/jdk22.0.1/c7ec1332f7bb44aeba2eb341ae18aca4/8/GPL/openjdk-22.0.1_linux-x64_bin.tar.gz", "jdk-22.tar.gz", "22"),
                                 "23" => java::install_java_on_centos_and_fedora("https://download.java.net/java/GA/jdk23/3c5b90190c68498b986a97f276efd28a/37/GPL/openjdk-23_linux-x64_bin.tar.gz", "jdk-23.tar.gz", "23"),
                                 "24" => java::install_java_on_centos_and_fedora("https://download.java.net/java/early_access/jdk24/13/GPL/openjdk-24-ea+13_linux-x64_bin.tar.gz", "java-24-ea.tar.gz", "24"),
+                                "latest" => java::install_java_on_centos_and_fedora("https://download.java.net/java/early_access/jdk24/13/GPL/openjdk-24-ea+13_linux-x64_bin.tar.gz", "java-24-ea.tar.gz", "24"),
                                 &_ => ()
                             }
                         },
@@ -593,9 +606,11 @@ impl Execution for UserAction {
                                 "20" => java::install_java_on_centos_and_fedora("https://download.java.net/java/GA/jdk20.0.2/6e380f22cbe7469fa75fb448bd903d8e/9/GPL/openjdk-20.0.2_linux-x64_bin.tar.gz", "jdk-20.tar.gz", "20"),
                                 "21" => java::install_java_on_centos_and_fedora("https://download.java.net/java/GA/jdk21.0.2/f2283984656d49d69e91c558476027ac/13/GPL/openjdk-21.0.2_linux-x64_bin.tar.gz", "jdk-21.tar.gz", "21"),
                                 "" => java::install_java_on_centos_and_fedora("https://download.java.net/java/GA/jdk21.0.2/f2283984656d49d69e91c558476027ac/13/GPL/openjdk-21.0.2_linux-x64_bin.tar.gz", "jdk-21.tar.gz", "21"),
+                                "lts" => java::install_java_on_centos_and_fedora("https://download.java.net/java/GA/jdk21.0.2/f2283984656d49d69e91c558476027ac/13/GPL/openjdk-21.0.2_linux-x64_bin.tar.gz", "jdk-21.tar.gz", "21"),
                                 "22" => java::install_java_on_centos_and_fedora("https://download.java.net/java/GA/jdk22.0.1/c7ec1332f7bb44aeba2eb341ae18aca4/8/GPL/openjdk-22.0.1_linux-x64_bin.tar.gz", "jdk-22.tar.gz", "22"),
                                 "23" => java::install_java_on_centos_and_fedora("https://download.java.net/java/GA/jdk23/3c5b90190c68498b986a97f276efd28a/37/GPL/openjdk-23_linux-x64_bin.tar.gz", "jdk-23.tar.gz", "23"),
                                 "24" => java::install_java_on_centos_and_fedora("https://download.java.net/java/early_access/jdk24/13/GPL/openjdk-24-ea+13_linux-x64_bin.tar.gz", "java-24-ea.tar.gz", "24"),
+                                "latest" => java::install_java_on_centos_and_fedora("https://download.java.net/java/early_access/jdk24/13/GPL/openjdk-24-ea+13_linux-x64_bin.tar.gz", "java-24-ea.tar.gz", "24"),
                                 &_ => ()
                             }
                         },
@@ -616,9 +631,11 @@ impl Execution for UserAction {
                                 "20" => java::install_java_on_rocky_linux("https://download.java.net/java/GA/jdk20.0.2/6e380f22cbe7469fa75fb448bd903d8e/9/GPL/openjdk-20.0.2_linux-x64_bin.tar.gz", "jdk-20.tar.gz", "20"),
                                 "21" => java::install_java_on_rocky_linux("https://download.java.net/java/GA/jdk21.0.2/f2283984656d49d69e91c558476027ac/13/GPL/openjdk-21.0.2_linux-x64_bin.tar.gz", "jdk-21.tar.gz", "21"),
                                 "" => java::install_java_on_rocky_linux("https://download.java.net/java/GA/jdk21.0.2/f2283984656d49d69e91c558476027ac/13/GPL/openjdk-21.0.2_linux-x64_bin.tar.gz", "jdk-21.tar.gz", "21"),
+                                "lts" => java::install_java_on_rocky_linux("https://download.java.net/java/GA/jdk21.0.2/f2283984656d49d69e91c558476027ac/13/GPL/openjdk-21.0.2_linux-x64_bin.tar.gz", "jdk-21.tar.gz", "21"),
                                 "22" => java::install_java_on_rocky_linux("https://download.java.net/java/GA/jdk22.0.1/c7ec1332f7bb44aeba2eb341ae18aca4/8/GPL/openjdk-22.0.1_linux-x64_bin.tar.gz", "jdk-22.tar.gz", "22"),
                                 "23" => java::install_java_on_rocky_linux("https://download.java.net/java/GA/jdk23/3c5b90190c68498b986a97f276efd28a/37/GPL/openjdk-23_linux-x64_bin.tar.gz", "jdk-23.tar.gz", "23"),
                                 "24" => java::install_java_on_rocky_linux("https://download.java.net/java/early_access/jdk24/13/GPL/openjdk-24-ea+13_linux-x64_bin.tar.gz", "java-24-ea.tar.gz", "24"),
+                                "latest" => java::install_java_on_rocky_linux("https://download.java.net/java/early_access/jdk24/13/GPL/openjdk-24-ea+13_linux-x64_bin.tar.gz", "java-24-ea.tar.gz", "24"),
                                 &_ => ()
                             }
                         },
@@ -639,9 +656,11 @@ impl Execution for UserAction {
                                 "20" => java::install_java_on_alma_linux("https://download.java.net/java/GA/jdk20.0.2/6e380f22cbe7469fa75fb448bd903d8e/9/GPL/openjdk-20.0.2_linux-x64_bin.tar.gz", "jdk-20.tar.gz", "20"),
                                 "21" => java::install_java_on_alma_linux("https://download.java.net/java/GA/jdk21.0.2/f2283984656d49d69e91c558476027ac/13/GPL/openjdk-21.0.2_linux-x64_bin.tar.gz", "jdk-21.tar.gz", "21"),
                                 "" => java::install_java_on_alma_linux("https://download.java.net/java/GA/jdk21.0.2/f2283984656d49d69e91c558476027ac/13/GPL/openjdk-21.0.2_linux-x64_bin.tar.gz", "jdk-21.tar.gz", "21"),
+                                "lts" => java::install_java_on_alma_linux("https://download.java.net/java/GA/jdk21.0.2/f2283984656d49d69e91c558476027ac/13/GPL/openjdk-21.0.2_linux-x64_bin.tar.gz", "jdk-21.tar.gz", "21"),
                                 "22" => java::install_java_on_alma_linux("https://download.java.net/java/GA/jdk22.0.1/c7ec1332f7bb44aeba2eb341ae18aca4/8/GPL/openjdk-22.0.1_linux-x64_bin.tar.gz", "jdk-22.tar.gz", "22"),
                                 "23" => java::install_java_on_alma_linux("https://download.java.net/java/GA/jdk23/3c5b90190c68498b986a97f276efd28a/37/GPL/openjdk-23_linux-x64_bin.tar.gz", "jdk-23.tar.gz", "23"),
                                 "24" => java::install_java_on_alma_linux("https://download.java.net/java/early_access/jdk24/13/GPL/openjdk-24-ea+13_linux-x64_bin.tar.gz", "java-24-ea.tar.gz", "24"),
+                                "latest" => java::install_java_on_alma_linux("https://download.java.net/java/early_access/jdk24/13/GPL/openjdk-24-ea+13_linux-x64_bin.tar.gz", "java-24-ea.tar.gz", "24"),
                                 &_ => ()
                             }
                         },
@@ -666,9 +685,11 @@ impl Execution for UserAction {
                                 "20" => java::install_java_on_arch_linux("https://download.java.net/java/GA/jdk20.0.2/6e380f22cbe7469fa75fb448bd903d8e/9/GPL/openjdk-20.0.2_linux-x64_bin.tar.gz", "jdk-20.tar.gz", "20"),
                                 "21" => java::install_java_on_arch_linux("https://download.java.net/java/GA/jdk21.0.2/f2283984656d49d69e91c558476027ac/13/GPL/openjdk-21.0.2_linux-x64_bin.tar.gz", "jdk-21.tar.gz", "21"),
                                 "" => java::install_java_on_arch_linux("https://download.java.net/java/GA/jdk21.0.2/f2283984656d49d69e91c558476027ac/13/GPL/openjdk-21.0.2_linux-x64_bin.tar.gz", "jdk-21.tar.gz", "21"),
+                                "lts" => java::install_java_on_arch_linux("https://download.java.net/java/GA/jdk21.0.2/f2283984656d49d69e91c558476027ac/13/GPL/openjdk-21.0.2_linux-x64_bin.tar.gz", "jdk-21.tar.gz", "21"),
                                 "22" => java::install_java_on_arch_linux("https://download.java.net/java/GA/jdk22.0.1/c7ec1332f7bb44aeba2eb341ae18aca4/8/GPL/openjdk-22.0.1_linux-x64_bin.tar.gz", "jdk-22.tar.gz", "22"),
                                 "23" => java::install_java_on_arch_linux("https://download.java.net/java/GA/jdk23/3c5b90190c68498b986a97f276efd28a/37/GPL/openjdk-23_linux-x64_bin.tar.gz", "jdk-23.tar.gz", "23"),
                                 "24" => java::install_java_on_arch_linux("https://download.java.net/java/early_access/jdk24/13/GPL/openjdk-24-ea+13_linux-x64_bin.tar.gz", "java-24-ea.tar.gz", "24"),
+                                "latest" => java::install_java_on_arch_linux("https://download.java.net/java/early_access/jdk24/13/GPL/openjdk-24-ea+13_linux-x64_bin.tar.gz", "java-24-ea.tar.gz", "24"),
                                 &_ => ()
                             }
                         }
@@ -733,7 +754,109 @@ impl Execution for UserAction {
 
     fn install_maven(&self) -> Self {
         if self.first_arg == CommandType::Install && self.second_arg == "maven".to_string() {
-            todo!()
+            // Because the source files of maven's way of maintenances differentiates widely, we have to
+            // make that preparations for creating links, file names and versions, otherwise the
+            // actual installations of maven could be way more unmaintenable.
+            let generate_version = match self.third_arg.as_str() {
+                "1" => "1.0".to_string(),
+                "1.1.0" => "1.1".to_string(),
+                "1.0.0" => "1.0".to_string(),
+                "2" => "2.0".to_string(),
+                "2.0.0" => "2.0".to_string(),
+                "2.1" => "2.1.0".to_string(),
+                "2.2" => "2.2.0".to_string(),
+                "3" => "3.0".to_string(),
+                "3.0.0" => "3.0".to_string(),
+                "3.1" => "3.1.0".to_string(),
+                "3.2" => "3.2.0".to_string(),
+                _ => self.third_arg.trim().to_string().clone()
+            };
+
+            println!("generated version: {}", generate_version);
+
+            let generate_file_name = match self.os_type {
+                OsType::Windows => match self.third_arg.starts_with("1") {
+                    true => format!("maven-{}.zip", generate_version),
+                    false => match self.third_arg.starts_with("2") {
+                        true => match generate_version.as_str() {
+                            "2.0" => "maven-2.0.zip".to_string(),
+                            "2.0.1" => "maven-2.0.1-bin.zip".to_string(),
+                            "2.0.2" => "maven-2.0.2-bin.zip".to_string(),
+                            "2.0.3" => "maven-2.0.3-bin.zip".to_string(),
+                            "2.0.4" => "maven-2.0.4-bin.zip".to_string(),
+                            "2.0.5" => "maven-2.0.5-bin.zip".to_string(),
+                            "2.0.6" => "maven-2.0.6-bin.zip".to_string(),
+                            "2.0.7" => "maven-2.0.7-bin.zip".to_string(),
+                            _ => format!("apache-maven-{}-bin.zip", generate_version)
+                        },
+                        false => format!("apache-maven-{}-bin.zip", generate_version)
+                    }
+                },
+                OsType::Linux => match self.third_arg.starts_with("1") {
+                    true => format!("maven-{}.tar.gz", generate_version),
+                    false => match self.third_arg.starts_with("2") {
+                        true => match generate_version.as_str() {
+                            "2.0" => "maven-2.0.tar.gz".to_string(),
+                            "2.0.1" => "maven-2.0.1-bin.tar.gz".to_string(),
+                            "2.0.2" => "maven-2.0.2-bin.tar.gz".to_string(),
+                            "2.0.3" => "maven-2.0.3-bin.tar.gz".to_string(),
+                            "2.0.4" => "maven-2.0.4-bin.tar.gz".to_string(),
+                            "2.0.5" => "maven-2.0.5-bin.tar.gz".to_string(),
+                            "2.0.6" => "maven-2.0.6-bin.tar.gz".to_string(),
+                            "2.0.7" => "maven-2.0.7-bin.tar.gz".to_string(),
+                            _ => format!("apache-maven-{}-bin.tar.gz", generate_version)
+                        },
+                        false => format!("apache-maven-{}-bin.tar.gz", generate_version)
+                    }
+                },
+                OsType::Darwin => "not implemented for darwin!".to_string()
+            };
+
+            println!("generated file name: {}", generate_file_name);
+
+            let generate_download_link = match &self.third_arg.starts_with("1") {
+                true => format!("https://archive.apache.org/dist/maven/binaries/{}", generate_file_name),
+                false => match &self.third_arg.starts_with("2") {
+                    true => format!("https://archive.apache.org/dist/maven/binaries/{}", generate_file_name),
+                    false => match &self.third_arg.starts_with("3") {
+                        true => match self.third_arg.starts_with("3.2") || self.third_arg.starts_with("3.1") || self.third_arg.starts_with("3.0") {
+                            true => format!("https://archive.apache.org/dist/maven/binaries/{}", generate_file_name),
+                            false => format!("https://dlcdn.apache.org/maven/maven-3/{}/binaries/{}", generate_version, generate_file_name)
+                        },
+                        false => format!("https://dlcdn.apache.org/maven/maven-4/{}/binaries/{}", generate_version, generate_file_name)
+                    }
+                }
+            };
+
+            println!("generated download link: {}", generate_download_link);
+
+            match self.os_type {
+                OsType::Windows => maven::install_maven_on_windows(&generate_download_link, &generate_file_name, &generate_version),
+                OsType::Linux => {
+                    let linux_dist = utils::return_linux_dist_etc_os_release();
+                    let mut null_var = "".to_string();
+
+                    match linux_dist {
+                        "ubuntu" => maven::install_maven_on_debian_based_distros(&generate_download_link, &generate_file_name, &generate_version),
+                        "debian" => maven::install_maven_on_debian_based_distros(&generate_download_link, &generate_file_name, &generate_version),
+                        "kali linux" => maven::install_maven_on_debian_based_distros(&generate_download_link, &generate_file_name, &generate_version),
+                        "pardus" => maven::install_maven_on_debian_based_distros(&generate_download_link, &generate_file_name, &generate_version),
+                        "arch wsl" => maven::install_maven_on_arch_linux(&generate_download_link, &generate_file_name, &generate_version),
+                        "alma linux" => maven::install_maven_on_alma_linux(&generate_download_link, &generate_file_name, &generate_version),
+                        "centos" => maven::install_maven_on_centos_and_fedora(&generate_download_link, &generate_file_name, &generate_version),
+                        "fedora" => maven::install_maven_on_centos_and_fedora(&generate_download_link, &generate_file_name, &generate_version),
+                        "rocky" => maven::install_maven_on_rocky_linux(&generate_download_link, &generate_file_name, &generate_version),
+                        &_ => null_var = "none".to_string()
+                    }
+
+                    if null_var == "none".to_string() {
+                        if utils::check_if_linux_dist_is_arch_linux() {
+                            maven::install_maven_on_arch_linux(&generate_download_link, &generate_file_name, &generate_version)
+                        }
+                    }
+                },
+                OsType::Darwin => ()
+            }
         }
 
         return Self {
@@ -992,13 +1115,13 @@ impl Help for UserAction {
     }
     
     fn rust_help(&self) -> Self {
-        println!("Rust is a low level, safety first, unique language which is sometimes more performant than c and c++.");
-        println!("Language is inspired from Node.js, Haskell and C++");
-        println!("Rust started to be develope on 2007 and it's first stable release on 2015.");
-        println!("Rust's Ecosystem is still in early stages but because of the rust's guarantee 'If it compiles, it'll work without bug' every rust package that you can found most probably will work.");
+        println!("Rust is a low level, safety first, unique language which is many times more performant than c and c++.");
+        println!("Language is inspired mostly from Node.js, Haskell and C++. It took it's package manager and many function names from Node.js, pattern matching and immutability by default from haskell and it's various low level features, such as it's range of pointers from c++.");
+        println!("Rust started to be developed on 2007 and it's first stable release on 2015.");
+        println!("Rust's Ecosystem is still in early stages but because of the rust's guarantee 'If it compiles, it'll work without bug' every rust package that you can found most probably will work, if there is no logical bug.");
         println!("Rust has very loyal developer community that for most of them Rust is a niche.");
         println!("It has more different synthax and programming style than other c inspired languages such as c++, java, javascript, php. Especially the borrow checker is most complicated things for programmers but also that thing makes rust is safe.");
-        println!("Also, that program written with rust.");
+        println!("Also, that program written with rust, because we don't want to deal with poor package management and build systems of java and c++.");
 
         return Self {
             os_type: self.os_type.clone(),
@@ -1063,7 +1186,7 @@ impl Help for UserAction {
 
     fn yarn_help(&self) -> Self {
         println!("Yarn is a package manager for Node.js that developed primarily by facebook.");
-        println!("It started to be develope on 2016 and it's first stable release released on 2017.");
+        println!("It started to be developed on 2016 and it's first stable release released on 2017.");
         println!("It's compatible with npm and it offers many features that don't available on npm such as high performance, package caching and so on.");
         return Self {
             os_type: self.os_type.clone(),
@@ -1077,11 +1200,11 @@ impl Help for UserAction {
     }
 
     fn jdk_help(&self) -> Self {
-        println!("Java is a high level, compiled and interpreted programming language that invented on 1995.");
+        println!("Java is a high level, statically typed compiled and interpreted programming language that invented on 1995.");
         println!("Java codes first compiled via Java compiler to java bytecodes then interpreted via Java Virtual Machine.");
         println!("Because of that nature, java is faster than other interpreted languages, such as javascript, python, php and ruby.");
         println!("Java is intended to be a c++ replacement for Performance-Critic Back-End due to it's safety, platform agnosticism and especially easiness of tooling relative to c++ and achieved very good success about it. It's more slower than c++ but way more easy to setup, develop and deploy all kind of apps.");        
-        println!("Later than it published, in a few years, it achieved to be de facto standard on Back-End development for performance-critic systems for decades. In current years, it's in a slow decline especially because of rise of go and rust, and maybe in future bun.");
+        println!("Later than it published, in a few years, it achieved to be de facto standard on Back-End development for performance-critic systems for decades. In current years, it's in a slow decline especially because of rise of go and rust.");
         println!("JDK, which means Java Development Kit, includes Java Runtime Environment, Java Virtual Machine And Java Api's. It's main tooling for anything a java app needs.");
        
         return Self {
@@ -1113,7 +1236,7 @@ impl Help for UserAction {
 
     fn maven_help(&self) -> Self {
         println!("Maven is a compiler, tester, package manager for Java.");
-        println!("It started to be develope on 2001 by Apache Ant and it released it's first stable version on 2004.");
+        println!("It started to be developed on 2001 by Apache Ant and it released it's first stable version on 2004.");
         return Self {
             os_type: self.os_type.clone(),
             os_release: self.os_release.clone(),
@@ -1143,13 +1266,9 @@ impl Help for UserAction {
     }
 }
 
-// aşşağıdaki ufulelerde nermefrazların yüklü olup olmadığını teftiş et, eğer yüklü iseler "--version" talimatı
-// ile yüklü unsurların versiyonunu bul ve daha sonra mevcud en yeni versiyonlarının hangi versiyonları olduğunu 
-// bul ve şu usulle ekrana yazdır: "Your ... version is ... , the newest ... version is ..."
-
 impl Version for UserAction {
     fn log_version(&self) -> Self {
-        println!("You're using v0.3.0 of incli.");
+        println!("You're using v0.10.0 of incli.");
 
         return Self {
             os_type: self.os_type.clone(),

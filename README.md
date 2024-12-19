@@ -27,7 +27,6 @@ If you like that program, consider to give a like on [github repo](https://githu
 
 ## Currently Planned to Support Package Managers and Sdk's
 
-* Maven
 * python
 * php
 * phpmyadmin
@@ -35,283 +34,50 @@ If you like that program, consider to give a like on [github repo](https://githu
 * ruby
 * ocaml
 * zig
+* elixir
+* erlang
+* deno
 
 ## Current Status
 
-In this situation rust, node.js, yarn, bun, golang, jvm and gradle are supported.
+In this situation rust, node.js, yarn, bun, golang, jvm, gradle and maven are supported.
 
 Also we'll make minor updates for supporting new lts and latest releases for Node.js And Golang.
 
-# Rust:
+You can look [SUPPORTED-OS](https://github.com/Necoo33/incli/blob/main/SUPPORTED-OS.md) document to learn which distros supported for each program and how to install them. General synthax is:
 
-### Windows
+`(that binary) (action) (program) (version number[if the action is 'install'])`. Also `latest` and `lts` arguments are supported for Node.js(continuously updated), Go(continuously updated) and Java(Java version 21.0.2).
 
-I tried that setup on my another computer and it worked.
+For example:
 
-Be sure you have the latest version of Visual C++ Redistributable for Visual Studio on computer, or you can't run the package.
+### Rust
 
-* Windows 10 Home Basic - &#10003;
+`(that binary) install rust`
 
-I don't have any idea if another windows versions will work or not if latest Redistributable is downloaded, it should be tested. 
+### Node.js
 
-### Linux
+`(that binary) install node latest`
 
-In linux, that distributions are tested:
+### Go
 
-* Ubuntu 22.04 LTS - &#10003;
-* Ubuntu 22 wsl - &#129300;
-* Debian 12 wsl - &#10003;
-* Arch wsl - &#10003;
-* Kali Linux wsl - &#10003;
-* Alma Linux 9 wsl - &#10003;
-* CentOS 9 Stream - &#10003;
-* Pardus 23 XFCE - &#10003;
-* Fedora 39 Workstation - &#10003;
-* Rocky Linux 9.4 - &#10003;
-* Alpine Linux wsl - &#2049;
+`(that binary) install go lts`
 
-You can view more detailed information on "SUPPORTED-OS.md" file about the supports.
+### Bun
 
-### Mac OS
+`(that binary) install bun`
 
-There is no implementation yet
+### Yarn
 
-# Node.js
+`(that binary) install yarn`
 
-When installing Node.js, you can also specialize a third argument. If you want to install latest long term support version, you can run a command like that: `(that binary) install node lts`, or if you want to download latest version, you can run that command: `(that binary) install node latest`. If you don't specialize third argument, that'll install lts version.
+### Java
 
-### Windows:
+``(that binary) install java 11`
 
-* Windows 10 Home Basic - &#10003;
+### Gradle
 
-### Linux:
+`(that binary) install gradle 8.8`
 
-* Ubuntu 22.04 LTS - &#10003;
-* Ubuntu 22 wsl - &#129300;
-* Debian 12 wsl - &#10003;
-* Arch wsl - &#10003;
-* Kali Linux wsl - &#10003;
-* Alma Linux 9 wsl - &#10003;
-* CentOS 9 Stream - &#10003;
-* Pardus 23 XFCE - &#10003;
-* Fedora 39 Workstation - &#10003;
-* Rocky Linux 9.4 - &#10003;
-* Alpine Linux wsl - &#2049;
+### Maven
 
-### Mac Os
-
-There is no implementation yet.
-
-# Bun:
-
-### Windows
-
-Because bun has not windows version, we cannot implemented that yet.
-
-### Linux
-
-In linux, that distributions are tested:
-
-* Ubuntu 22.04 LTS - &#10003;
-* Ubuntu 22 wsl - &#10003;
-* Debian 12 wsl - &#10003;
-* Arch wsl - &#10003;
-* Kali Linux wsl - &#10003;
-* Alma Linux 9 wsl - &#10003;
-* CentOS 9 Stream - &#10003;
-* Pardus 23 XFCE - &#10003;
-* Fedora 39 Workstation - &#10003;
-* Rocky Linux 9.4 - &#10003;
-* Alpine Linux wsl - &#2049;
-
-You can view more detailed information on "SUPPORTED-OS.md" file about the supports.
-
-### Mac OS
-
-There is no implementation yet
-
-# Yarn:
-
-### Windows
-
-* Windows 11 - &#10003;
-* Windows 10 Home - &#10003;
-
-### Linux
-
-In linux, that distributions are tested:
-
-* Ubuntu 22.04 LTS - &#10003;
-* Ubuntu 22 wsl - &#10003;
-* Debian 12 wsl - &#10003;
-* Arch wsl - &#10003;
-* Kali Linux wsl - &#10003;
-* Alma Linux 9 wsl - &#10003;
-* CentOS 9 Stream - &#10003;
-* Pardus 23 XFCE - &#10003;
-* Fedora 39 Workstation - &#10003;
-* Rocky Linux 9.4 - &#10003;
-* Alpine Linux wsl - &#2049;
-
-You can view more detailed information on "SUPPORTED-OS.md" file about the supports.
-
-### Mac OS
-
-There is no implementation yet
-
-# Go
-
-When installing Go, you can also specialize a third argument. If you want to install latest long term support version, you can run a command like that: `(that binary) install go lts`, or if you want to download latest version, you can run that command: `(that binary) install go latest`. If you don't specialize third argument, that'll install lts version.
-
-### Windows:
-
-* Windows 10 Home Basic - &#10003;
-
-### Linux:
-
-* Ubuntu 22.04 LTS - &#10003;
-* Ubuntu 22 wsl - &#10003;
-* Debian 12 wsl - &#10003;
-* Arch wsl - &#10003;
-* Kali Linux wsl - &#10003;
-* Alma Linux 9 wsl - &#10003;
-* CentOS 9 Stream - &#10003;
-* Pardus 23 XFCE - &#10003;
-* Fedora 39 Workstation - &#10003;
-* Rocky Linux 9.4 - &#10003;
-* Alpine Linux wsl - &#2049;
-
-### Mac Os
-
-There is no implementation yet.
-
-# Java
-
-You can install pretty much every open jdk versions that released from 8 to 24, which in early access. If you want to download Java 8 on windows, you also have to specialize a third argument, like so: `(that binary) install java 8 ('jre' or 'jdk')` this is because in Java 8 the Java Development Kit doesn't include Java Runtime Environment and you also have to download it seperately, which ultimately means you have to make 2 installation, and you can install it on every linux system without fourth command if it's installable. In newer versions you just use this synthax: `(that binary) install java (version number)`. If you don't specify third argument, it'll install the latest lts version, which is 21.
-
-### Windows:
-
-* Windows 10 Home Basic - &#10003;
-
-### Linux:
-
-* Ubuntu 24.04 LTS - &#10003;
-* Ubuntu 22.04 LTS - &#129300;
-* Ubuntu 22 wsl - &#10003;
-* Debian 12 wsl - &#10003;
-* Arch wsl - &#10003;
-* Kali Linux wsl - &#10003;
-* Alma Linux 9 wsl - &#10003;
-* CentOS 9 Stream - &#10003;
-* Pardus 23 XFCE - &#10003;
-* Fedora 39 Workstation - &#10003;
-* Rocky Linux 9.4 - &#10003;
-* Alpine Linux wsl - &#2049;
-
-### Mac Os
-
-There is no implementation yet.
-
-# Gradle
-
-You can install every gradle version that available on gradle's official website. Incli downloads the binary version of gradle. You can download it via typing `(that binary) install gradle (version number)`. You can install every version if it's file name ends with "bin" before .zip extension. For example that command installs the gradle 8.10.2: `(that binary) install gradle 8.10.2`. If you want, you can install milestone versions too, like that: `(that binary) install gradle 8.10.2-milestone-1`.
-
-### Windows:
-
-* Windows 11 Pro - &#10003;
-
-### Linux:
-
-* Ubuntu 24.04 LTS - &#129300;
-* Ubuntu 22.04 LTS - &#129300;
-* Ubuntu 22 wsl - &#10003;
-* Debian 12 wsl - &#10003;
-* Arch wsl - &#10003;
-* Kali Linux wsl - &#10003;
-* Alma Linux 9 wsl - &#10003;
-* CentOS 9 Stream - &#10003;
-* Pardus 23 XFCE - &#10003;
-* Fedora 39 Workstation - &#10003;
-* Rocky Linux 9.4 - &#10003;
-* Alpine Linux wsl - &#2049;
-
-### Mac Os
-
-There is no implementation yet.
-
-## Guide
-
-You have to compile that app for specific platform that you'll use.
-
-Than You can run that app on your terminal(in windows, powershell works well) like that synthax:
-
-help command:
-
-`(That Binary) help rust` or `(That Binary) help`
-
-install command:
-
-`(That Binary) install rust`
-
-version command:
-
-`(That Binary) version rust` or `(That Binary) version`
-
-## Our Roadmap to Next Releases
-
-The roadmap of this project is this:
-
-* Up until 1.0 release, implement all currently planned sdk's for at least 1 release and distribution.
-
-* adding "uninstall" command support and deleting downloaded tools.
-
-I'm also open for contributions about implementing other sdk's and package managers with the test results of that codes. If you want to support that project and contribute, please check out the "CONTRIBUTION_GUIDE.md". If you like that project anyway, please check out the github repo and give a star to that project.
-
-## Our Roadmap to Individual Releases
-
-### v0.10.0
-
-* Maven Support
-
-### v1.0.0
-
-* Adding Uninstall Support
-
-### v1.1.0
-
-* Python Support
-
-### v1.2.0
-
-* Adding support for downloading everything on demanded path.
-
-### v1.3.0
-
-* Support for adding individual sdk's to system's PATH variable.
-
-### v1.4.0
-
-* Adding Support For Downloading Specific Versions.
-
-### v1.5.0
-
-* Adding Composer Support
-* Adding PhpMyAdmin Support
-
-### v1.6.0
-
-* Adding Android Support
-
-### v1.7.0
-
-* Adding Ruby Support
-* Adding rbenv Support
-
-### v1.8.0
-
-* Adding Zig Support
-
-### v1.9.0
-
-* Adding Ocaml Support
-
+`(that binary) install maven 3.9.9`

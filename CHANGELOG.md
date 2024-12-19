@@ -1,5 +1,10 @@
 # Incli Changelog
 
+## v0.10.0
+
+Added Maven Support.
+Added `lts` and `latest` support for java installations. `lts` is set to version 21.0.2 and `latest` set to version 24-ea.
+
 ## v0.9.1
 
 A potential bug were fixed on various installations of java on linux.

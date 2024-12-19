@@ -7,28 +7,23 @@ mod yarn;
 mod go;
 mod java;
 mod gradle;
+mod maven;
 
 use models::{CreateAction, OsType, Execution, Version, Help, CommandType};
 use sys_info_extended::{os_release, os_type, get_current_user};
 use std::env::args;
 
-
-// yapılacak şeyler:
-
-// şu an sadece rust için yapıldı, bunu bir windows ve macos subsystem bulup orada dene, linux için bilgisayardaki
-// debian ve arch linux'da deneyebilirsin, fedora'yı da yükleyerek dene.
-
-// windows'da bir dosya çalıştırmak için şu usulü kullanabilirsin: 
-// terminalde alakalı dosya'nın klasörüne git: ".\'dosya ismi.dosyaUzantisi'" suretiyle terminale talimat gir.
-// ya da şöyle yap: C klasörüne git, ".\klasor1\klasor2\'dosya ismi.dosyaUzantisi'" suretiyle terminale talimat gir.
+// entry point of the app.
 
 fn main() {
+    // collect the system infos which we use in the processes of installation
     let user_session = models::UserSession {
         os_type: os_type().unwrap(),
         os_release: os_release().unwrap(),
         current_user: get_current_user()
     };
 
+    // collecting command line arguments manually:
     let args: Vec<String> = args().collect();
 
     let mut arg1 = "".to_string();
