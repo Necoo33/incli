@@ -2,6 +2,8 @@
 
 Incli is a Automation Tool For Installing Compilers, Sdk's and Package Managers to different kernels and operating systems.
 
+This is the 0.x branch for incli, that branch will continue to develop until v1.0.0 release is published, meantime we'll continue to develop main branch.
+
 It has 3 different command types for now:
 
 * install: it is for installing sdk's. 
