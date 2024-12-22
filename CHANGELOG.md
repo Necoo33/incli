@@ -1,5 +1,9 @@
 # Incli Changelog
 
+## v0.10.1
+
+Upgraded Node.js's latest version to 23.5.0 .
+
 ## v0.10.0
 
 Added Maven Support.
