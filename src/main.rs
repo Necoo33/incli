@@ -1,5 +1,7 @@
-mod models;
 mod utils;
+mod env_conf;
+mod models;
+
 mod rust;
 mod node;
 mod bun;
@@ -8,6 +10,7 @@ mod go;
 mod java;
 mod gradle;
 mod maven;
+
 
 use models::{CreateAction, OsType, Execution, Version, Help, CommandType};
 use sys_info_extended::{os_release, os_type, get_current_user};
