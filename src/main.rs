@@ -1,7 +1,12 @@
+// First Layer
 mod utils;
-mod env_conf;
 mod models;
 
+// Second Layer, They only depend utils and models
+mod env_conf;
+mod user_session;
+
+// Also Second layer, depends only utils and models
 mod rust;
 mod node;
 mod bun;
@@ -11,20 +16,19 @@ mod java;
 mod gradle;
 mod maven;
 
+// Third Layer, both depend first and second layers.
+mod user_action;
 
-use models::{CreateAction, OsType, Execution, Version, Help, CommandType};
-use sys_info_extended::{os_release, os_type, get_current_user};
+// Fourth And Last Layer
+use models::{CommandType, EnvConfiguration, Execution, Help, OsType, UserSession, Version};
+use sys_info_extended::{os_release, os_type, get_current_user, get_home_dir_and_shell};
 use std::env::args;
 
 // entry point of the app.
 
 fn main() {
     // collect the system infos which we use in the processes of installation
-    let user_session = models::UserSession {
-        os_type: os_type().unwrap(),
-        os_release: os_release().unwrap(),
-        current_user: get_current_user()
-    };
+    let user_session = UserSession::create();
 
     // collecting command line arguments manually:
     let args: Vec<String> = args().collect();

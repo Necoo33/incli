@@ -1,9 +1,8 @@
-use crate::utils;
-use std::{fs::OpenOptions, io::Read, path::Path};
+use crate::models::{self, EnvConfiguration, EnvConfigurationError, EnvConfigurationOpts, OsType};
+use std::{fs::OpenOptions, io::{Read, Write}, path::Path, process::exit};
+use sys_info_extended::{get_home_dir_and_shell, os_type, EnvOptions};
 
-pub enum ShellType {
-    Sh, Bash, Zsh, Fish, Ksh, Csh, Tcsh, Ion, Nushell, Hush, Dash, Ash
-}
+use models::{ShellType, ShellError};
 
 pub fn detect_shell(user: &str) -> std::result::Result<ShellType, ShellError> {
     let etc_passwd = Path::new("/etc/passwd");
@@ -60,6 +59,101 @@ pub fn detect_shell(user: &str) -> std::result::Result<ShellType, ShellError> {
     }
 }
 
-pub enum ShellError {
-    PasswdNotExist, UnableToOpenPasswd(String), UnableToReadPasswd(String), FileMalformed, UnknownShell, UserNotFound
+
+
+impl EnvConfiguration {
+    pub fn init(username: &String, os_type: OsType) -> Self {
+        let home_dir = match os_type {
+            OsType::Windows => EnvConfigurationOpts::Initial,
+            _ => match get_home_dir_and_shell(&username) {
+                Ok(confs) => EnvConfigurationOpts::Specific(confs.home_dir),
+                Err(_) => panic!("Your env configurations either wrong or unusual, panicking.")
+            } 
+        };
+
+        Self {
+            os: os_type,
+            home_dir: home_dir,
+            shell: match detect_shell(&username) {
+                Ok(shell) => EnvConfigurationOpts::Shell(shell),
+                Err(error) => panic!("Shell error: {}", error)
+            }
+        }
+    }
+
+    pub fn windows_configure_path_var(&self, env_opts: EnvOptions) {
+        match sys_info_extended::append_env(env_opts) {
+            Ok(_) => println!("You successfully append your value to path env on windows."),
+            Err(error) => {
+                println!("That error occured when we try to append your env: {}", error);
+
+                exit(1)
+            }
+        }
+    }
+
+    pub fn windows_configure_another_env(&self, env_opts: EnvOptions) {
+        match sys_info_extended::set_env(env_opts) {
+            Ok(_) => println!("You successfully set your env."),
+            Err(error) => {
+                println!("That error occured when we try to append your env: {}", error);
+
+                exit(1)
+            }
+        }
+    }
+
+    pub fn configure_debian_env_path_var(&self, value: &str) -> Result<(), EnvConfigurationError> {
+        match &self.shell {
+            EnvConfigurationOpts::Shell(shell) => match shell {
+                ShellType::Bash => {
+                    match OpenOptions::new().append(true).open(format!("{}/.bashrc", self.home_dir)) {
+                        Ok(mut bashrc_file) => {
+                            let format_value = format!("\nexport PATH=\"{}:$PATH\"", value);
+
+                            let add_env = Write::write_all(&mut bashrc_file, format_value.as_bytes());
+                    
+                            match add_env {
+                                Ok(_) => Ok(()),
+                                Err(error) => Err(EnvConfigurationError::UnableToWriteUserShellFile(error.to_string()))
+                            }
+                        },
+                        Err(error) => Err(EnvConfigurationError::UnableToOpenUserShellFile(error.to_string()))
+                    }
+                },
+                _ => Err(EnvConfigurationError::NotConfigured)
+            },
+            EnvConfigurationOpts::Initial => Err(EnvConfigurationError::InvalidValueToPass),
+            EnvConfigurationOpts::Specific(_) => Err(EnvConfigurationError::InvalidValueToPass)
+
+        }
+    }
+
+    pub fn add_debian_env_var(&self, name: &str, value: &str) -> Result<(), EnvConfigurationError> {
+        match &self.shell {
+            EnvConfigurationOpts::Shell(shell) => match shell {
+                ShellType::Bash => {
+                    match OpenOptions::new().append(true).open(format!("{}/.bashrc", self.home_dir)) {
+                        Ok(mut bashrc_file) => {
+                            let format_value = format!("\nexport {}=\"{}\"", name, value);
+
+                            let add_env = Write::write_all(&mut bashrc_file, format_value.as_bytes());
+                    
+                            match add_env {
+                                Ok(_) => Ok(()),
+                                Err(error) => Err(EnvConfigurationError::UnableToWriteUserShellFile(error.to_string()))
+                            }
+                        },
+                        Err(error) => Err(EnvConfigurationError::UnableToOpenUserShellFile(error.to_string()))
+                    }
+                },
+                _ => Err(EnvConfigurationError::NotConfigured)
+            },
+            EnvConfigurationOpts::Initial => Err(EnvConfigurationError::InvalidValueToPass),
+            EnvConfigurationOpts::Specific(_) => Err(EnvConfigurationError::InvalidValueToPass)
+
+        }
+    }
 }
+
+

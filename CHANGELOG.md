@@ -1,5 +1,9 @@
 # Incli Changelog
 
+## v1.0.0
+
+Project Structure changed, switched to layered architecture.
+
 ## v0.10.0
 
 Added Maven Support.
