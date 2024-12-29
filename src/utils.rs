@@ -1,8 +1,10 @@
-use std::process::{Command, ExitStatus, Output};
+use std::process::{exit, Command, ExitStatus, Output};
 use std::fs::{File, self};
 use std::io::{self, BufRead, BufReader, Error, Read};
 use zip::read::ZipArchive;
 use sys_info_extended;
+
+use crate::models::{EnvConfiguration, EnvConfigurationOpts, ShellType};
 
 pub fn return_linux_dist_etc_os_release<'a>() -> &'a str {
     if let Ok(file) = File::open("/etc/os-release") {
@@ -72,17 +74,8 @@ pub fn check_if_linux_dist_is_arch_linux() -> bool {
     return false;
 }
 
-pub fn configure_incli_envs_file(user: &String, run_commands_as_root: bool){
-    let user_path;
-
-    if user != &"root" {
-        user_path = format!("/home/{}", user)
-    } else {
-        user_path = "/root".to_string()
-    }
-
-    let incli_paths_path = format!("{}/INCLI_PATHS", user_path);
-
+pub fn configure_incli_envs_file(env_confs: &EnvConfiguration, user: &String, run_commands_as_root: bool){
+    let incli_paths_path = format!("{}/INCLI_PATHS", env_confs.home_dir);
 
     let create_incli_paths_folder = match run_commands_as_root {
         true => Command::new("sudo")
@@ -169,27 +162,38 @@ pub fn configure_incli_envs_file(user: &String, run_commands_as_root: bool){
         }
     }
 
-    let bashrc_path = format!("{}/.bashrc", user_path);
+    let rc_path = match &env_confs.shell {
+        EnvConfigurationOpts::Shell(shell) => match shell {
+            ShellType::Bash => format!("{}/.bashrc", env_confs.home_dir),
+            ShellType::Zsh => format!("{}/.zshrc", env_confs.home_dir),
+            _ => {
+                println!("Error when we try to open user's bash profile page, your shell is not supported yet.");
+
+                exit(1)
+            }
+        },
+        _ => panic!("You cannot send any env configuration option other then shell to configure_incli_envs.sh file, panicking")
+    };
 
     let give_permission_to_bashrc = match run_commands_as_root {
         true => Command::new("sudo")
                             .arg("chmod")
                             .arg("777")
-                            .arg(&bashrc_path)
+                            .arg(&rc_path)
                             .output()
                             .expect("cannot give permission to .bashrc file"),
         false => Command::new("chmod")
                             .arg("777")
-                            .arg(&bashrc_path)
+                            .arg(&rc_path)
                             .output()
                             .expect("cannot give permission to .bashrc file")
     };
 
     if !give_permission_to_bashrc.status.success() {
-        println!("Cannot give required permissions for .bashrc, you have to add incli-envs.sh file's path on that file via that synthax for adding your program on your user's env's: \". \"$HOME/INCLI_PATHS/incli-envs.sh\"\"")
+        println!("Cannot give required permissions for {}, you have to add incli-envs.sh file's path on that file via that synthax for adding your program on your user's env's: \". \"$HOME/INCLI_PATHS/incli-envs.sh\"\"", rc_path)
     }
 
-    let bashrc_file = fs::OpenOptions::new().append(true).read(true).open(bashrc_path);
+    let bashrc_file = fs::OpenOptions::new().append(true).read(true).open(rc_path);
 
     match bashrc_file {
         Ok(mut file) => {
@@ -199,11 +203,21 @@ pub fn configure_incli_envs_file(user: &String, run_commands_as_root: bool){
 
             if !quotes.contains("incli-envs.sh") {
                 let incli_envs = incli_envs_path;
-                let format_incli_envs_bytes = format!(". \"{}\"", incli_envs);
+
+                let format_incli_envs_bytes = match &env_confs.shell {
+                    EnvConfigurationOpts::Shell(shell) => match shell {
+                        ShellType::Bash => format!(". \"{}\"", incli_envs),
+                        ShellType::Zsh => format!("\nif [ -f \"{}\" ]; then\n   source \"{}\"\nfi\n", incli_envs, incli_envs),
+                        _ => {
+                            println!("Error when we try to add incli_envs.sh file to rc file, your shell is not supported yet.");
+
+                            exit(1)
+                        }
+                    },
+                    _ => panic!("You cannot send any env configuration option other then shell to configure_incli_envs.sh file, panicking")
+                };
     
-                let add_env_file_dest = io::Write::write_all(&mut file, format_incli_envs_bytes.as_bytes());
-    
-                match add_env_file_dest {
+                match io::Write::write_all(&mut file, format_incli_envs_bytes.as_bytes()) {
                     Ok(_) => println!("incli-envs.sh file successfully added on .bashrc file."),
                     Err(err) => eprintln!("An Error occured when incli-envs.sh file about to write on .bashrc file: {}", err)
                 }

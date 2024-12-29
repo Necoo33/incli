@@ -119,9 +119,9 @@ impl Execution for UserAction {
             match self.os_type {
                 OsType::Windows => {
                     match self.third_arg.as_str() {
-                        "lts" => go::install_go_on_windows("https://go.dev/dl/go1.23.4.windows-amd64.msi", "go1.23.4.windows-amd64.msi"),
-                        "" => go::install_go_on_windows("https://go.dev/dl/go1.23.4.windows-amd64.msi", "go1.23.4.windows-amd64.msi"),
-                        "latest" => go::install_go_on_windows("https://go.dev/dl/go1.23rc2.windows-amd64.msi", "go1.23rc2.windows-amd64.msi"),
+                        "lts" => go::install_go_on_windows(&self.env_confs, "https://go.dev/dl/go1.23.4.windows-amd64.msi", "go1.23.4.windows-amd64.msi"),
+                        "" => go::install_go_on_windows(&self.env_confs, "https://go.dev/dl/go1.23.4.windows-amd64.msi", "go1.23.4.windows-amd64.msi"),
+                        "latest" => go::install_go_on_windows(&self.env_confs, "https://go.dev/dl/go1.23rc2.windows-amd64.msi", "go1.23rc2.windows-amd64.msi"),
                         &_ => go::install_go_error()
                     };
                 },
@@ -132,86 +132,86 @@ impl Execution for UserAction {
                     match linux_dist {
                         "ubuntu" => {
                             match self.third_arg.as_str() {
-                                "lts" => go::install_go_on_debian_based_distros("https://go.dev/dl/go1.23.4.linux-amd64.tar.gz", "go1.23.4.linux-amd64.tar.gz"),
-                                "" => go::install_go_on_debian_based_distros("https://go.dev/dl/go1.23.4.linux-amd64.tar.gz", "go1.23.4.linux-amd64.tar.gz"),
-                                "latest" => go::install_go_on_debian_based_distros("https://go.dev/dl/go1.23rc2.linux-amd64.tar.gz", "go1.23rc2.linux-amd64.tar.gz"),
+                                "lts" => go::install_go_on_debian_based_distros(&self.env_confs, "https://go.dev/dl/go1.23.4.linux-amd64.tar.gz", "go1.23.4.linux-amd64.tar.gz"),
+                                "" => go::install_go_on_debian_based_distros(&self.env_confs, "https://go.dev/dl/go1.23.4.linux-amd64.tar.gz", "go1.23.4.linux-amd64.tar.gz"),
+                                "latest" => go::install_go_on_debian_based_distros(&self.env_confs, "https://go.dev/dl/go1.23rc2.linux-amd64.tar.gz", "go1.23rc2.linux-amd64.tar.gz"),
                                 &_ => go::install_go_error()
                             }
                         },
                         "debian" => {
                             match self.third_arg.as_str() {
-                                "lts" => go::install_go_on_debian_based_distros("https://go.dev/dl/go1.23.4.linux-amd64.tar.gz", "go1.23.4.linux-amd64.tar.gz"),
-                                "" => go::install_go_on_debian_based_distros("https://go.dev/dl/go1.23.4.linux-amd64.tar.gz", "go1.23.4.linux-amd64.tar.gz"),
-                                "latest" => go::install_go_on_debian_based_distros("https://go.dev/dl/go1.23rc2.linux-amd64.tar.gz", "go1.23rc2.linux-amd64.tar.gz"),
+                                "lts" => go::install_go_on_debian_based_distros(&self.env_confs, "https://go.dev/dl/go1.23.4.linux-amd64.tar.gz", "go1.23.4.linux-amd64.tar.gz"),
+                                "" => go::install_go_on_debian_based_distros(&self.env_confs, "https://go.dev/dl/go1.23.4.linux-amd64.tar.gz", "go1.23.4.linux-amd64.tar.gz"),
+                                "latest" => go::install_go_on_debian_based_distros(&self.env_confs, "https://go.dev/dl/go1.23rc2.linux-amd64.tar.gz", "go1.23rc2.linux-amd64.tar.gz"),
                                 &_ => go::install_go_error()
                             }
                         },
                         "pardus" => {
                             match self.third_arg.as_str() {
-                                "lts" => go::install_go_on_debian_based_distros("https://go.dev/dl/go1.23.4.linux-amd64.tar.gz", "go1.23.4.linux-amd64.tar.gz"),
-                                "" => go::install_go_on_debian_based_distros("https://go.dev/dl/go1.23.4.linux-amd64.tar.gz", "go1.23.4.linux-amd64.tar.gz"),
-                                "latest" => go::install_go_on_debian_based_distros("https://go.dev/dl/go1.23rc2.linux-amd64.tar.gz", "go1.23rc2.linux-amd64.tar.gz"),
+                                "lts" => go::install_go_on_debian_based_distros(&self.env_confs, "https://go.dev/dl/go1.23.4.linux-amd64.tar.gz", "go1.23.4.linux-amd64.tar.gz"),
+                                "" => go::install_go_on_debian_based_distros(&self.env_confs, "https://go.dev/dl/go1.23.4.linux-amd64.tar.gz", "go1.23.4.linux-amd64.tar.gz"),
+                                "latest" => go::install_go_on_debian_based_distros(&self.env_confs, "https://go.dev/dl/go1.23rc2.linux-amd64.tar.gz", "go1.23rc2.linux-amd64.tar.gz"),
                                 &_ => go::install_go_error()
                             }
                         },
                         "arch wsl" => {
                             match self.third_arg.as_str() {
-                                "lts" => go::install_go_on_arch_linux("https://go.dev/dl/go1.23.4.linux-amd64.tar.gz", "go1.23.4.linux-amd64.tar.gz"),
-                                "" => go::install_go_on_arch_linux("https://go.dev/dl/go1.23.4.linux-amd64.tar.gz", "go1.23.4.linux-amd64.tar.gz"),
-                                "latest" => go::install_go_on_arch_linux("https://go.dev/dl/go1.23rc2.linux-amd64.tar.gz", "go1.23rc2.linux-amd64.tar.gz"),
+                                "lts" => go::install_go_on_arch_linux(&self.env_confs, "https://go.dev/dl/go1.23.4.linux-amd64.tar.gz", "go1.23.4.linux-amd64.tar.gz"),
+                                "" => go::install_go_on_arch_linux(&self.env_confs, "https://go.dev/dl/go1.23.4.linux-amd64.tar.gz", "go1.23.4.linux-amd64.tar.gz"),
+                                "latest" => go::install_go_on_arch_linux(&self.env_confs, "https://go.dev/dl/go1.23rc2.linux-amd64.tar.gz", "go1.23rc2.linux-amd64.tar.gz"),
                                 &_ => go::install_go_error()
                             }
                         }
                         "kali linux" => {
                             match self.third_arg.as_str() {
-                                "lts" => go::install_go_on_debian_based_distros("https://go.dev/dl/go1.23.4.linux-amd64.tar.gz", "go1.23.4.linux-amd64.tar.gz"),
-                                "" => go::install_go_on_debian_based_distros("https://go.dev/dl/go1.23.4.linux-amd64.tar.gz", "go1.23.4.linux-amd64.tar.gz"),
-                                "latest" => go::install_go_on_debian_based_distros("https://go.dev/dl/go1.23rc2.linux-amd64.tar.gz", "go1.23rc2.linux-amd64.tar.gz"),
+                                "lts" => go::install_go_on_debian_based_distros(&self.env_confs, "https://go.dev/dl/go1.23.4.linux-amd64.tar.gz", "go1.23.4.linux-amd64.tar.gz"),
+                                "" => go::install_go_on_debian_based_distros(&self.env_confs, "https://go.dev/dl/go1.23.4.linux-amd64.tar.gz", "go1.23.4.linux-amd64.tar.gz"),
+                                "latest" => go::install_go_on_debian_based_distros(&self.env_confs, "https://go.dev/dl/go1.23rc2.linux-amd64.tar.gz", "go1.23rc2.linux-amd64.tar.gz"),
                                 &_ => go::install_go_error()
                             }
                         },
                         "fedora" => {
                             match self.third_arg.as_str() {
-                                "lts" => go::install_go_on_centos_and_fedora("https://go.dev/dl/go1.23.4.linux-amd64.tar.gz", "go1.23.4.linux-amd64.tar.gz"),
-                                "" => go::install_go_on_centos_and_fedora("https://go.dev/dl/go1.23.4.linux-amd64.tar.gz", "go1.23.4.linux-amd64.tar.gz"),
-                                "latest" => go::install_go_on_centos_and_fedora("https://go.dev/dl/go1.23rc2.linux-amd64.tar.gz", "go1.23rc2.linux-amd64.tar.gz"),
+                                "lts" => go::install_go_on_centos_and_fedora(&self.env_confs, "https://go.dev/dl/go1.23.4.linux-amd64.tar.gz", "go1.23.4.linux-amd64.tar.gz"),
+                                "" => go::install_go_on_centos_and_fedora(&self.env_confs, "https://go.dev/dl/go1.23.4.linux-amd64.tar.gz", "go1.23.4.linux-amd64.tar.gz"),
+                                "latest" => go::install_go_on_centos_and_fedora(&self.env_confs, "https://go.dev/dl/go1.23rc2.linux-amd64.tar.gz", "go1.23rc2.linux-amd64.tar.gz"),
                                 &_ => go::install_go_error()
                             }
                         },
                         "centos" => {
                             match self.third_arg.as_str() {
-                                "lts" => go::install_go_on_centos_and_fedora("https://go.dev/dl/go1.23.4.linux-amd64.tar.gz", "go1.23.4.linux-amd64.tar.gz"),
-                                "" => go::install_go_on_centos_and_fedora("https://go.dev/dl/go1.23.4.linux-amd64.tar.gz", "go1.23.4.linux-amd64.tar.gz"),
-                                "latest" => go::install_go_on_centos_and_fedora("https://go.dev/dl/go1.23rc2.linux-amd64.tar.gz", "go1.23rc2.linux-amd64.tar.gz"),
+                                "lts" => go::install_go_on_centos_and_fedora(&self.env_confs, "https://go.dev/dl/go1.23.4.linux-amd64.tar.gz", "go1.23.4.linux-amd64.tar.gz"),
+                                "" => go::install_go_on_centos_and_fedora(&self.env_confs, "https://go.dev/dl/go1.23.4.linux-amd64.tar.gz", "go1.23.4.linux-amd64.tar.gz"),
+                                "latest" => go::install_go_on_centos_and_fedora(&self.env_confs, "https://go.dev/dl/go1.23rc2.linux-amd64.tar.gz", "go1.23rc2.linux-amd64.tar.gz"),
                                 &_ => go::install_go_error()
                             }
                         },
                         "rocky" => {
                             match self.third_arg.as_str() {
-                                "lts" => go::install_go_on_rocky_linux("https://go.dev/dl/go1.23.4.linux-amd64.tar.gz", "go1.23.4.linux-amd64.tar.gz"),
-                                "" => go::install_go_on_rocky_linux("https://go.dev/dl/go1.23.4.linux-amd64.tar.gz", "go1.23.4.linux-amd64.tar.gz"),
-                                "latest" => go::install_go_on_rocky_linux("https://go.dev/dl/go1.23rc2.linux-amd64.tar.gz", "go1.23rc2.linux-amd64.tar.gz"),
+                                "lts" => go::install_go_on_rocky_linux(&self.env_confs, "https://go.dev/dl/go1.23.4.linux-amd64.tar.gz", "go1.23.4.linux-amd64.tar.gz"),
+                                "" => go::install_go_on_rocky_linux(&self.env_confs, "https://go.dev/dl/go1.23.4.linux-amd64.tar.gz", "go1.23.4.linux-amd64.tar.gz"),
+                                "latest" => go::install_go_on_rocky_linux(&self.env_confs, "https://go.dev/dl/go1.23rc2.linux-amd64.tar.gz", "go1.23rc2.linux-amd64.tar.gz"),
                                 &_ => go::install_go_error()
                             }
                         }
                         "alma linux" => {
                             match self.third_arg.as_str() {
-                                "lts" => go::install_go_on_alma_linux("https://go.dev/dl/go1.23.4.linux-amd64.tar.gz", "go1.23.4.linux-amd64.tar.gz"),
-                                "" => go::install_go_on_alma_linux("https://go.dev/dl/go1.23.4.linux-amd64.tar.gz", "go1.23.4.linux-amd64.tar.gz"),
-                                "latest" => go::install_go_on_alma_linux("https://go.dev/dl/go1.23rc2.linux-amd64.tar.gz", "go1.23rc2.linux-amd64.tar.gz"),
+                                "lts" => go::install_go_on_alma_linux(&self.env_confs, "https://go.dev/dl/go1.23.4.linux-amd64.tar.gz", "go1.23.4.linux-amd64.tar.gz"),
+                                "" => go::install_go_on_alma_linux(&self.env_confs, "https://go.dev/dl/go1.23.4.linux-amd64.tar.gz", "go1.23.4.linux-amd64.tar.gz"),
+                                "latest" => go::install_go_on_alma_linux(&self.env_confs, "https://go.dev/dl/go1.23rc2.linux-amd64.tar.gz", "go1.23rc2.linux-amd64.tar.gz"),
                                 &_ => go::install_go_error()
                             }
                         },
-                        "alpine" => go::install_go_on_alpine_linux("https://go.dev/dl/go1.23.4.linux-amd64.tar.gz", "go1.23.4.linux-amd64.tar.gz"),
+                        "alpine" => (),
                         &_ => null_var = "none".to_string()
                     }
 
                     if null_var == "none".to_string() {
                         if utils::check_if_linux_dist_is_arch_linux() {
                             match self.third_arg.as_str() {
-                                "lts" => go::install_go_on_arch_linux("https://go.dev/dl/go1.23.4.linux-amd64.tar.gz", "go1.23.4.linux-amd64.tar.gz"),
-                                "" => go::install_go_on_arch_linux("https://go.dev/dl/go1.23.4.linux-amd64.tar.gz", "go1.23.4.linux-amd64.tar.gz"),
-                                "latest" => go::install_go_on_arch_linux("https://go.dev/dl/go1.23rc2.linux-amd64.tar.gz", "go1.23rc2.linux-amd64.tar.gz"),
+                                "lts" => go::install_go_on_arch_linux(&self.env_confs, "https://go.dev/dl/go1.23.4.linux-amd64.tar.gz", "go1.23.4.linux-amd64.tar.gz"),
+                                "" => go::install_go_on_arch_linux(&self.env_confs, "https://go.dev/dl/go1.23.4.linux-amd64.tar.gz", "go1.23.4.linux-amd64.tar.gz"),
+                                "latest" => go::install_go_on_arch_linux(&self.env_confs, "https://go.dev/dl/go1.23rc2.linux-amd64.tar.gz", "go1.23rc2.linux-amd64.tar.gz"),
                                 &_ => go::install_go_error()
                             }
                         }
@@ -229,26 +229,26 @@ impl Execution for UserAction {
             match self.os_type {
                 OsType::Windows => match self.third_arg.as_str() {
                     "8" => match self.fourth_arg.as_str() {
-                        "jdk" => java::install_java_on_windows("https://github.com/adoptium/temurin8-binaries/releases/download/jdk8u422-b05/OpenJDK8U-jdk_x64_windows_hotspot_8u422b05.msi", "jdk-8.msi", "8"),
-                        "jre" => java::install_java_on_windows("https://github.com/adoptium/temurin8-binaries/releases/download/jdk8u422-b05/OpenJDK8U-jre_x64_windows_hotspot_8u422b05.msi", "jre-8.msi", "8"),
+                        "jdk" => java::install_java_on_windows(&self.env_confs, "https://github.com/adoptium/temurin8-binaries/releases/download/jdk8u422-b05/OpenJDK8U-jdk_x64_windows_hotspot_8u422b05.msi", "jdk-8.msi", "8"),
+                        "jre" => java::install_java_on_windows(&self.env_confs, "https://github.com/adoptium/temurin8-binaries/releases/download/jdk8u422-b05/OpenJDK8U-jre_x64_windows_hotspot_8u422b05.msi", "jre-8.msi", "8"),
                         &_ => ()
                     },
                     "9" => println!("Unfortunately, There Is no installation of Java 9 for Windows"),
                     "10" => println!("Unfortunately, There Is no installation of Java 10 for Windows"),
-                    "11" => java::install_java_on_windows("https://download.java.net/java/GA/jdk11/9/GPL/openjdk-11.0.2_windows-x64_bin.zip", "jdk-11.zip", "11"),
-                    "12" => java::install_java_on_windows("https://download.java.net/java/GA/jdk12.0.2/e482c34c86bd4bf8b56c0b35558996b9/10/GPL/openjdk-12.0.2_windows-x64_bin.zip", "jdk-12.zip", "12"),
-                    "13" => java::install_java_on_windows("https://download.java.net/java/GA/jdk13.0.2/d4173c853231432d94f001e99d882ca7/8/GPL/openjdk-13.0.2_windows-x64_bin.zip", "jdk-13.zip", "13"),
-                    "14" => java::install_java_on_windows("https://download.java.net/java/GA/jdk14.0.2/205943a0976c4ed48cb16f1043c5c647/12/GPL/openjdk-14.0.2_windows-x64_bin.zip", "jdk-14.zip", "14"),
-                    "15" => java::install_java_on_windows("https://download.java.net/java/GA/jdk15.0.2/0d1cfde4252546c6931946de8db48ee2/7/GPL/openjdk-15.0.2_windows-x64_bin.zip", "jdk-15.zip", "15"),
-                    "16" => java::install_java_on_windows("https://download.java.net/java/GA/jdk16.0.2/d4a915d82b4c4fbb9bde534da945d746/7/GPL/openjdk-16.0.2_windows-x64_bin.zip", "jdk-16.zip", "16"),
-                    "17" => java::install_java_on_windows("https://download.java.net/java/GA/jdk17.0.2/dfd4a8d0985749f896bed50d7138ee7f/8/GPL/openjdk-17.0.2_windows-x64_bin.zip", "jdk-17.zip", "17"),
-                    "18" => java::install_java_on_windows("https://download.java.net/java/GA/jdk18.0.2/f6ad4b4450fd4d298113270ec84f30ee/9/GPL/openjdk-18.0.2_windows-x64_bin.zip", "jdk-18.zip", "18"),
-                    "19" => java::install_java_on_windows("https://download.java.net/java/GA/jdk19.0.1/afdd2e245b014143b62ccb916125e3ce/10/GPL/openjdk-19.0.1_windows-x64_bin.zip", "jdk-19.zip", "19"),
-                    "20" => java::install_java_on_windows("https://download.java.net/java/GA/jdk20.0.2/6e380f22cbe7469fa75fb448bd903d8e/9/GPL/openjdk-20.0.2_windows-x64_bin.zip", "jdk-20.zip", "20"),
-                    "21" => java::install_java_on_windows("https://download.java.net/java/GA/jdk21.0.2/f2283984656d49d69e91c558476027ac/13/GPL/openjdk-21.0.2_windows-x64_bin.zip", "jdk-21.zip", "21"),
-                    "" => java::install_java_on_windows("https://download.java.net/java/GA/jdk21.0.2/f2283984656d49d69e91c558476027ac/13/GPL/openjdk-21.0.2_windows-x64_bin.zip", "jdk-21.zip", "21"),
-                    "22" => java::install_java_on_windows("https://download.java.net/java/GA/jdk22.0.1/c7ec1332f7bb44aeba2eb341ae18aca4/8/GPL/openjdk-22.0.1_windows-x64_bin.zip", "jdk-22.zip", "22"),
-                    "23" => java::install_java_on_windows("https://download.java.net/java/early_access/jdk24/13/GPL/openjdk-24-ea+13_windows-x64_bin.zip", "jdk-23.zip", "23"),
+                    "11" => java::install_java_on_windows(&self.env_confs, "https://download.java.net/java/GA/jdk11/9/GPL/openjdk-11.0.2_windows-x64_bin.zip", "jdk-11.zip", "11"),
+                    "12" => java::install_java_on_windows(&self.env_confs, "https://download.java.net/java/GA/jdk12.0.2/e482c34c86bd4bf8b56c0b35558996b9/10/GPL/openjdk-12.0.2_windows-x64_bin.zip", "jdk-12.zip", "12"),
+                    "13" => java::install_java_on_windows(&self.env_confs, "https://download.java.net/java/GA/jdk13.0.2/d4173c853231432d94f001e99d882ca7/8/GPL/openjdk-13.0.2_windows-x64_bin.zip", "jdk-13.zip", "13"),
+                    "14" => java::install_java_on_windows(&self.env_confs, "https://download.java.net/java/GA/jdk14.0.2/205943a0976c4ed48cb16f1043c5c647/12/GPL/openjdk-14.0.2_windows-x64_bin.zip", "jdk-14.zip", "14"),
+                    "15" => java::install_java_on_windows(&self.env_confs, "https://download.java.net/java/GA/jdk15.0.2/0d1cfde4252546c6931946de8db48ee2/7/GPL/openjdk-15.0.2_windows-x64_bin.zip", "jdk-15.zip", "15"),
+                    "16" => java::install_java_on_windows(&self.env_confs, "https://download.java.net/java/GA/jdk16.0.2/d4a915d82b4c4fbb9bde534da945d746/7/GPL/openjdk-16.0.2_windows-x64_bin.zip", "jdk-16.zip", "16"),
+                    "17" => java::install_java_on_windows(&self.env_confs, "https://download.java.net/java/GA/jdk17.0.2/dfd4a8d0985749f896bed50d7138ee7f/8/GPL/openjdk-17.0.2_windows-x64_bin.zip", "jdk-17.zip", "17"),
+                    "18" => java::install_java_on_windows(&self.env_confs, "https://download.java.net/java/GA/jdk18.0.2/f6ad4b4450fd4d298113270ec84f30ee/9/GPL/openjdk-18.0.2_windows-x64_bin.zip", "jdk-18.zip", "18"),
+                    "19" => java::install_java_on_windows(&self.env_confs, "https://download.java.net/java/GA/jdk19.0.1/afdd2e245b014143b62ccb916125e3ce/10/GPL/openjdk-19.0.1_windows-x64_bin.zip", "jdk-19.zip", "19"),
+                    "20" => java::install_java_on_windows(&self.env_confs, "https://download.java.net/java/GA/jdk20.0.2/6e380f22cbe7469fa75fb448bd903d8e/9/GPL/openjdk-20.0.2_windows-x64_bin.zip", "jdk-20.zip", "20"),
+                    "21" => java::install_java_on_windows(&self.env_confs, "https://download.java.net/java/GA/jdk21.0.2/f2283984656d49d69e91c558476027ac/13/GPL/openjdk-21.0.2_windows-x64_bin.zip", "jdk-21.zip", "21"),
+                    "" => java::install_java_on_windows(&self.env_confs, "https://download.java.net/java/GA/jdk21.0.2/f2283984656d49d69e91c558476027ac/13/GPL/openjdk-21.0.2_windows-x64_bin.zip", "jdk-21.zip", "21"),
+                    "22" => java::install_java_on_windows(&self.env_confs, "https://download.java.net/java/GA/jdk22.0.1/c7ec1332f7bb44aeba2eb341ae18aca4/8/GPL/openjdk-22.0.1_windows-x64_bin.zip", "jdk-22.zip", "22"),
+                    "23" => java::install_java_on_windows(&self.env_confs, "https://download.java.net/java/early_access/jdk24/13/GPL/openjdk-24-ea+13_windows-x64_bin.zip", "jdk-23.zip", "23"),
                     "24" => todo!(),
                     _ => ()
                 },
@@ -259,226 +259,226 @@ impl Execution for UserAction {
                     match linux_dist {
                         "ubuntu" => {
                             match self.third_arg.as_str() {
-                                "8" => java::install_java_on_debian_based_distros("", "", "8"),
-                                "9" => java::install_java_on_debian_based_distros("https://download.java.net/java/GA/jdk9/9.0.4/binaries/openjdk-9.0.4_linux-x64_bin.tar.gz", "jdk-9.tar.gz", "9"),
-                                "10" => java::install_java_on_debian_based_distros("https://download.java.net/java/GA/jdk10/10.0.2/19aef61b38124481863b1413dce1855f/13/openjdk-10.0.2_linux-x64_bin.tar.gz", "jdk-10.tar.gz", "10"),
-                                "11" => java::install_java_on_debian_based_distros("https://download.java.net/java/GA/jdk11/9/GPL/openjdk-11.0.2_linux-x64_bin.tar.gz", "jdk-11.tar.gz", "11"),
-                                "12" => java::install_java_on_debian_based_distros("https://download.java.net/java/GA/jdk12.0.2/e482c34c86bd4bf8b56c0b35558996b9/10/GPL/openjdk-12.0.2_linux-x64_bin.tar.gz", "jdk-12.tar.gz", "12"),
-                                "13" => java::install_java_on_debian_based_distros("https://download.java.net/java/GA/jdk13.0.2/d4173c853231432d94f001e99d882ca7/8/GPL/openjdk-13.0.2_linux-x64_bin.tar.gz", "jdk-13.tar.gz", "13"),
-                                "14" => java::install_java_on_debian_based_distros("https://download.java.net/java/GA/jdk14.0.2/205943a0976c4ed48cb16f1043c5c647/12/GPL/openjdk-14.0.2_linux-x64_bin.tar.gz", "jdk-14.tar.gz", "14"),
-                                "15" => java::install_java_on_debian_based_distros("https://download.java.net/java/GA/jdk15.0.2/0d1cfde4252546c6931946de8db48ee2/7/GPL/openjdk-15.0.2_linux-x64_bin.tar.gz", "jdk-15.tar.gz", "15"),
-                                "16" => java::install_java_on_debian_based_distros("https://download.java.net/java/GA/jdk16.0.2/d4a915d82b4c4fbb9bde534da945d746/7/GPL/openjdk-16.0.2_linux-x64_bin.tar.gz", "jdk-16.tar.gz", "16"),
-                                "17" => java::install_java_on_debian_based_distros("https://download.java.net/java/GA/jdk17.0.2/dfd4a8d0985749f896bed50d7138ee7f/8/GPL/openjdk-17.0.2_linux-x64_bin.tar.gz", "jdk-17.tar.gz", "17"),
-                                "18" => java::install_java_on_debian_based_distros("https://download.java.net/java/GA/jdk18.0.2/f6ad4b4450fd4d298113270ec84f30ee/9/GPL/openjdk-18.0.2_linux-x64_bin.tar.gz", "jdk-18.tar.gz", "18"),
-                                "19" => java::install_java_on_debian_based_distros("https://download.java.net/java/GA/jdk19.0.1/afdd2e245b014143b62ccb916125e3ce/10/GPL/openjdk-19.0.1_linux-x64_bin.tar.gz", "jdk-19.tar.gz", "19"),
-                                "20" => java::install_java_on_debian_based_distros("https://download.java.net/java/GA/jdk20.0.2/6e380f22cbe7469fa75fb448bd903d8e/9/GPL/openjdk-20.0.2_linux-x64_bin.tar.gz", "jdk-20.tar.gz", "20"),
-                                "21" => java::install_java_on_debian_based_distros("https://download.java.net/java/GA/jdk21.0.2/f2283984656d49d69e91c558476027ac/13/GPL/openjdk-21.0.2_linux-x64_bin.tar.gz", "jdk-21.tar.gz", "21"),
-                                "" => java::install_java_on_debian_based_distros("https://download.java.net/java/GA/jdk21.0.2/f2283984656d49d69e91c558476027ac/13/GPL/openjdk-21.0.2_linux-x64_bin.tar.gz", "jdk-21.tar.gz", "21"),
-                                "lts" => java::install_java_on_debian_based_distros("https://download.java.net/java/GA/jdk21.0.2/f2283984656d49d69e91c558476027ac/13/GPL/openjdk-21.0.2_linux-x64_bin.tar.gz", "jdk-21.tar.gz", "21"),
-                                "22" => java::install_java_on_debian_based_distros("https://download.java.net/java/GA/jdk22.0.1/c7ec1332f7bb44aeba2eb341ae18aca4/8/GPL/openjdk-22.0.1_linux-x64_bin.tar.gz", "jdk-22.tar.gz", "22"),
-                                "23" => java::install_java_on_debian_based_distros("https://download.java.net/java/GA/jdk23/3c5b90190c68498b986a97f276efd28a/37/GPL/openjdk-23_linux-x64_bin.tar.gz", "jdk-23.tar.gz", "23"),
-                                "24" => java::install_java_on_debian_based_distros("https://download.java.net/java/early_access/jdk24/13/GPL/openjdk-24-ea+13_linux-x64_bin.tar.gz", "java-24-ea.tar.gz", "24"),
-                                "latest" => java::install_java_on_debian_based_distros("https://download.java.net/java/GA/jdk21.0.2/f2283984656d49d69e91c558476027ac/13/GPL/openjdk-21.0.2_linux-x64_bin.tar.gz", "jdk-21.tar.gz", "21"),
+                                "8" => java::install_java_on_debian_based_distros(&self.env_confs, "", "", "8"),
+                                "9" => java::install_java_on_debian_based_distros(&self.env_confs, "https://download.java.net/java/GA/jdk9/9.0.4/binaries/openjdk-9.0.4_linux-x64_bin.tar.gz", "jdk-9.tar.gz", "9"),
+                                "10" => java::install_java_on_debian_based_distros(&self.env_confs, "https://download.java.net/java/GA/jdk10/10.0.2/19aef61b38124481863b1413dce1855f/13/openjdk-10.0.2_linux-x64_bin.tar.gz", "jdk-10.tar.gz", "10"),
+                                "11" => java::install_java_on_debian_based_distros(&self.env_confs, "https://download.java.net/java/GA/jdk11/9/GPL/openjdk-11.0.2_linux-x64_bin.tar.gz", "jdk-11.tar.gz", "11"),
+                                "12" => java::install_java_on_debian_based_distros(&self.env_confs, "https://download.java.net/java/GA/jdk12.0.2/e482c34c86bd4bf8b56c0b35558996b9/10/GPL/openjdk-12.0.2_linux-x64_bin.tar.gz", "jdk-12.tar.gz", "12"),
+                                "13" => java::install_java_on_debian_based_distros(&self.env_confs, "https://download.java.net/java/GA/jdk13.0.2/d4173c853231432d94f001e99d882ca7/8/GPL/openjdk-13.0.2_linux-x64_bin.tar.gz", "jdk-13.tar.gz", "13"),
+                                "14" => java::install_java_on_debian_based_distros(&self.env_confs, "https://download.java.net/java/GA/jdk14.0.2/205943a0976c4ed48cb16f1043c5c647/12/GPL/openjdk-14.0.2_linux-x64_bin.tar.gz", "jdk-14.tar.gz", "14"),
+                                "15" => java::install_java_on_debian_based_distros(&self.env_confs, "https://download.java.net/java/GA/jdk15.0.2/0d1cfde4252546c6931946de8db48ee2/7/GPL/openjdk-15.0.2_linux-x64_bin.tar.gz", "jdk-15.tar.gz", "15"),
+                                "16" => java::install_java_on_debian_based_distros(&self.env_confs, "https://download.java.net/java/GA/jdk16.0.2/d4a915d82b4c4fbb9bde534da945d746/7/GPL/openjdk-16.0.2_linux-x64_bin.tar.gz", "jdk-16.tar.gz", "16"),
+                                "17" => java::install_java_on_debian_based_distros(&self.env_confs, "https://download.java.net/java/GA/jdk17.0.2/dfd4a8d0985749f896bed50d7138ee7f/8/GPL/openjdk-17.0.2_linux-x64_bin.tar.gz", "jdk-17.tar.gz", "17"),
+                                "18" => java::install_java_on_debian_based_distros(&self.env_confs, "https://download.java.net/java/GA/jdk18.0.2/f6ad4b4450fd4d298113270ec84f30ee/9/GPL/openjdk-18.0.2_linux-x64_bin.tar.gz", "jdk-18.tar.gz", "18"),
+                                "19" => java::install_java_on_debian_based_distros(&self.env_confs, "https://download.java.net/java/GA/jdk19.0.1/afdd2e245b014143b62ccb916125e3ce/10/GPL/openjdk-19.0.1_linux-x64_bin.tar.gz", "jdk-19.tar.gz", "19"),
+                                "20" => java::install_java_on_debian_based_distros(&self.env_confs, "https://download.java.net/java/GA/jdk20.0.2/6e380f22cbe7469fa75fb448bd903d8e/9/GPL/openjdk-20.0.2_linux-x64_bin.tar.gz", "jdk-20.tar.gz", "20"),
+                                "21" => java::install_java_on_debian_based_distros(&self.env_confs, "https://download.java.net/java/GA/jdk21.0.2/f2283984656d49d69e91c558476027ac/13/GPL/openjdk-21.0.2_linux-x64_bin.tar.gz", "jdk-21.tar.gz", "21"),
+                                "" => java::install_java_on_debian_based_distros(&self.env_confs, "https://download.java.net/java/GA/jdk21.0.2/f2283984656d49d69e91c558476027ac/13/GPL/openjdk-21.0.2_linux-x64_bin.tar.gz", "jdk-21.tar.gz", "21"),
+                                "lts" => java::install_java_on_debian_based_distros(&self.env_confs, "https://download.java.net/java/GA/jdk21.0.2/f2283984656d49d69e91c558476027ac/13/GPL/openjdk-21.0.2_linux-x64_bin.tar.gz", "jdk-21.tar.gz", "21"),
+                                "22" => java::install_java_on_debian_based_distros(&self.env_confs, "https://download.java.net/java/GA/jdk22.0.1/c7ec1332f7bb44aeba2eb341ae18aca4/8/GPL/openjdk-22.0.1_linux-x64_bin.tar.gz", "jdk-22.tar.gz", "22"),
+                                "23" => java::install_java_on_debian_based_distros(&self.env_confs, "https://download.java.net/java/GA/jdk23/3c5b90190c68498b986a97f276efd28a/37/GPL/openjdk-23_linux-x64_bin.tar.gz", "jdk-23.tar.gz", "23"),
+                                "24" => java::install_java_on_debian_based_distros(&self.env_confs, "https://download.java.net/java/early_access/jdk24/13/GPL/openjdk-24-ea+13_linux-x64_bin.tar.gz", "java-24-ea.tar.gz", "24"),
+                                "latest" => java::install_java_on_debian_based_distros(&self.env_confs, "https://download.java.net/java/GA/jdk21.0.2/f2283984656d49d69e91c558476027ac/13/GPL/openjdk-21.0.2_linux-x64_bin.tar.gz", "jdk-21.tar.gz", "21"),
                                 &_ => ()
                             }
                         },
                         "debian" => {
                             match self.third_arg.as_str() {
-                                "8" => java::install_java_on_debian_based_distros("", "", "8"),
-                                "9" => java::install_java_on_debian_based_distros("https://download.java.net/java/GA/jdk9/9.0.4/binaries/openjdk-9.0.4_linux-x64_bin.tar.gz", "jdk-9.tar.gz", "9"),
-                                "10" => java::install_java_on_debian_based_distros("https://download.java.net/java/GA/jdk10/10.0.2/19aef61b38124481863b1413dce1855f/13/openjdk-10.0.2_linux-x64_bin.tar.gz", "jdk-10.tar.gz", "10"),
-                                "11" => java::install_java_on_debian_based_distros("https://download.java.net/java/GA/jdk11/9/GPL/openjdk-11.0.2_linux-x64_bin.tar.gz", "jdk-11.tar.gz", "11"),
-                                "12" => java::install_java_on_debian_based_distros("https://download.java.net/java/GA/jdk12.0.2/e482c34c86bd4bf8b56c0b35558996b9/10/GPL/openjdk-12.0.2_linux-x64_bin.tar.gz", "jdk-12.tar.gz", "12"),
-                                "13" => java::install_java_on_debian_based_distros("https://download.java.net/java/GA/jdk13.0.2/d4173c853231432d94f001e99d882ca7/8/GPL/openjdk-13.0.2_linux-x64_bin.tar.gz", "jdk-13.tar.gz", "13"),
-                                "14" => java::install_java_on_debian_based_distros("https://download.java.net/java/GA/jdk14.0.2/205943a0976c4ed48cb16f1043c5c647/12/GPL/openjdk-14.0.2_linux-x64_bin.tar.gz", "jdk-14.tar.gz", "14"),
-                                "15" => java::install_java_on_debian_based_distros("https://download.java.net/java/GA/jdk15.0.2/0d1cfde4252546c6931946de8db48ee2/7/GPL/openjdk-15.0.2_linux-x64_bin.tar.gz", "jdk-15.tar.gz", "15"),
-                                "16" => java::install_java_on_debian_based_distros("https://download.java.net/java/GA/jdk16.0.2/d4a915d82b4c4fbb9bde534da945d746/7/GPL/openjdk-16.0.2_linux-x64_bin.tar.gz", "jdk-16.tar.gz", "16"),
-                                "17" => java::install_java_on_debian_based_distros("https://download.java.net/java/GA/jdk17.0.2/dfd4a8d0985749f896bed50d7138ee7f/8/GPL/openjdk-17.0.2_linux-x64_bin.tar.gz", "jdk-17.tar.gz", "17"),
-                                "18" => java::install_java_on_debian_based_distros("https://download.java.net/java/GA/jdk18.0.2/f6ad4b4450fd4d298113270ec84f30ee/9/GPL/openjdk-18.0.2_linux-x64_bin.tar.gz", "jdk-18.tar.gz", "18"),
-                                "19" => java::install_java_on_debian_based_distros("https://download.java.net/java/GA/jdk19.0.1/afdd2e245b014143b62ccb916125e3ce/10/GPL/openjdk-19.0.1_linux-x64_bin.tar.gz", "jdk-19.tar.gz", "19"),
-                                "20" => java::install_java_on_debian_based_distros("https://download.java.net/java/GA/jdk20.0.2/6e380f22cbe7469fa75fb448bd903d8e/9/GPL/openjdk-20.0.2_linux-x64_bin.tar.gz", "jdk-20.tar.gz", "20"),
-                                "21" => java::install_java_on_debian_based_distros("https://download.java.net/java/GA/jdk21.0.2/f2283984656d49d69e91c558476027ac/13/GPL/openjdk-21.0.2_linux-x64_bin.tar.gz", "jdk-21.tar.gz", "21"),
-                                "" => java::install_java_on_debian_based_distros("https://download.java.net/java/GA/jdk21.0.2/f2283984656d49d69e91c558476027ac/13/GPL/openjdk-21.0.2_linux-x64_bin.tar.gz", "jdk-21.tar.gz", "21"),
-                                "lts" => java::install_java_on_debian_based_distros("https://download.java.net/java/GA/jdk21.0.2/f2283984656d49d69e91c558476027ac/13/GPL/openjdk-21.0.2_linux-x64_bin.tar.gz", "jdk-21.tar.gz", "21"),
-                                "22" => java::install_java_on_debian_based_distros("https://download.java.net/java/GA/jdk22.0.1/c7ec1332f7bb44aeba2eb341ae18aca4/8/GPL/openjdk-22.0.1_linux-x64_bin.tar.gz", "jdk-22.tar.gz", "22"),
-                                "23" => java::install_java_on_debian_based_distros("https://download.java.net/java/GA/jdk23/3c5b90190c68498b986a97f276efd28a/37/GPL/openjdk-23_linux-x64_bin.tar.gz", "jdk-23.tar.gz", "23"),
-                                "24" => java::install_java_on_debian_based_distros("https://download.java.net/java/early_access/jdk24/13/GPL/openjdk-24-ea+13_linux-x64_bin.tar.gz", "java-24-ea.tar.gz", "24"),
-                                "latest" => java::install_java_on_debian_based_distros("https://download.java.net/java/GA/jdk21.0.2/f2283984656d49d69e91c558476027ac/13/GPL/openjdk-21.0.2_linux-x64_bin.tar.gz", "jdk-21.tar.gz", "21"),
+                                "8" => java::install_java_on_debian_based_distros(&self.env_confs, "", "", "8"),
+                                "9" => java::install_java_on_debian_based_distros(&self.env_confs, "https://download.java.net/java/GA/jdk9/9.0.4/binaries/openjdk-9.0.4_linux-x64_bin.tar.gz", "jdk-9.tar.gz", "9"),
+                                "10" => java::install_java_on_debian_based_distros(&self.env_confs, "https://download.java.net/java/GA/jdk10/10.0.2/19aef61b38124481863b1413dce1855f/13/openjdk-10.0.2_linux-x64_bin.tar.gz", "jdk-10.tar.gz", "10"),
+                                "11" => java::install_java_on_debian_based_distros(&self.env_confs, "https://download.java.net/java/GA/jdk11/9/GPL/openjdk-11.0.2_linux-x64_bin.tar.gz", "jdk-11.tar.gz", "11"),
+                                "12" => java::install_java_on_debian_based_distros(&self.env_confs, "https://download.java.net/java/GA/jdk12.0.2/e482c34c86bd4bf8b56c0b35558996b9/10/GPL/openjdk-12.0.2_linux-x64_bin.tar.gz", "jdk-12.tar.gz", "12"),
+                                "13" => java::install_java_on_debian_based_distros(&self.env_confs, "https://download.java.net/java/GA/jdk13.0.2/d4173c853231432d94f001e99d882ca7/8/GPL/openjdk-13.0.2_linux-x64_bin.tar.gz", "jdk-13.tar.gz", "13"),
+                                "14" => java::install_java_on_debian_based_distros(&self.env_confs, "https://download.java.net/java/GA/jdk14.0.2/205943a0976c4ed48cb16f1043c5c647/12/GPL/openjdk-14.0.2_linux-x64_bin.tar.gz", "jdk-14.tar.gz", "14"),
+                                "15" => java::install_java_on_debian_based_distros(&self.env_confs, "https://download.java.net/java/GA/jdk15.0.2/0d1cfde4252546c6931946de8db48ee2/7/GPL/openjdk-15.0.2_linux-x64_bin.tar.gz", "jdk-15.tar.gz", "15"),
+                                "16" => java::install_java_on_debian_based_distros(&self.env_confs, "https://download.java.net/java/GA/jdk16.0.2/d4a915d82b4c4fbb9bde534da945d746/7/GPL/openjdk-16.0.2_linux-x64_bin.tar.gz", "jdk-16.tar.gz", "16"),
+                                "17" => java::install_java_on_debian_based_distros(&self.env_confs, "https://download.java.net/java/GA/jdk17.0.2/dfd4a8d0985749f896bed50d7138ee7f/8/GPL/openjdk-17.0.2_linux-x64_bin.tar.gz", "jdk-17.tar.gz", "17"),
+                                "18" => java::install_java_on_debian_based_distros(&self.env_confs, "https://download.java.net/java/GA/jdk18.0.2/f6ad4b4450fd4d298113270ec84f30ee/9/GPL/openjdk-18.0.2_linux-x64_bin.tar.gz", "jdk-18.tar.gz", "18"),
+                                "19" => java::install_java_on_debian_based_distros(&self.env_confs, "https://download.java.net/java/GA/jdk19.0.1/afdd2e245b014143b62ccb916125e3ce/10/GPL/openjdk-19.0.1_linux-x64_bin.tar.gz", "jdk-19.tar.gz", "19"),
+                                "20" => java::install_java_on_debian_based_distros(&self.env_confs, "https://download.java.net/java/GA/jdk20.0.2/6e380f22cbe7469fa75fb448bd903d8e/9/GPL/openjdk-20.0.2_linux-x64_bin.tar.gz", "jdk-20.tar.gz", "20"),
+                                "21" => java::install_java_on_debian_based_distros(&self.env_confs, "https://download.java.net/java/GA/jdk21.0.2/f2283984656d49d69e91c558476027ac/13/GPL/openjdk-21.0.2_linux-x64_bin.tar.gz", "jdk-21.tar.gz", "21"),
+                                "" => java::install_java_on_debian_based_distros(&self.env_confs, "https://download.java.net/java/GA/jdk21.0.2/f2283984656d49d69e91c558476027ac/13/GPL/openjdk-21.0.2_linux-x64_bin.tar.gz", "jdk-21.tar.gz", "21"),
+                                "lts" => java::install_java_on_debian_based_distros(&self.env_confs, "https://download.java.net/java/GA/jdk21.0.2/f2283984656d49d69e91c558476027ac/13/GPL/openjdk-21.0.2_linux-x64_bin.tar.gz", "jdk-21.tar.gz", "21"),
+                                "22" => java::install_java_on_debian_based_distros(&self.env_confs, "https://download.java.net/java/GA/jdk22.0.1/c7ec1332f7bb44aeba2eb341ae18aca4/8/GPL/openjdk-22.0.1_linux-x64_bin.tar.gz", "jdk-22.tar.gz", "22"),
+                                "23" => java::install_java_on_debian_based_distros(&self.env_confs, "https://download.java.net/java/GA/jdk23/3c5b90190c68498b986a97f276efd28a/37/GPL/openjdk-23_linux-x64_bin.tar.gz", "jdk-23.tar.gz", "23"),
+                                "24" => java::install_java_on_debian_based_distros(&self.env_confs, "https://download.java.net/java/early_access/jdk24/13/GPL/openjdk-24-ea+13_linux-x64_bin.tar.gz", "java-24-ea.tar.gz", "24"),
+                                "latest" => java::install_java_on_debian_based_distros(&self.env_confs, "https://download.java.net/java/GA/jdk21.0.2/f2283984656d49d69e91c558476027ac/13/GPL/openjdk-21.0.2_linux-x64_bin.tar.gz", "jdk-21.tar.gz", "21"),
                                 &_ => ()
                             }
                         },
                         "pardus" => {
                             match self.third_arg.as_str() {
-                                "8" => java::install_java_on_debian_based_distros("", "", "8"),
-                                "9" => java::install_java_on_debian_based_distros("https://download.java.net/java/GA/jdk9/9.0.4/binaries/openjdk-9.0.4_linux-x64_bin.tar.gz", "jdk-9.tar.gz", "9"),
-                                "10" => java::install_java_on_debian_based_distros("https://download.java.net/java/GA/jdk10/10.0.2/19aef61b38124481863b1413dce1855f/13/openjdk-10.0.2_linux-x64_bin.tar.gz", "jdk-10.tar.gz", "10"),
-                                "11" => java::install_java_on_debian_based_distros("https://download.java.net/java/GA/jdk11/9/GPL/openjdk-11.0.2_linux-x64_bin.tar.gz", "jdk-11.tar.gz", "11"),
-                                "12" => java::install_java_on_debian_based_distros("https://download.java.net/java/GA/jdk12.0.2/e482c34c86bd4bf8b56c0b35558996b9/10/GPL/openjdk-12.0.2_linux-x64_bin.tar.gz", "jdk-12.tar.gz", "12"),
-                                "13" => java::install_java_on_debian_based_distros("https://download.java.net/java/GA/jdk13.0.2/d4173c853231432d94f001e99d882ca7/8/GPL/openjdk-13.0.2_linux-x64_bin.tar.gz", "jdk-13.tar.gz", "13"),
-                                "14" => java::install_java_on_debian_based_distros("https://download.java.net/java/GA/jdk14.0.2/205943a0976c4ed48cb16f1043c5c647/12/GPL/openjdk-14.0.2_linux-x64_bin.tar.gz", "jdk-14.tar.gz", "14"),
-                                "15" => java::install_java_on_debian_based_distros("https://download.java.net/java/GA/jdk15.0.2/0d1cfde4252546c6931946de8db48ee2/7/GPL/openjdk-15.0.2_linux-x64_bin.tar.gz", "jdk-15.tar.gz", "15"),
-                                "16" => java::install_java_on_debian_based_distros("https://download.java.net/java/GA/jdk16.0.2/d4a915d82b4c4fbb9bde534da945d746/7/GPL/openjdk-16.0.2_linux-x64_bin.tar.gz", "jdk-16.tar.gz", "16"),
-                                "17" => java::install_java_on_debian_based_distros("https://download.java.net/java/GA/jdk17.0.2/dfd4a8d0985749f896bed50d7138ee7f/8/GPL/openjdk-17.0.2_linux-x64_bin.tar.gz", "jdk-17.tar.gz", "17"),
-                                "18" => java::install_java_on_debian_based_distros("https://download.java.net/java/GA/jdk18.0.2/f6ad4b4450fd4d298113270ec84f30ee/9/GPL/openjdk-18.0.2_linux-x64_bin.tar.gz", "jdk-18.tar.gz", "18"),
-                                "19" => java::install_java_on_debian_based_distros("https://download.java.net/java/GA/jdk19.0.1/afdd2e245b014143b62ccb916125e3ce/10/GPL/openjdk-19.0.1_linux-x64_bin.tar.gz", "jdk-19.tar.gz", "19"),
-                                "20" => java::install_java_on_debian_based_distros("https://download.java.net/java/GA/jdk20.0.2/6e380f22cbe7469fa75fb448bd903d8e/9/GPL/openjdk-20.0.2_linux-x64_bin.tar.gz", "jdk-20.tar.gz", "20"),
-                                "21" => java::install_java_on_debian_based_distros("https://download.java.net/java/GA/jdk21.0.2/f2283984656d49d69e91c558476027ac/13/GPL/openjdk-21.0.2_linux-x64_bin.tar.gz", "jdk-21.tar.gz", "21"),
-                                "" => java::install_java_on_debian_based_distros("https://download.java.net/java/GA/jdk21.0.2/f2283984656d49d69e91c558476027ac/13/GPL/openjdk-21.0.2_linux-x64_bin.tar.gz", "jdk-21.tar.gz", "21"),
-                                "lts" => java::install_java_on_debian_based_distros("https://download.java.net/java/GA/jdk21.0.2/f2283984656d49d69e91c558476027ac/13/GPL/openjdk-21.0.2_linux-x64_bin.tar.gz", "jdk-21.tar.gz", "21"),
-                                "22" => java::install_java_on_debian_based_distros("https://download.java.net/java/GA/jdk22.0.1/c7ec1332f7bb44aeba2eb341ae18aca4/8/GPL/openjdk-22.0.1_linux-x64_bin.tar.gz", "jdk-22.tar.gz", "22"),
-                                "23" => java::install_java_on_debian_based_distros("https://download.java.net/java/GA/jdk23/3c5b90190c68498b986a97f276efd28a/37/GPL/openjdk-23_linux-x64_bin.tar.gz", "jdk-23.tar.gz", "23"),
-                                "24" => java::install_java_on_debian_based_distros("https://download.java.net/java/early_access/jdk24/13/GPL/openjdk-24-ea+13_linux-x64_bin.tar.gz", "java-24-ea.tar.gz", "24"),
-                                "latest" => java::install_java_on_debian_based_distros("https://download.java.net/java/GA/jdk21.0.2/f2283984656d49d69e91c558476027ac/13/GPL/openjdk-21.0.2_linux-x64_bin.tar.gz", "jdk-21.tar.gz", "21"),
+                                "8" => java::install_java_on_debian_based_distros(&self.env_confs, "", "", "8"),
+                                "9" => java::install_java_on_debian_based_distros(&self.env_confs, "https://download.java.net/java/GA/jdk9/9.0.4/binaries/openjdk-9.0.4_linux-x64_bin.tar.gz", "jdk-9.tar.gz", "9"),
+                                "10" => java::install_java_on_debian_based_distros(&self.env_confs, "https://download.java.net/java/GA/jdk10/10.0.2/19aef61b38124481863b1413dce1855f/13/openjdk-10.0.2_linux-x64_bin.tar.gz", "jdk-10.tar.gz", "10"),
+                                "11" => java::install_java_on_debian_based_distros(&self.env_confs, "https://download.java.net/java/GA/jdk11/9/GPL/openjdk-11.0.2_linux-x64_bin.tar.gz", "jdk-11.tar.gz", "11"),
+                                "12" => java::install_java_on_debian_based_distros(&self.env_confs, "https://download.java.net/java/GA/jdk12.0.2/e482c34c86bd4bf8b56c0b35558996b9/10/GPL/openjdk-12.0.2_linux-x64_bin.tar.gz", "jdk-12.tar.gz", "12"),
+                                "13" => java::install_java_on_debian_based_distros(&self.env_confs, "https://download.java.net/java/GA/jdk13.0.2/d4173c853231432d94f001e99d882ca7/8/GPL/openjdk-13.0.2_linux-x64_bin.tar.gz", "jdk-13.tar.gz", "13"),
+                                "14" => java::install_java_on_debian_based_distros(&self.env_confs, "https://download.java.net/java/GA/jdk14.0.2/205943a0976c4ed48cb16f1043c5c647/12/GPL/openjdk-14.0.2_linux-x64_bin.tar.gz", "jdk-14.tar.gz", "14"),
+                                "15" => java::install_java_on_debian_based_distros(&self.env_confs, "https://download.java.net/java/GA/jdk15.0.2/0d1cfde4252546c6931946de8db48ee2/7/GPL/openjdk-15.0.2_linux-x64_bin.tar.gz", "jdk-15.tar.gz", "15"),
+                                "16" => java::install_java_on_debian_based_distros(&self.env_confs, "https://download.java.net/java/GA/jdk16.0.2/d4a915d82b4c4fbb9bde534da945d746/7/GPL/openjdk-16.0.2_linux-x64_bin.tar.gz", "jdk-16.tar.gz", "16"),
+                                "17" => java::install_java_on_debian_based_distros(&self.env_confs, "https://download.java.net/java/GA/jdk17.0.2/dfd4a8d0985749f896bed50d7138ee7f/8/GPL/openjdk-17.0.2_linux-x64_bin.tar.gz", "jdk-17.tar.gz", "17"),
+                                "18" => java::install_java_on_debian_based_distros(&self.env_confs, "https://download.java.net/java/GA/jdk18.0.2/f6ad4b4450fd4d298113270ec84f30ee/9/GPL/openjdk-18.0.2_linux-x64_bin.tar.gz", "jdk-18.tar.gz", "18"),
+                                "19" => java::install_java_on_debian_based_distros(&self.env_confs, "https://download.java.net/java/GA/jdk19.0.1/afdd2e245b014143b62ccb916125e3ce/10/GPL/openjdk-19.0.1_linux-x64_bin.tar.gz", "jdk-19.tar.gz", "19"),
+                                "20" => java::install_java_on_debian_based_distros(&self.env_confs, "https://download.java.net/java/GA/jdk20.0.2/6e380f22cbe7469fa75fb448bd903d8e/9/GPL/openjdk-20.0.2_linux-x64_bin.tar.gz", "jdk-20.tar.gz", "20"),
+                                "21" => java::install_java_on_debian_based_distros(&self.env_confs, "https://download.java.net/java/GA/jdk21.0.2/f2283984656d49d69e91c558476027ac/13/GPL/openjdk-21.0.2_linux-x64_bin.tar.gz", "jdk-21.tar.gz", "21"),
+                                "" => java::install_java_on_debian_based_distros(&self.env_confs, "https://download.java.net/java/GA/jdk21.0.2/f2283984656d49d69e91c558476027ac/13/GPL/openjdk-21.0.2_linux-x64_bin.tar.gz", "jdk-21.tar.gz", "21"),
+                                "lts" => java::install_java_on_debian_based_distros(&self.env_confs, "https://download.java.net/java/GA/jdk21.0.2/f2283984656d49d69e91c558476027ac/13/GPL/openjdk-21.0.2_linux-x64_bin.tar.gz", "jdk-21.tar.gz", "21"),
+                                "22" => java::install_java_on_debian_based_distros(&self.env_confs, "https://download.java.net/java/GA/jdk22.0.1/c7ec1332f7bb44aeba2eb341ae18aca4/8/GPL/openjdk-22.0.1_linux-x64_bin.tar.gz", "jdk-22.tar.gz", "22"),
+                                "23" => java::install_java_on_debian_based_distros(&self.env_confs, "https://download.java.net/java/GA/jdk23/3c5b90190c68498b986a97f276efd28a/37/GPL/openjdk-23_linux-x64_bin.tar.gz", "jdk-23.tar.gz", "23"),
+                                "24" => java::install_java_on_debian_based_distros(&self.env_confs, "https://download.java.net/java/early_access/jdk24/13/GPL/openjdk-24-ea+13_linux-x64_bin.tar.gz", "java-24-ea.tar.gz", "24"),
+                                "latest" => java::install_java_on_debian_based_distros(&self.env_confs, "https://download.java.net/java/GA/jdk21.0.2/f2283984656d49d69e91c558476027ac/13/GPL/openjdk-21.0.2_linux-x64_bin.tar.gz", "jdk-21.tar.gz", "21"),
                                 &_ => ()
                             }
                         },
                         "kali linux" => {
                             match self.third_arg.as_str() {
-                                "8" => java::install_java_on_debian_based_distros("", "", "8"),
-                                "9" => java::install_java_on_debian_based_distros("https://download.java.net/java/GA/jdk9/9.0.4/binaries/openjdk-9.0.4_linux-x64_bin.tar.gz", "jdk-9.tar.gz", "9"),
-                                "10" => java::install_java_on_debian_based_distros("https://download.java.net/java/GA/jdk10/10.0.2/19aef61b38124481863b1413dce1855f/13/openjdk-10.0.2_linux-x64_bin.tar.gz", "jdk-10.tar.gz", "10"),
-                                "11" => java::install_java_on_debian_based_distros("https://download.java.net/java/GA/jdk11/9/GPL/openjdk-11.0.2_linux-x64_bin.tar.gz", "jdk-11.tar.gz", "11"),
-                                "12" => java::install_java_on_debian_based_distros("https://download.java.net/java/GA/jdk12.0.2/e482c34c86bd4bf8b56c0b35558996b9/10/GPL/openjdk-12.0.2_linux-x64_bin.tar.gz", "jdk-12.tar.gz", "12"),
-                                "13" => java::install_java_on_debian_based_distros("https://download.java.net/java/GA/jdk13.0.2/d4173c853231432d94f001e99d882ca7/8/GPL/openjdk-13.0.2_linux-x64_bin.tar.gz", "jdk-13.tar.gz", "13"),
-                                "14" => java::install_java_on_debian_based_distros("https://download.java.net/java/GA/jdk14.0.2/205943a0976c4ed48cb16f1043c5c647/12/GPL/openjdk-14.0.2_linux-x64_bin.tar.gz", "jdk-14.tar.gz", "14"),
-                                "15" => java::install_java_on_debian_based_distros("https://download.java.net/java/GA/jdk15.0.2/0d1cfde4252546c6931946de8db48ee2/7/GPL/openjdk-15.0.2_linux-x64_bin.tar.gz", "jdk-15.tar.gz", "15"),
-                                "16" => java::install_java_on_debian_based_distros("https://download.java.net/java/GA/jdk16.0.2/d4a915d82b4c4fbb9bde534da945d746/7/GPL/openjdk-16.0.2_linux-x64_bin.tar.gz", "jdk-16.tar.gz", "16"),
-                                "17" => java::install_java_on_debian_based_distros("https://download.java.net/java/GA/jdk17.0.2/dfd4a8d0985749f896bed50d7138ee7f/8/GPL/openjdk-17.0.2_linux-x64_bin.tar.gz", "jdk-17.tar.gz", "17"),
-                                "18" => java::install_java_on_debian_based_distros("https://download.java.net/java/GA/jdk18.0.2/f6ad4b4450fd4d298113270ec84f30ee/9/GPL/openjdk-18.0.2_linux-x64_bin.tar.gz", "jdk-18.tar.gz", "18"),
-                                "19" => java::install_java_on_debian_based_distros("https://download.java.net/java/GA/jdk19.0.1/afdd2e245b014143b62ccb916125e3ce/10/GPL/openjdk-19.0.1_linux-x64_bin.tar.gz", "jdk-19.tar.gz", "19"),
-                                "20" => java::install_java_on_debian_based_distros("https://download.java.net/java/GA/jdk20.0.2/6e380f22cbe7469fa75fb448bd903d8e/9/GPL/openjdk-20.0.2_linux-x64_bin.tar.gz", "jdk-20.tar.gz", "20"),
-                                "21" => java::install_java_on_debian_based_distros("https://download.java.net/java/GA/jdk21.0.2/f2283984656d49d69e91c558476027ac/13/GPL/openjdk-21.0.2_linux-x64_bin.tar.gz", "jdk-21.tar.gz", "21"),
-                                "" => java::install_java_on_debian_based_distros("https://download.java.net/java/GA/jdk21.0.2/f2283984656d49d69e91c558476027ac/13/GPL/openjdk-21.0.2_linux-x64_bin.tar.gz", "jdk-21.tar.gz", "21"),
-                                "lts" => java::install_java_on_debian_based_distros("https://download.java.net/java/GA/jdk21.0.2/f2283984656d49d69e91c558476027ac/13/GPL/openjdk-21.0.2_linux-x64_bin.tar.gz", "jdk-21.tar.gz", "21"),
-                                "22" => java::install_java_on_debian_based_distros("https://download.java.net/java/GA/jdk22.0.1/c7ec1332f7bb44aeba2eb341ae18aca4/8/GPL/openjdk-22.0.1_linux-x64_bin.tar.gz", "jdk-22.tar.gz", "22"),
-                                "23" => java::install_java_on_debian_based_distros("https://download.java.net/java/GA/jdk23/3c5b90190c68498b986a97f276efd28a/37/GPL/openjdk-23_linux-x64_bin.tar.gz", "jdk-23.tar.gz", "23"),
-                                "24" => java::install_java_on_debian_based_distros("https://download.java.net/java/early_access/jdk24/13/GPL/openjdk-24-ea+13_linux-x64_bin.tar.gz", "java-24-ea.tar.gz", "24"),
-                                "latest" => java::install_java_on_debian_based_distros("https://download.java.net/java/GA/jdk21.0.2/f2283984656d49d69e91c558476027ac/13/GPL/openjdk-21.0.2_linux-x64_bin.tar.gz", "jdk-21.tar.gz", "21"),
+                                "8" => java::install_java_on_debian_based_distros(&self.env_confs, "", "", "8"),
+                                "9" => java::install_java_on_debian_based_distros(&self.env_confs, "https://download.java.net/java/GA/jdk9/9.0.4/binaries/openjdk-9.0.4_linux-x64_bin.tar.gz", "jdk-9.tar.gz", "9"),
+                                "10" => java::install_java_on_debian_based_distros(&self.env_confs, "https://download.java.net/java/GA/jdk10/10.0.2/19aef61b38124481863b1413dce1855f/13/openjdk-10.0.2_linux-x64_bin.tar.gz", "jdk-10.tar.gz", "10"),
+                                "11" => java::install_java_on_debian_based_distros(&self.env_confs, "https://download.java.net/java/GA/jdk11/9/GPL/openjdk-11.0.2_linux-x64_bin.tar.gz", "jdk-11.tar.gz", "11"),
+                                "12" => java::install_java_on_debian_based_distros(&self.env_confs, "https://download.java.net/java/GA/jdk12.0.2/e482c34c86bd4bf8b56c0b35558996b9/10/GPL/openjdk-12.0.2_linux-x64_bin.tar.gz", "jdk-12.tar.gz", "12"),
+                                "13" => java::install_java_on_debian_based_distros(&self.env_confs, "https://download.java.net/java/GA/jdk13.0.2/d4173c853231432d94f001e99d882ca7/8/GPL/openjdk-13.0.2_linux-x64_bin.tar.gz", "jdk-13.tar.gz", "13"),
+                                "14" => java::install_java_on_debian_based_distros(&self.env_confs, "https://download.java.net/java/GA/jdk14.0.2/205943a0976c4ed48cb16f1043c5c647/12/GPL/openjdk-14.0.2_linux-x64_bin.tar.gz", "jdk-14.tar.gz", "14"),
+                                "15" => java::install_java_on_debian_based_distros(&self.env_confs, "https://download.java.net/java/GA/jdk15.0.2/0d1cfde4252546c6931946de8db48ee2/7/GPL/openjdk-15.0.2_linux-x64_bin.tar.gz", "jdk-15.tar.gz", "15"),
+                                "16" => java::install_java_on_debian_based_distros(&self.env_confs, "https://download.java.net/java/GA/jdk16.0.2/d4a915d82b4c4fbb9bde534da945d746/7/GPL/openjdk-16.0.2_linux-x64_bin.tar.gz", "jdk-16.tar.gz", "16"),
+                                "17" => java::install_java_on_debian_based_distros(&self.env_confs, "https://download.java.net/java/GA/jdk17.0.2/dfd4a8d0985749f896bed50d7138ee7f/8/GPL/openjdk-17.0.2_linux-x64_bin.tar.gz", "jdk-17.tar.gz", "17"),
+                                "18" => java::install_java_on_debian_based_distros(&self.env_confs, "https://download.java.net/java/GA/jdk18.0.2/f6ad4b4450fd4d298113270ec84f30ee/9/GPL/openjdk-18.0.2_linux-x64_bin.tar.gz", "jdk-18.tar.gz", "18"),
+                                "19" => java::install_java_on_debian_based_distros(&self.env_confs, "https://download.java.net/java/GA/jdk19.0.1/afdd2e245b014143b62ccb916125e3ce/10/GPL/openjdk-19.0.1_linux-x64_bin.tar.gz", "jdk-19.tar.gz", "19"),
+                                "20" => java::install_java_on_debian_based_distros(&self.env_confs, "https://download.java.net/java/GA/jdk20.0.2/6e380f22cbe7469fa75fb448bd903d8e/9/GPL/openjdk-20.0.2_linux-x64_bin.tar.gz", "jdk-20.tar.gz", "20"),
+                                "21" => java::install_java_on_debian_based_distros(&self.env_confs, "https://download.java.net/java/GA/jdk21.0.2/f2283984656d49d69e91c558476027ac/13/GPL/openjdk-21.0.2_linux-x64_bin.tar.gz", "jdk-21.tar.gz", "21"),
+                                "" => java::install_java_on_debian_based_distros(&self.env_confs, "https://download.java.net/java/GA/jdk21.0.2/f2283984656d49d69e91c558476027ac/13/GPL/openjdk-21.0.2_linux-x64_bin.tar.gz", "jdk-21.tar.gz", "21"),
+                                "lts" => java::install_java_on_debian_based_distros(&self.env_confs, "https://download.java.net/java/GA/jdk21.0.2/f2283984656d49d69e91c558476027ac/13/GPL/openjdk-21.0.2_linux-x64_bin.tar.gz", "jdk-21.tar.gz", "21"),
+                                "22" => java::install_java_on_debian_based_distros(&self.env_confs, "https://download.java.net/java/GA/jdk22.0.1/c7ec1332f7bb44aeba2eb341ae18aca4/8/GPL/openjdk-22.0.1_linux-x64_bin.tar.gz", "jdk-22.tar.gz", "22"),
+                                "23" => java::install_java_on_debian_based_distros(&self.env_confs, "https://download.java.net/java/GA/jdk23/3c5b90190c68498b986a97f276efd28a/37/GPL/openjdk-23_linux-x64_bin.tar.gz", "jdk-23.tar.gz", "23"),
+                                "24" => java::install_java_on_debian_based_distros(&self.env_confs, "https://download.java.net/java/early_access/jdk24/13/GPL/openjdk-24-ea+13_linux-x64_bin.tar.gz", "java-24-ea.tar.gz", "24"),
+                                "latest" => java::install_java_on_debian_based_distros(&self.env_confs, "https://download.java.net/java/GA/jdk21.0.2/f2283984656d49d69e91c558476027ac/13/GPL/openjdk-21.0.2_linux-x64_bin.tar.gz", "jdk-21.tar.gz", "21"),
                                 &_ => ()
                             }
                         },
                         "arch wsl" => {
                             match self.third_arg.as_str() {
                                 "8" => println!("Unfortunately, there is no installation option for Java 8 on Arch Wsl."),
-                                "9" => java::install_java_on_arch_linux("https://download.java.net/java/GA/jdk9/9.0.4/binaries/openjdk-9.0.4_linux-x64_bin.tar.gz", "jdk-9.tar.gz", "9"),
-                                "10" => java::install_java_on_arch_linux("https://download.java.net/java/GA/jdk10/10.0.2/19aef61b38124481863b1413dce1855f/13/openjdk-10.0.2_linux-x64_bin.tar.gz", "jdk-10.tar.gz", "10"),
-                                "11" => java::install_java_on_arch_linux("https://download.java.net/java/GA/jdk11/9/GPL/openjdk-11.0.2_linux-x64_bin.tar.gz", "jdk-11.tar.gz", "11"),
-                                "12" => java::install_java_on_arch_linux("https://download.java.net/java/GA/jdk12.0.2/e482c34c86bd4bf8b56c0b35558996b9/10/GPL/openjdk-12.0.2_linux-x64_bin.tar.gz", "jdk-12.tar.gz", "12"),
-                                "13" => java::install_java_on_arch_linux("https://download.java.net/java/GA/jdk13.0.2/d4173c853231432d94f001e99d882ca7/8/GPL/openjdk-13.0.2_linux-x64_bin.tar.gz", "jdk-13.tar.gz", "13"),
-                                "14" => java::install_java_on_arch_linux("https://download.java.net/java/GA/jdk14.0.2/205943a0976c4ed48cb16f1043c5c647/12/GPL/openjdk-14.0.2_linux-x64_bin.tar.gz", "jdk-14.tar.gz", "14"),
-                                "15" => java::install_java_on_arch_linux("https://download.java.net/java/GA/jdk15.0.2/0d1cfde4252546c6931946de8db48ee2/7/GPL/openjdk-15.0.2_linux-x64_bin.tar.gz", "jdk-15.tar.gz", "15"),
-                                "16" => java::install_java_on_arch_linux("https://download.java.net/java/GA/jdk16.0.2/d4a915d82b4c4fbb9bde534da945d746/7/GPL/openjdk-16.0.2_linux-x64_bin.tar.gz", "jdk-16.tar.gz", "16"),
-                                "17" => java::install_java_on_arch_linux("https://download.java.net/java/GA/jdk17.0.2/dfd4a8d0985749f896bed50d7138ee7f/8/GPL/openjdk-17.0.2_linux-x64_bin.tar.gz", "jdk-17.tar.gz", "17"),
-                                "18" => java::install_java_on_arch_linux("https://download.java.net/java/GA/jdk18.0.2/f6ad4b4450fd4d298113270ec84f30ee/9/GPL/openjdk-18.0.2_linux-x64_bin.tar.gz", "jdk-18.tar.gz", "18"),
-                                "19" => java::install_java_on_arch_linux("https://download.java.net/java/GA/jdk19.0.1/afdd2e245b014143b62ccb916125e3ce/10/GPL/openjdk-19.0.1_linux-x64_bin.tar.gz", "jdk-19.tar.gz", "19"),
-                                "20" => java::install_java_on_arch_linux("https://download.java.net/java/GA/jdk20.0.2/6e380f22cbe7469fa75fb448bd903d8e/9/GPL/openjdk-20.0.2_linux-x64_bin.tar.gz", "jdk-20.tar.gz", "20"),
-                                "21" => java::install_java_on_arch_linux("https://download.java.net/java/GA/jdk21.0.2/f2283984656d49d69e91c558476027ac/13/GPL/openjdk-21.0.2_linux-x64_bin.tar.gz", "jdk-21.tar.gz", "21"),
-                                "" => java::install_java_on_arch_linux("https://download.java.net/java/GA/jdk21.0.2/f2283984656d49d69e91c558476027ac/13/GPL/openjdk-21.0.2_linux-x64_bin.tar.gz", "jdk-21.tar.gz", "21"),
-                                "lts" => java::install_java_on_arch_linux("https://download.java.net/java/GA/jdk21.0.2/f2283984656d49d69e91c558476027ac/13/GPL/openjdk-21.0.2_linux-x64_bin.tar.gz", "jdk-21.tar.gz", "21"),
-                                "22" => java::install_java_on_arch_linux("https://download.java.net/java/GA/jdk22.0.1/c7ec1332f7bb44aeba2eb341ae18aca4/8/GPL/openjdk-22.0.1_linux-x64_bin.tar.gz", "jdk-22.tar.gz", "22"),
-                                "23" => java::install_java_on_arch_linux("https://download.java.net/java/GA/jdk23/3c5b90190c68498b986a97f276efd28a/37/GPL/openjdk-23_linux-x64_bin.tar.gz", "jdk-23.tar.gz", "23"),
-                                "24" => java::install_java_on_arch_linux("https://download.java.net/java/early_access/jdk24/13/GPL/openjdk-24-ea+13_linux-x64_bin.tar.gz", "java-24-ea.tar.gz", "24"),
-                                "latest" => java::install_java_on_arch_linux("https://download.java.net/java/early_access/jdk24/13/GPL/openjdk-24-ea+13_linux-x64_bin.tar.gz", "java-24-ea.tar.gz", "24"),
+                                "9" => java::install_java_on_arch_linux(&self.env_confs, "https://download.java.net/java/GA/jdk9/9.0.4/binaries/openjdk-9.0.4_linux-x64_bin.tar.gz", "jdk-9.tar.gz", "9"),
+                                "10" => java::install_java_on_arch_linux(&self.env_confs, "https://download.java.net/java/GA/jdk10/10.0.2/19aef61b38124481863b1413dce1855f/13/openjdk-10.0.2_linux-x64_bin.tar.gz", "jdk-10.tar.gz", "10"),
+                                "11" => java::install_java_on_arch_linux(&self.env_confs, "https://download.java.net/java/GA/jdk11/9/GPL/openjdk-11.0.2_linux-x64_bin.tar.gz", "jdk-11.tar.gz", "11"),
+                                "12" => java::install_java_on_arch_linux(&self.env_confs, "https://download.java.net/java/GA/jdk12.0.2/e482c34c86bd4bf8b56c0b35558996b9/10/GPL/openjdk-12.0.2_linux-x64_bin.tar.gz", "jdk-12.tar.gz", "12"),
+                                "13" => java::install_java_on_arch_linux(&self.env_confs, "https://download.java.net/java/GA/jdk13.0.2/d4173c853231432d94f001e99d882ca7/8/GPL/openjdk-13.0.2_linux-x64_bin.tar.gz", "jdk-13.tar.gz", "13"),
+                                "14" => java::install_java_on_arch_linux(&self.env_confs, "https://download.java.net/java/GA/jdk14.0.2/205943a0976c4ed48cb16f1043c5c647/12/GPL/openjdk-14.0.2_linux-x64_bin.tar.gz", "jdk-14.tar.gz", "14"),
+                                "15" => java::install_java_on_arch_linux(&self.env_confs, "https://download.java.net/java/GA/jdk15.0.2/0d1cfde4252546c6931946de8db48ee2/7/GPL/openjdk-15.0.2_linux-x64_bin.tar.gz", "jdk-15.tar.gz", "15"),
+                                "16" => java::install_java_on_arch_linux(&self.env_confs, "https://download.java.net/java/GA/jdk16.0.2/d4a915d82b4c4fbb9bde534da945d746/7/GPL/openjdk-16.0.2_linux-x64_bin.tar.gz", "jdk-16.tar.gz", "16"),
+                                "17" => java::install_java_on_arch_linux(&self.env_confs, "https://download.java.net/java/GA/jdk17.0.2/dfd4a8d0985749f896bed50d7138ee7f/8/GPL/openjdk-17.0.2_linux-x64_bin.tar.gz", "jdk-17.tar.gz", "17"),
+                                "18" => java::install_java_on_arch_linux(&self.env_confs, "https://download.java.net/java/GA/jdk18.0.2/f6ad4b4450fd4d298113270ec84f30ee/9/GPL/openjdk-18.0.2_linux-x64_bin.tar.gz", "jdk-18.tar.gz", "18"),
+                                "19" => java::install_java_on_arch_linux(&self.env_confs, "https://download.java.net/java/GA/jdk19.0.1/afdd2e245b014143b62ccb916125e3ce/10/GPL/openjdk-19.0.1_linux-x64_bin.tar.gz", "jdk-19.tar.gz", "19"),
+                                "20" => java::install_java_on_arch_linux(&self.env_confs, "https://download.java.net/java/GA/jdk20.0.2/6e380f22cbe7469fa75fb448bd903d8e/9/GPL/openjdk-20.0.2_linux-x64_bin.tar.gz", "jdk-20.tar.gz", "20"),
+                                "21" => java::install_java_on_arch_linux(&self.env_confs, "https://download.java.net/java/GA/jdk21.0.2/f2283984656d49d69e91c558476027ac/13/GPL/openjdk-21.0.2_linux-x64_bin.tar.gz", "jdk-21.tar.gz", "21"),
+                                "" => java::install_java_on_arch_linux(&self.env_confs, "https://download.java.net/java/GA/jdk21.0.2/f2283984656d49d69e91c558476027ac/13/GPL/openjdk-21.0.2_linux-x64_bin.tar.gz", "jdk-21.tar.gz", "21"),
+                                "lts" => java::install_java_on_arch_linux(&self.env_confs, "https://download.java.net/java/GA/jdk21.0.2/f2283984656d49d69e91c558476027ac/13/GPL/openjdk-21.0.2_linux-x64_bin.tar.gz", "jdk-21.tar.gz", "21"),
+                                "22" => java::install_java_on_arch_linux(&self.env_confs, "https://download.java.net/java/GA/jdk22.0.1/c7ec1332f7bb44aeba2eb341ae18aca4/8/GPL/openjdk-22.0.1_linux-x64_bin.tar.gz", "jdk-22.tar.gz", "22"),
+                                "23" => java::install_java_on_arch_linux(&self.env_confs, "https://download.java.net/java/GA/jdk23/3c5b90190c68498b986a97f276efd28a/37/GPL/openjdk-23_linux-x64_bin.tar.gz", "jdk-23.tar.gz", "23"),
+                                "24" => java::install_java_on_arch_linux(&self.env_confs, "https://download.java.net/java/early_access/jdk24/13/GPL/openjdk-24-ea+13_linux-x64_bin.tar.gz", "java-24-ea.tar.gz", "24"),
+                                "latest" => java::install_java_on_arch_linux(&self.env_confs, "https://download.java.net/java/early_access/jdk24/13/GPL/openjdk-24-ea+13_linux-x64_bin.tar.gz", "java-24-ea.tar.gz", "24"),
                                 &_ => ()
                             }
                         },
                         "centos" => {
                             match self.third_arg.as_str() {
-                                "8" => java::install_java_on_centos_and_fedora("", "", "8"),
-                                "9" => java::install_java_on_centos_and_fedora("https://download.java.net/java/GA/jdk9/9.0.4/binaries/openjdk-9.0.4_linux-x64_bin.tar.gz", "jdk-9.tar.gz", "9"),
-                                "10" => java::install_java_on_centos_and_fedora("https://download.java.net/java/GA/jdk10/10.0.2/19aef61b38124481863b1413dce1855f/13/openjdk-10.0.2_linux-x64_bin.tar.gz", "jdk-10.tar.gz", "10"),
-                                "11" => java::install_java_on_centos_and_fedora("https://download.java.net/java/GA/jdk11/9/GPL/openjdk-11.0.2_linux-x64_bin.tar.gz", "jdk-11.tar.gz", "11"),
-                                "12" => java::install_java_on_centos_and_fedora("https://download.java.net/java/GA/jdk12.0.2/e482c34c86bd4bf8b56c0b35558996b9/10/GPL/openjdk-12.0.2_linux-x64_bin.tar.gz", "jdk-12.tar.gz", "12"),
-                                "13" => java::install_java_on_centos_and_fedora("https://download.java.net/java/GA/jdk13.0.2/d4173c853231432d94f001e99d882ca7/8/GPL/openjdk-13.0.2_linux-x64_bin.tar.gz", "jdk-13.tar.gz", "13"),
-                                "14" => java::install_java_on_centos_and_fedora("https://download.java.net/java/GA/jdk14.0.2/205943a0976c4ed48cb16f1043c5c647/12/GPL/openjdk-14.0.2_linux-x64_bin.tar.gz", "jdk-14.tar.gz", "14"),
-                                "15" => java::install_java_on_centos_and_fedora("https://download.java.net/java/GA/jdk15.0.2/0d1cfde4252546c6931946de8db48ee2/7/GPL/openjdk-15.0.2_linux-x64_bin.tar.gz", "jdk-15.tar.gz", "15"),
-                                "16" => java::install_java_on_centos_and_fedora("https://download.java.net/java/GA/jdk16.0.2/d4a915d82b4c4fbb9bde534da945d746/7/GPL/openjdk-16.0.2_linux-x64_bin.tar.gz", "jdk-16.tar.gz", "16"),
-                                "17" => java::install_java_on_centos_and_fedora("https://download.java.net/java/GA/jdk17.0.2/dfd4a8d0985749f896bed50d7138ee7f/8/GPL/openjdk-17.0.2_linux-x64_bin.tar.gz", "jdk-17.tar.gz", "17"),
-                                "18" => java::install_java_on_centos_and_fedora("https://download.java.net/java/GA/jdk18.0.2/f6ad4b4450fd4d298113270ec84f30ee/9/GPL/openjdk-18.0.2_linux-x64_bin.tar.gz", "jdk-18.tar.gz", "18"),
-                                "19" => java::install_java_on_centos_and_fedora("https://download.java.net/java/GA/jdk19.0.1/afdd2e245b014143b62ccb916125e3ce/10/GPL/openjdk-19.0.1_linux-x64_bin.tar.gz", "jdk-19.tar.gz", "19"),
-                                "20" => java::install_java_on_centos_and_fedora("https://download.java.net/java/GA/jdk20.0.2/6e380f22cbe7469fa75fb448bd903d8e/9/GPL/openjdk-20.0.2_linux-x64_bin.tar.gz", "jdk-20.tar.gz", "20"),
-                                "21" => java::install_java_on_centos_and_fedora("https://download.java.net/java/GA/jdk21.0.2/f2283984656d49d69e91c558476027ac/13/GPL/openjdk-21.0.2_linux-x64_bin.tar.gz", "jdk-21.tar.gz", "21"),
-                                "" => java::install_java_on_centos_and_fedora("https://download.java.net/java/GA/jdk21.0.2/f2283984656d49d69e91c558476027ac/13/GPL/openjdk-21.0.2_linux-x64_bin.tar.gz", "jdk-21.tar.gz", "21"),
-                                "lts" => java::install_java_on_centos_and_fedora("https://download.java.net/java/GA/jdk21.0.2/f2283984656d49d69e91c558476027ac/13/GPL/openjdk-21.0.2_linux-x64_bin.tar.gz", "jdk-21.tar.gz", "21"),
-                                "22" => java::install_java_on_centos_and_fedora("https://download.java.net/java/GA/jdk22.0.1/c7ec1332f7bb44aeba2eb341ae18aca4/8/GPL/openjdk-22.0.1_linux-x64_bin.tar.gz", "jdk-22.tar.gz", "22"),
-                                "23" => java::install_java_on_centos_and_fedora("https://download.java.net/java/GA/jdk23/3c5b90190c68498b986a97f276efd28a/37/GPL/openjdk-23_linux-x64_bin.tar.gz", "jdk-23.tar.gz", "23"),
-                                "24" => java::install_java_on_centos_and_fedora("https://download.java.net/java/early_access/jdk24/13/GPL/openjdk-24-ea+13_linux-x64_bin.tar.gz", "java-24-ea.tar.gz", "24"),
-                                "latest" => java::install_java_on_centos_and_fedora("https://download.java.net/java/early_access/jdk24/13/GPL/openjdk-24-ea+13_linux-x64_bin.tar.gz", "java-24-ea.tar.gz", "24"),
+                                "8" => java::install_java_on_centos_and_fedora(&self.env_confs, "", "", "8"),
+                                "9" => java::install_java_on_centos_and_fedora(&self.env_confs, "https://download.java.net/java/GA/jdk9/9.0.4/binaries/openjdk-9.0.4_linux-x64_bin.tar.gz", "jdk-9.tar.gz", "9"),
+                                "10" => java::install_java_on_centos_and_fedora(&self.env_confs, "https://download.java.net/java/GA/jdk10/10.0.2/19aef61b38124481863b1413dce1855f/13/openjdk-10.0.2_linux-x64_bin.tar.gz", "jdk-10.tar.gz", "10"),
+                                "11" => java::install_java_on_centos_and_fedora(&self.env_confs, "https://download.java.net/java/GA/jdk11/9/GPL/openjdk-11.0.2_linux-x64_bin.tar.gz", "jdk-11.tar.gz", "11"),
+                                "12" => java::install_java_on_centos_and_fedora(&self.env_confs, "https://download.java.net/java/GA/jdk12.0.2/e482c34c86bd4bf8b56c0b35558996b9/10/GPL/openjdk-12.0.2_linux-x64_bin.tar.gz", "jdk-12.tar.gz", "12"),
+                                "13" => java::install_java_on_centos_and_fedora(&self.env_confs, "https://download.java.net/java/GA/jdk13.0.2/d4173c853231432d94f001e99d882ca7/8/GPL/openjdk-13.0.2_linux-x64_bin.tar.gz", "jdk-13.tar.gz", "13"),
+                                "14" => java::install_java_on_centos_and_fedora(&self.env_confs, "https://download.java.net/java/GA/jdk14.0.2/205943a0976c4ed48cb16f1043c5c647/12/GPL/openjdk-14.0.2_linux-x64_bin.tar.gz", "jdk-14.tar.gz", "14"),
+                                "15" => java::install_java_on_centos_and_fedora(&self.env_confs, "https://download.java.net/java/GA/jdk15.0.2/0d1cfde4252546c6931946de8db48ee2/7/GPL/openjdk-15.0.2_linux-x64_bin.tar.gz", "jdk-15.tar.gz", "15"),
+                                "16" => java::install_java_on_centos_and_fedora(&self.env_confs, "https://download.java.net/java/GA/jdk16.0.2/d4a915d82b4c4fbb9bde534da945d746/7/GPL/openjdk-16.0.2_linux-x64_bin.tar.gz", "jdk-16.tar.gz", "16"),
+                                "17" => java::install_java_on_centos_and_fedora(&self.env_confs, "https://download.java.net/java/GA/jdk17.0.2/dfd4a8d0985749f896bed50d7138ee7f/8/GPL/openjdk-17.0.2_linux-x64_bin.tar.gz", "jdk-17.tar.gz", "17"),
+                                "18" => java::install_java_on_centos_and_fedora(&self.env_confs, "https://download.java.net/java/GA/jdk18.0.2/f6ad4b4450fd4d298113270ec84f30ee/9/GPL/openjdk-18.0.2_linux-x64_bin.tar.gz", "jdk-18.tar.gz", "18"),
+                                "19" => java::install_java_on_centos_and_fedora(&self.env_confs, "https://download.java.net/java/GA/jdk19.0.1/afdd2e245b014143b62ccb916125e3ce/10/GPL/openjdk-19.0.1_linux-x64_bin.tar.gz", "jdk-19.tar.gz", "19"),
+                                "20" => java::install_java_on_centos_and_fedora(&self.env_confs, "https://download.java.net/java/GA/jdk20.0.2/6e380f22cbe7469fa75fb448bd903d8e/9/GPL/openjdk-20.0.2_linux-x64_bin.tar.gz", "jdk-20.tar.gz", "20"),
+                                "21" => java::install_java_on_centos_and_fedora(&self.env_confs, "https://download.java.net/java/GA/jdk21.0.2/f2283984656d49d69e91c558476027ac/13/GPL/openjdk-21.0.2_linux-x64_bin.tar.gz", "jdk-21.tar.gz", "21"),
+                                "" => java::install_java_on_centos_and_fedora(&self.env_confs, "https://download.java.net/java/GA/jdk21.0.2/f2283984656d49d69e91c558476027ac/13/GPL/openjdk-21.0.2_linux-x64_bin.tar.gz", "jdk-21.tar.gz", "21"),
+                                "lts" => java::install_java_on_centos_and_fedora(&self.env_confs, "https://download.java.net/java/GA/jdk21.0.2/f2283984656d49d69e91c558476027ac/13/GPL/openjdk-21.0.2_linux-x64_bin.tar.gz", "jdk-21.tar.gz", "21"),
+                                "22" => java::install_java_on_centos_and_fedora(&self.env_confs, "https://download.java.net/java/GA/jdk22.0.1/c7ec1332f7bb44aeba2eb341ae18aca4/8/GPL/openjdk-22.0.1_linux-x64_bin.tar.gz", "jdk-22.tar.gz", "22"),
+                                "23" => java::install_java_on_centos_and_fedora(&self.env_confs, "https://download.java.net/java/GA/jdk23/3c5b90190c68498b986a97f276efd28a/37/GPL/openjdk-23_linux-x64_bin.tar.gz", "jdk-23.tar.gz", "23"),
+                                "24" => java::install_java_on_centos_and_fedora(&self.env_confs, "https://download.java.net/java/early_access/jdk24/13/GPL/openjdk-24-ea+13_linux-x64_bin.tar.gz", "java-24-ea.tar.gz", "24"),
+                                "latest" => java::install_java_on_centos_and_fedora(&self.env_confs, "https://download.java.net/java/early_access/jdk24/13/GPL/openjdk-24-ea+13_linux-x64_bin.tar.gz", "java-24-ea.tar.gz", "24"),
                                 &_ => ()
                             }
                         },
                         "fedora" => {
                             match self.third_arg.as_str() {
-                                "8" => java::install_java_on_centos_and_fedora("", "", "8"),
-                                "9" => java::install_java_on_centos_and_fedora("https://download.java.net/java/GA/jdk9/9.0.4/binaries/openjdk-9.0.4_linux-x64_bin.tar.gz", "jdk-9.tar.gz", "9"),
-                                "10" => java::install_java_on_centos_and_fedora("https://download.java.net/java/GA/jdk10/10.0.2/19aef61b38124481863b1413dce1855f/13/openjdk-10.0.2_linux-x64_bin.tar.gz", "jdk-10.tar.gz", "10"),
-                                "11" => java::install_java_on_centos_and_fedora("https://download.java.net/java/GA/jdk11/9/GPL/openjdk-11.0.2_linux-x64_bin.tar.gz", "jdk-11.tar.gz", "11"),
-                                "12" => java::install_java_on_centos_and_fedora("https://download.java.net/java/GA/jdk12.0.2/e482c34c86bd4bf8b56c0b35558996b9/10/GPL/openjdk-12.0.2_linux-x64_bin.tar.gz", "jdk-12.tar.gz", "12"),
-                                "13" => java::install_java_on_centos_and_fedora("https://download.java.net/java/GA/jdk13.0.2/d4173c853231432d94f001e99d882ca7/8/GPL/openjdk-13.0.2_linux-x64_bin.tar.gz", "jdk-13.tar.gz", "13"),
-                                "14" => java::install_java_on_centos_and_fedora("https://download.java.net/java/GA/jdk14.0.2/205943a0976c4ed48cb16f1043c5c647/12/GPL/openjdk-14.0.2_linux-x64_bin.tar.gz", "jdk-14.tar.gz", "14"),
-                                "15" => java::install_java_on_centos_and_fedora("https://download.java.net/java/GA/jdk15.0.2/0d1cfde4252546c6931946de8db48ee2/7/GPL/openjdk-15.0.2_linux-x64_bin.tar.gz", "jdk-15.tar.gz", "15"),
-                                "16" => java::install_java_on_centos_and_fedora("https://download.java.net/java/GA/jdk16.0.2/d4a915d82b4c4fbb9bde534da945d746/7/GPL/openjdk-16.0.2_linux-x64_bin.tar.gz", "jdk-16.tar.gz", "16"),
-                                "17" => java::install_java_on_centos_and_fedora("https://download.java.net/java/GA/jdk17.0.2/dfd4a8d0985749f896bed50d7138ee7f/8/GPL/openjdk-17.0.2_linux-x64_bin.tar.gz", "jdk-17.tar.gz", "17"),
-                                "18" => java::install_java_on_centos_and_fedora("https://download.java.net/java/GA/jdk18.0.2/f6ad4b4450fd4d298113270ec84f30ee/9/GPL/openjdk-18.0.2_linux-x64_bin.tar.gz", "jdk-18.tar.gz", "18"),
-                                "19" => java::install_java_on_centos_and_fedora("https://download.java.net/java/GA/jdk19.0.1/afdd2e245b014143b62ccb916125e3ce/10/GPL/openjdk-19.0.1_linux-x64_bin.tar.gz", "jdk-19.tar.gz", "19"),
-                                "20" => java::install_java_on_centos_and_fedora("https://download.java.net/java/GA/jdk20.0.2/6e380f22cbe7469fa75fb448bd903d8e/9/GPL/openjdk-20.0.2_linux-x64_bin.tar.gz", "jdk-20.tar.gz", "20"),
-                                "21" => java::install_java_on_centos_and_fedora("https://download.java.net/java/GA/jdk21.0.2/f2283984656d49d69e91c558476027ac/13/GPL/openjdk-21.0.2_linux-x64_bin.tar.gz", "jdk-21.tar.gz", "21"),
-                                "" => java::install_java_on_centos_and_fedora("https://download.java.net/java/GA/jdk21.0.2/f2283984656d49d69e91c558476027ac/13/GPL/openjdk-21.0.2_linux-x64_bin.tar.gz", "jdk-21.tar.gz", "21"),
-                                "lts" => java::install_java_on_centos_and_fedora("https://download.java.net/java/GA/jdk21.0.2/f2283984656d49d69e91c558476027ac/13/GPL/openjdk-21.0.2_linux-x64_bin.tar.gz", "jdk-21.tar.gz", "21"),
-                                "22" => java::install_java_on_centos_and_fedora("https://download.java.net/java/GA/jdk22.0.1/c7ec1332f7bb44aeba2eb341ae18aca4/8/GPL/openjdk-22.0.1_linux-x64_bin.tar.gz", "jdk-22.tar.gz", "22"),
-                                "23" => java::install_java_on_centos_and_fedora("https://download.java.net/java/GA/jdk23/3c5b90190c68498b986a97f276efd28a/37/GPL/openjdk-23_linux-x64_bin.tar.gz", "jdk-23.tar.gz", "23"),
-                                "24" => java::install_java_on_centos_and_fedora("https://download.java.net/java/early_access/jdk24/13/GPL/openjdk-24-ea+13_linux-x64_bin.tar.gz", "java-24-ea.tar.gz", "24"),
-                                "latest" => java::install_java_on_centos_and_fedora("https://download.java.net/java/early_access/jdk24/13/GPL/openjdk-24-ea+13_linux-x64_bin.tar.gz", "java-24-ea.tar.gz", "24"),
+                                "8" => java::install_java_on_centos_and_fedora(&self.env_confs, "", "", "8"),
+                                "9" => java::install_java_on_centos_and_fedora(&self.env_confs, "https://download.java.net/java/GA/jdk9/9.0.4/binaries/openjdk-9.0.4_linux-x64_bin.tar.gz", "jdk-9.tar.gz", "9"),
+                                "10" => java::install_java_on_centos_and_fedora(&self.env_confs, "https://download.java.net/java/GA/jdk10/10.0.2/19aef61b38124481863b1413dce1855f/13/openjdk-10.0.2_linux-x64_bin.tar.gz", "jdk-10.tar.gz", "10"),
+                                "11" => java::install_java_on_centos_and_fedora(&self.env_confs, "https://download.java.net/java/GA/jdk11/9/GPL/openjdk-11.0.2_linux-x64_bin.tar.gz", "jdk-11.tar.gz", "11"),
+                                "12" => java::install_java_on_centos_and_fedora(&self.env_confs, "https://download.java.net/java/GA/jdk12.0.2/e482c34c86bd4bf8b56c0b35558996b9/10/GPL/openjdk-12.0.2_linux-x64_bin.tar.gz", "jdk-12.tar.gz", "12"),
+                                "13" => java::install_java_on_centos_and_fedora(&self.env_confs, "https://download.java.net/java/GA/jdk13.0.2/d4173c853231432d94f001e99d882ca7/8/GPL/openjdk-13.0.2_linux-x64_bin.tar.gz", "jdk-13.tar.gz", "13"),
+                                "14" => java::install_java_on_centos_and_fedora(&self.env_confs, "https://download.java.net/java/GA/jdk14.0.2/205943a0976c4ed48cb16f1043c5c647/12/GPL/openjdk-14.0.2_linux-x64_bin.tar.gz", "jdk-14.tar.gz", "14"),
+                                "15" => java::install_java_on_centos_and_fedora(&self.env_confs, "https://download.java.net/java/GA/jdk15.0.2/0d1cfde4252546c6931946de8db48ee2/7/GPL/openjdk-15.0.2_linux-x64_bin.tar.gz", "jdk-15.tar.gz", "15"),
+                                "16" => java::install_java_on_centos_and_fedora(&self.env_confs, "https://download.java.net/java/GA/jdk16.0.2/d4a915d82b4c4fbb9bde534da945d746/7/GPL/openjdk-16.0.2_linux-x64_bin.tar.gz", "jdk-16.tar.gz", "16"),
+                                "17" => java::install_java_on_centos_and_fedora(&self.env_confs, "https://download.java.net/java/GA/jdk17.0.2/dfd4a8d0985749f896bed50d7138ee7f/8/GPL/openjdk-17.0.2_linux-x64_bin.tar.gz", "jdk-17.tar.gz", "17"),
+                                "18" => java::install_java_on_centos_and_fedora(&self.env_confs, "https://download.java.net/java/GA/jdk18.0.2/f6ad4b4450fd4d298113270ec84f30ee/9/GPL/openjdk-18.0.2_linux-x64_bin.tar.gz", "jdk-18.tar.gz", "18"),
+                                "19" => java::install_java_on_centos_and_fedora(&self.env_confs, "https://download.java.net/java/GA/jdk19.0.1/afdd2e245b014143b62ccb916125e3ce/10/GPL/openjdk-19.0.1_linux-x64_bin.tar.gz", "jdk-19.tar.gz", "19"),
+                                "20" => java::install_java_on_centos_and_fedora(&self.env_confs, "https://download.java.net/java/GA/jdk20.0.2/6e380f22cbe7469fa75fb448bd903d8e/9/GPL/openjdk-20.0.2_linux-x64_bin.tar.gz", "jdk-20.tar.gz", "20"),
+                                "21" => java::install_java_on_centos_and_fedora(&self.env_confs, "https://download.java.net/java/GA/jdk21.0.2/f2283984656d49d69e91c558476027ac/13/GPL/openjdk-21.0.2_linux-x64_bin.tar.gz", "jdk-21.tar.gz", "21"),
+                                "" => java::install_java_on_centos_and_fedora(&self.env_confs, "https://download.java.net/java/GA/jdk21.0.2/f2283984656d49d69e91c558476027ac/13/GPL/openjdk-21.0.2_linux-x64_bin.tar.gz", "jdk-21.tar.gz", "21"),
+                                "lts" => java::install_java_on_centos_and_fedora(&self.env_confs, "https://download.java.net/java/GA/jdk21.0.2/f2283984656d49d69e91c558476027ac/13/GPL/openjdk-21.0.2_linux-x64_bin.tar.gz", "jdk-21.tar.gz", "21"),
+                                "22" => java::install_java_on_centos_and_fedora(&self.env_confs, "https://download.java.net/java/GA/jdk22.0.1/c7ec1332f7bb44aeba2eb341ae18aca4/8/GPL/openjdk-22.0.1_linux-x64_bin.tar.gz", "jdk-22.tar.gz", "22"),
+                                "23" => java::install_java_on_centos_and_fedora(&self.env_confs, "https://download.java.net/java/GA/jdk23/3c5b90190c68498b986a97f276efd28a/37/GPL/openjdk-23_linux-x64_bin.tar.gz", "jdk-23.tar.gz", "23"),
+                                "24" => java::install_java_on_centos_and_fedora(&self.env_confs, "https://download.java.net/java/early_access/jdk24/13/GPL/openjdk-24-ea+13_linux-x64_bin.tar.gz", "java-24-ea.tar.gz", "24"),
+                                "latest" => java::install_java_on_centos_and_fedora(&self.env_confs, "https://download.java.net/java/early_access/jdk24/13/GPL/openjdk-24-ea+13_linux-x64_bin.tar.gz", "java-24-ea.tar.gz", "24"),
                                 &_ => ()
                             }
                         },
                         "rocky" => {
                             match self.third_arg.as_str() {
-                                "8" => java::install_java_on_rocky_linux("", "", "8"),
-                                "9" => java::install_java_on_rocky_linux("https://download.java.net/java/GA/jdk9/9.0.4/binaries/openjdk-9.0.4_linux-x64_bin.tar.gz", "jdk-9.tar.gz", "9"),
-                                "10" => java::install_java_on_rocky_linux("https://download.java.net/java/GA/jdk10/10.0.2/19aef61b38124481863b1413dce1855f/13/openjdk-10.0.2_linux-x64_bin.tar.gz", "jdk-10.tar.gz", "10"),
-                                "11" => java::install_java_on_rocky_linux("https://download.java.net/java/GA/jdk11/9/GPL/openjdk-11.0.2_linux-x64_bin.tar.gz", "jdk-11.tar.gz", "11"),
-                                "12" => java::install_java_on_rocky_linux("https://download.java.net/java/GA/jdk12.0.2/e482c34c86bd4bf8b56c0b35558996b9/10/GPL/openjdk-12.0.2_linux-x64_bin.tar.gz", "jdk-12.tar.gz", "12"),
-                                "13" => java::install_java_on_rocky_linux("https://download.java.net/java/GA/jdk13.0.2/d4173c853231432d94f001e99d882ca7/8/GPL/openjdk-13.0.2_linux-x64_bin.tar.gz", "jdk-13.tar.gz", "13"),
-                                "14" => java::install_java_on_rocky_linux("https://download.java.net/java/GA/jdk14.0.2/205943a0976c4ed48cb16f1043c5c647/12/GPL/openjdk-14.0.2_linux-x64_bin.tar.gz", "jdk-14.tar.gz", "14"),
-                                "15" => java::install_java_on_rocky_linux("https://download.java.net/java/GA/jdk15.0.2/0d1cfde4252546c6931946de8db48ee2/7/GPL/openjdk-15.0.2_linux-x64_bin.tar.gz", "jdk-15.tar.gz", "15"),
-                                "16" => java::install_java_on_rocky_linux("https://download.java.net/java/GA/jdk16.0.2/d4a915d82b4c4fbb9bde534da945d746/7/GPL/openjdk-16.0.2_linux-x64_bin.tar.gz", "jdk-16.tar.gz", "16"),
-                                "17" => java::install_java_on_rocky_linux("https://download.java.net/java/GA/jdk17.0.2/dfd4a8d0985749f896bed50d7138ee7f/8/GPL/openjdk-17.0.2_linux-x64_bin.tar.gz", "jdk-17.tar.gz", "17"),
-                                "18" => java::install_java_on_rocky_linux("https://download.java.net/java/GA/jdk18.0.2/f6ad4b4450fd4d298113270ec84f30ee/9/GPL/openjdk-18.0.2_linux-x64_bin.tar.gz", "jdk-18.tar.gz", "18"),
-                                "19" => java::install_java_on_rocky_linux("https://download.java.net/java/GA/jdk19.0.1/afdd2e245b014143b62ccb916125e3ce/10/GPL/openjdk-19.0.1_linux-x64_bin.tar.gz", "jdk-19.tar.gz", "19"),
-                                "20" => java::install_java_on_rocky_linux("https://download.java.net/java/GA/jdk20.0.2/6e380f22cbe7469fa75fb448bd903d8e/9/GPL/openjdk-20.0.2_linux-x64_bin.tar.gz", "jdk-20.tar.gz", "20"),
-                                "21" => java::install_java_on_rocky_linux("https://download.java.net/java/GA/jdk21.0.2/f2283984656d49d69e91c558476027ac/13/GPL/openjdk-21.0.2_linux-x64_bin.tar.gz", "jdk-21.tar.gz", "21"),
-                                "" => java::install_java_on_rocky_linux("https://download.java.net/java/GA/jdk21.0.2/f2283984656d49d69e91c558476027ac/13/GPL/openjdk-21.0.2_linux-x64_bin.tar.gz", "jdk-21.tar.gz", "21"),
-                                "lts" => java::install_java_on_rocky_linux("https://download.java.net/java/GA/jdk21.0.2/f2283984656d49d69e91c558476027ac/13/GPL/openjdk-21.0.2_linux-x64_bin.tar.gz", "jdk-21.tar.gz", "21"),
-                                "22" => java::install_java_on_rocky_linux("https://download.java.net/java/GA/jdk22.0.1/c7ec1332f7bb44aeba2eb341ae18aca4/8/GPL/openjdk-22.0.1_linux-x64_bin.tar.gz", "jdk-22.tar.gz", "22"),
-                                "23" => java::install_java_on_rocky_linux("https://download.java.net/java/GA/jdk23/3c5b90190c68498b986a97f276efd28a/37/GPL/openjdk-23_linux-x64_bin.tar.gz", "jdk-23.tar.gz", "23"),
-                                "24" => java::install_java_on_rocky_linux("https://download.java.net/java/early_access/jdk24/13/GPL/openjdk-24-ea+13_linux-x64_bin.tar.gz", "java-24-ea.tar.gz", "24"),
-                                "latest" => java::install_java_on_rocky_linux("https://download.java.net/java/early_access/jdk24/13/GPL/openjdk-24-ea+13_linux-x64_bin.tar.gz", "java-24-ea.tar.gz", "24"),
+                                "8" => java::install_java_on_rocky_linux(&self.env_confs, "", "", "8"),
+                                "9" => java::install_java_on_rocky_linux(&self.env_confs, "https://download.java.net/java/GA/jdk9/9.0.4/binaries/openjdk-9.0.4_linux-x64_bin.tar.gz", "jdk-9.tar.gz", "9"),
+                                "10" => java::install_java_on_rocky_linux(&self.env_confs, "https://download.java.net/java/GA/jdk10/10.0.2/19aef61b38124481863b1413dce1855f/13/openjdk-10.0.2_linux-x64_bin.tar.gz", "jdk-10.tar.gz", "10"),
+                                "11" => java::install_java_on_rocky_linux(&self.env_confs, "https://download.java.net/java/GA/jdk11/9/GPL/openjdk-11.0.2_linux-x64_bin.tar.gz", "jdk-11.tar.gz", "11"),
+                                "12" => java::install_java_on_rocky_linux(&self.env_confs, "https://download.java.net/java/GA/jdk12.0.2/e482c34c86bd4bf8b56c0b35558996b9/10/GPL/openjdk-12.0.2_linux-x64_bin.tar.gz", "jdk-12.tar.gz", "12"),
+                                "13" => java::install_java_on_rocky_linux(&self.env_confs, "https://download.java.net/java/GA/jdk13.0.2/d4173c853231432d94f001e99d882ca7/8/GPL/openjdk-13.0.2_linux-x64_bin.tar.gz", "jdk-13.tar.gz", "13"),
+                                "14" => java::install_java_on_rocky_linux(&self.env_confs, "https://download.java.net/java/GA/jdk14.0.2/205943a0976c4ed48cb16f1043c5c647/12/GPL/openjdk-14.0.2_linux-x64_bin.tar.gz", "jdk-14.tar.gz", "14"),
+                                "15" => java::install_java_on_rocky_linux(&self.env_confs, "https://download.java.net/java/GA/jdk15.0.2/0d1cfde4252546c6931946de8db48ee2/7/GPL/openjdk-15.0.2_linux-x64_bin.tar.gz", "jdk-15.tar.gz", "15"),
+                                "16" => java::install_java_on_rocky_linux(&self.env_confs, "https://download.java.net/java/GA/jdk16.0.2/d4a915d82b4c4fbb9bde534da945d746/7/GPL/openjdk-16.0.2_linux-x64_bin.tar.gz", "jdk-16.tar.gz", "16"),
+                                "17" => java::install_java_on_rocky_linux(&self.env_confs, "https://download.java.net/java/GA/jdk17.0.2/dfd4a8d0985749f896bed50d7138ee7f/8/GPL/openjdk-17.0.2_linux-x64_bin.tar.gz", "jdk-17.tar.gz", "17"),
+                                "18" => java::install_java_on_rocky_linux(&self.env_confs, "https://download.java.net/java/GA/jdk18.0.2/f6ad4b4450fd4d298113270ec84f30ee/9/GPL/openjdk-18.0.2_linux-x64_bin.tar.gz", "jdk-18.tar.gz", "18"),
+                                "19" => java::install_java_on_rocky_linux(&self.env_confs, "https://download.java.net/java/GA/jdk19.0.1/afdd2e245b014143b62ccb916125e3ce/10/GPL/openjdk-19.0.1_linux-x64_bin.tar.gz", "jdk-19.tar.gz", "19"),
+                                "20" => java::install_java_on_rocky_linux(&self.env_confs, "https://download.java.net/java/GA/jdk20.0.2/6e380f22cbe7469fa75fb448bd903d8e/9/GPL/openjdk-20.0.2_linux-x64_bin.tar.gz", "jdk-20.tar.gz", "20"),
+                                "21" => java::install_java_on_rocky_linux(&self.env_confs, "https://download.java.net/java/GA/jdk21.0.2/f2283984656d49d69e91c558476027ac/13/GPL/openjdk-21.0.2_linux-x64_bin.tar.gz", "jdk-21.tar.gz", "21"),
+                                "" => java::install_java_on_rocky_linux(&self.env_confs, "https://download.java.net/java/GA/jdk21.0.2/f2283984656d49d69e91c558476027ac/13/GPL/openjdk-21.0.2_linux-x64_bin.tar.gz", "jdk-21.tar.gz", "21"),
+                                "lts" => java::install_java_on_rocky_linux(&self.env_confs, "https://download.java.net/java/GA/jdk21.0.2/f2283984656d49d69e91c558476027ac/13/GPL/openjdk-21.0.2_linux-x64_bin.tar.gz", "jdk-21.tar.gz", "21"),
+                                "22" => java::install_java_on_rocky_linux(&self.env_confs, "https://download.java.net/java/GA/jdk22.0.1/c7ec1332f7bb44aeba2eb341ae18aca4/8/GPL/openjdk-22.0.1_linux-x64_bin.tar.gz", "jdk-22.tar.gz", "22"),
+                                "23" => java::install_java_on_rocky_linux(&self.env_confs, "https://download.java.net/java/GA/jdk23/3c5b90190c68498b986a97f276efd28a/37/GPL/openjdk-23_linux-x64_bin.tar.gz", "jdk-23.tar.gz", "23"),
+                                "24" => java::install_java_on_rocky_linux(&self.env_confs, "https://download.java.net/java/early_access/jdk24/13/GPL/openjdk-24-ea+13_linux-x64_bin.tar.gz", "java-24-ea.tar.gz", "24"),
+                                "latest" => java::install_java_on_rocky_linux(&self.env_confs, "https://download.java.net/java/early_access/jdk24/13/GPL/openjdk-24-ea+13_linux-x64_bin.tar.gz", "java-24-ea.tar.gz", "24"),
                                 &_ => ()
                             }
                         },
                         "alma linux" => {
                             match self.third_arg.as_str() {
-                                "8" => java::install_java_on_alma_linux("", "", "8"),
-                                "9" => java::install_java_on_alma_linux("https://download.java.net/java/GA/jdk9/9.0.4/binaries/openjdk-9.0.4_linux-x64_bin.tar.gz", "jdk-9.tar.gz", "9"),
-                                "10" => java::install_java_on_alma_linux("https://download.java.net/java/GA/jdk10/10.0.2/19aef61b38124481863b1413dce1855f/13/openjdk-10.0.2_linux-x64_bin.tar.gz", "jdk-10.tar.gz", "10"),
-                                "11" => java::install_java_on_alma_linux("https://download.java.net/java/GA/jdk11/9/GPL/openjdk-11.0.2_linux-x64_bin.tar.gz", "jdk-11.tar.gz", "11"),
-                                "12" => java::install_java_on_alma_linux("https://download.java.net/java/GA/jdk12.0.2/e482c34c86bd4bf8b56c0b35558996b9/10/GPL/openjdk-12.0.2_linux-x64_bin.tar.gz", "jdk-12.tar.gz", "12"),
-                                "13" => java::install_java_on_alma_linux("https://download.java.net/java/GA/jdk13.0.2/d4173c853231432d94f001e99d882ca7/8/GPL/openjdk-13.0.2_linux-x64_bin.tar.gz", "jdk-13.tar.gz", "13"),
-                                "14" => java::install_java_on_alma_linux("https://download.java.net/java/GA/jdk14.0.2/205943a0976c4ed48cb16f1043c5c647/12/GPL/openjdk-14.0.2_linux-x64_bin.tar.gz", "jdk-14.tar.gz", "14"),
-                                "15" => java::install_java_on_alma_linux("https://download.java.net/java/GA/jdk15.0.2/0d1cfde4252546c6931946de8db48ee2/7/GPL/openjdk-15.0.2_linux-x64_bin.tar.gz", "jdk-15.tar.gz", "15"),
-                                "16" => java::install_java_on_alma_linux("https://download.java.net/java/GA/jdk16.0.2/d4a915d82b4c4fbb9bde534da945d746/7/GPL/openjdk-16.0.2_linux-x64_bin.tar.gz", "jdk-16.tar.gz", "16"),
-                                "17" => java::install_java_on_alma_linux("https://download.java.net/java/GA/jdk17.0.2/dfd4a8d0985749f896bed50d7138ee7f/8/GPL/openjdk-17.0.2_linux-x64_bin.tar.gz", "jdk-17.tar.gz", "17"),
-                                "18" => java::install_java_on_alma_linux("https://download.java.net/java/GA/jdk18.0.2/f6ad4b4450fd4d298113270ec84f30ee/9/GPL/openjdk-18.0.2_linux-x64_bin.tar.gz", "jdk-18.tar.gz", "18"),
-                                "19" => java::install_java_on_alma_linux("https://download.java.net/java/GA/jdk19.0.1/afdd2e245b014143b62ccb916125e3ce/10/GPL/openjdk-19.0.1_linux-x64_bin.tar.gz", "jdk-19.tar.gz", "19"),
-                                "20" => java::install_java_on_alma_linux("https://download.java.net/java/GA/jdk20.0.2/6e380f22cbe7469fa75fb448bd903d8e/9/GPL/openjdk-20.0.2_linux-x64_bin.tar.gz", "jdk-20.tar.gz", "20"),
-                                "21" => java::install_java_on_alma_linux("https://download.java.net/java/GA/jdk21.0.2/f2283984656d49d69e91c558476027ac/13/GPL/openjdk-21.0.2_linux-x64_bin.tar.gz", "jdk-21.tar.gz", "21"),
-                                "" => java::install_java_on_alma_linux("https://download.java.net/java/GA/jdk21.0.2/f2283984656d49d69e91c558476027ac/13/GPL/openjdk-21.0.2_linux-x64_bin.tar.gz", "jdk-21.tar.gz", "21"),
-                                "lts" => java::install_java_on_alma_linux("https://download.java.net/java/GA/jdk21.0.2/f2283984656d49d69e91c558476027ac/13/GPL/openjdk-21.0.2_linux-x64_bin.tar.gz", "jdk-21.tar.gz", "21"),
-                                "22" => java::install_java_on_alma_linux("https://download.java.net/java/GA/jdk22.0.1/c7ec1332f7bb44aeba2eb341ae18aca4/8/GPL/openjdk-22.0.1_linux-x64_bin.tar.gz", "jdk-22.tar.gz", "22"),
-                                "23" => java::install_java_on_alma_linux("https://download.java.net/java/GA/jdk23/3c5b90190c68498b986a97f276efd28a/37/GPL/openjdk-23_linux-x64_bin.tar.gz", "jdk-23.tar.gz", "23"),
-                                "24" => java::install_java_on_alma_linux("https://download.java.net/java/early_access/jdk24/13/GPL/openjdk-24-ea+13_linux-x64_bin.tar.gz", "java-24-ea.tar.gz", "24"),
-                                "latest" => java::install_java_on_alma_linux("https://download.java.net/java/early_access/jdk24/13/GPL/openjdk-24-ea+13_linux-x64_bin.tar.gz", "java-24-ea.tar.gz", "24"),
+                                "8" => java::install_java_on_alma_linux(&self.env_confs, "", "", "8"),
+                                "9" => java::install_java_on_alma_linux(&self.env_confs, "https://download.java.net/java/GA/jdk9/9.0.4/binaries/openjdk-9.0.4_linux-x64_bin.tar.gz", "jdk-9.tar.gz", "9"),
+                                "10" => java::install_java_on_alma_linux(&self.env_confs, "https://download.java.net/java/GA/jdk10/10.0.2/19aef61b38124481863b1413dce1855f/13/openjdk-10.0.2_linux-x64_bin.tar.gz", "jdk-10.tar.gz", "10"),
+                                "11" => java::install_java_on_alma_linux(&self.env_confs, "https://download.java.net/java/GA/jdk11/9/GPL/openjdk-11.0.2_linux-x64_bin.tar.gz", "jdk-11.tar.gz", "11"),
+                                "12" => java::install_java_on_alma_linux(&self.env_confs, "https://download.java.net/java/GA/jdk12.0.2/e482c34c86bd4bf8b56c0b35558996b9/10/GPL/openjdk-12.0.2_linux-x64_bin.tar.gz", "jdk-12.tar.gz", "12"),
+                                "13" => java::install_java_on_alma_linux(&self.env_confs, "https://download.java.net/java/GA/jdk13.0.2/d4173c853231432d94f001e99d882ca7/8/GPL/openjdk-13.0.2_linux-x64_bin.tar.gz", "jdk-13.tar.gz", "13"),
+                                "14" => java::install_java_on_alma_linux(&self.env_confs, "https://download.java.net/java/GA/jdk14.0.2/205943a0976c4ed48cb16f1043c5c647/12/GPL/openjdk-14.0.2_linux-x64_bin.tar.gz", "jdk-14.tar.gz", "14"),
+                                "15" => java::install_java_on_alma_linux(&self.env_confs, "https://download.java.net/java/GA/jdk15.0.2/0d1cfde4252546c6931946de8db48ee2/7/GPL/openjdk-15.0.2_linux-x64_bin.tar.gz", "jdk-15.tar.gz", "15"),
+                                "16" => java::install_java_on_alma_linux(&self.env_confs, "https://download.java.net/java/GA/jdk16.0.2/d4a915d82b4c4fbb9bde534da945d746/7/GPL/openjdk-16.0.2_linux-x64_bin.tar.gz", "jdk-16.tar.gz", "16"),
+                                "17" => java::install_java_on_alma_linux(&self.env_confs, "https://download.java.net/java/GA/jdk17.0.2/dfd4a8d0985749f896bed50d7138ee7f/8/GPL/openjdk-17.0.2_linux-x64_bin.tar.gz", "jdk-17.tar.gz", "17"),
+                                "18" => java::install_java_on_alma_linux(&self.env_confs, "https://download.java.net/java/GA/jdk18.0.2/f6ad4b4450fd4d298113270ec84f30ee/9/GPL/openjdk-18.0.2_linux-x64_bin.tar.gz", "jdk-18.tar.gz", "18"),
+                                "19" => java::install_java_on_alma_linux(&self.env_confs, "https://download.java.net/java/GA/jdk19.0.1/afdd2e245b014143b62ccb916125e3ce/10/GPL/openjdk-19.0.1_linux-x64_bin.tar.gz", "jdk-19.tar.gz", "19"),
+                                "20" => java::install_java_on_alma_linux(&self.env_confs, "https://download.java.net/java/GA/jdk20.0.2/6e380f22cbe7469fa75fb448bd903d8e/9/GPL/openjdk-20.0.2_linux-x64_bin.tar.gz", "jdk-20.tar.gz", "20"),
+                                "21" => java::install_java_on_alma_linux(&self.env_confs, "https://download.java.net/java/GA/jdk21.0.2/f2283984656d49d69e91c558476027ac/13/GPL/openjdk-21.0.2_linux-x64_bin.tar.gz", "jdk-21.tar.gz", "21"),
+                                "" => java::install_java_on_alma_linux(&self.env_confs, "https://download.java.net/java/GA/jdk21.0.2/f2283984656d49d69e91c558476027ac/13/GPL/openjdk-21.0.2_linux-x64_bin.tar.gz", "jdk-21.tar.gz", "21"),
+                                "lts" => java::install_java_on_alma_linux(&self.env_confs, "https://download.java.net/java/GA/jdk21.0.2/f2283984656d49d69e91c558476027ac/13/GPL/openjdk-21.0.2_linux-x64_bin.tar.gz", "jdk-21.tar.gz", "21"),
+                                "22" => java::install_java_on_alma_linux(&self.env_confs, "https://download.java.net/java/GA/jdk22.0.1/c7ec1332f7bb44aeba2eb341ae18aca4/8/GPL/openjdk-22.0.1_linux-x64_bin.tar.gz", "jdk-22.tar.gz", "22"),
+                                "23" => java::install_java_on_alma_linux(&self.env_confs, "https://download.java.net/java/GA/jdk23/3c5b90190c68498b986a97f276efd28a/37/GPL/openjdk-23_linux-x64_bin.tar.gz", "jdk-23.tar.gz", "23"),
+                                "24" => java::install_java_on_alma_linux(&self.env_confs, "https://download.java.net/java/early_access/jdk24/13/GPL/openjdk-24-ea+13_linux-x64_bin.tar.gz", "java-24-ea.tar.gz", "24"),
+                                "latest" => java::install_java_on_alma_linux(&self.env_confs, "https://download.java.net/java/early_access/jdk24/13/GPL/openjdk-24-ea+13_linux-x64_bin.tar.gz", "java-24-ea.tar.gz", "24"),
                                 &_ => ()
                             }
                         },
@@ -489,25 +489,25 @@ impl Execution for UserAction {
                         if utils::check_if_linux_dist_is_arch_linux() {
                             match self.third_arg.as_str() {
                                 "8" => println!("Unfortunately, there is no installation option for Java 8 on Arch Wsl."),
-                                "9" => java::install_java_on_arch_linux("https://download.java.net/java/GA/jdk9/9.0.4/binaries/openjdk-9.0.4_linux-x64_bin.tar.gz", "jdk-9.tar.gz", "9"),
-                                "10" => java::install_java_on_arch_linux("https://download.java.net/java/GA/jdk10/10.0.2/19aef61b38124481863b1413dce1855f/13/openjdk-10.0.2_linux-x64_bin.tar.gz", "jdk-10.tar.gz", "10"),
-                                "11" => java::install_java_on_arch_linux("https://download.java.net/java/GA/jdk11/9/GPL/openjdk-11.0.2_linux-x64_bin.tar.gz", "jdk-11.tar.gz", "11"),
-                                "12" => java::install_java_on_arch_linux("https://download.java.net/java/GA/jdk12.0.2/e482c34c86bd4bf8b56c0b35558996b9/10/GPL/openjdk-12.0.2_linux-x64_bin.tar.gz", "jdk-12.tar.gz", "12"),
-                                "13" => java::install_java_on_arch_linux("https://download.java.net/java/GA/jdk13.0.2/d4173c853231432d94f001e99d882ca7/8/GPL/openjdk-13.0.2_linux-x64_bin.tar.gz", "jdk-13.tar.gz", "13"),
-                                "14" => java::install_java_on_arch_linux("https://download.java.net/java/GA/jdk14.0.2/205943a0976c4ed48cb16f1043c5c647/12/GPL/openjdk-14.0.2_linux-x64_bin.tar.gz", "jdk-14.tar.gz", "14"),
-                                "15" => java::install_java_on_arch_linux("https://download.java.net/java/GA/jdk15.0.2/0d1cfde4252546c6931946de8db48ee2/7/GPL/openjdk-15.0.2_linux-x64_bin.tar.gz", "jdk-15.tar.gz", "15"),
-                                "16" => java::install_java_on_arch_linux("https://download.java.net/java/GA/jdk16.0.2/d4a915d82b4c4fbb9bde534da945d746/7/GPL/openjdk-16.0.2_linux-x64_bin.tar.gz", "jdk-16.tar.gz", "16"),
-                                "17" => java::install_java_on_arch_linux("https://download.java.net/java/GA/jdk17.0.2/dfd4a8d0985749f896bed50d7138ee7f/8/GPL/openjdk-17.0.2_linux-x64_bin.tar.gz", "jdk-17.tar.gz", "17"),
-                                "18" => java::install_java_on_arch_linux("https://download.java.net/java/GA/jdk18.0.2/f6ad4b4450fd4d298113270ec84f30ee/9/GPL/openjdk-18.0.2_linux-x64_bin.tar.gz", "jdk-18.tar.gz", "18"),
-                                "19" => java::install_java_on_arch_linux("https://download.java.net/java/GA/jdk19.0.1/afdd2e245b014143b62ccb916125e3ce/10/GPL/openjdk-19.0.1_linux-x64_bin.tar.gz", "jdk-19.tar.gz", "19"),
-                                "20" => java::install_java_on_arch_linux("https://download.java.net/java/GA/jdk20.0.2/6e380f22cbe7469fa75fb448bd903d8e/9/GPL/openjdk-20.0.2_linux-x64_bin.tar.gz", "jdk-20.tar.gz", "20"),
-                                "21" => java::install_java_on_arch_linux("https://download.java.net/java/GA/jdk21.0.2/f2283984656d49d69e91c558476027ac/13/GPL/openjdk-21.0.2_linux-x64_bin.tar.gz", "jdk-21.tar.gz", "21"),
-                                "" => java::install_java_on_arch_linux("https://download.java.net/java/GA/jdk21.0.2/f2283984656d49d69e91c558476027ac/13/GPL/openjdk-21.0.2_linux-x64_bin.tar.gz", "jdk-21.tar.gz", "21"),
-                                "lts" => java::install_java_on_arch_linux("https://download.java.net/java/GA/jdk21.0.2/f2283984656d49d69e91c558476027ac/13/GPL/openjdk-21.0.2_linux-x64_bin.tar.gz", "jdk-21.tar.gz", "21"),
-                                "22" => java::install_java_on_arch_linux("https://download.java.net/java/GA/jdk22.0.1/c7ec1332f7bb44aeba2eb341ae18aca4/8/GPL/openjdk-22.0.1_linux-x64_bin.tar.gz", "jdk-22.tar.gz", "22"),
-                                "23" => java::install_java_on_arch_linux("https://download.java.net/java/GA/jdk23/3c5b90190c68498b986a97f276efd28a/37/GPL/openjdk-23_linux-x64_bin.tar.gz", "jdk-23.tar.gz", "23"),
-                                "24" => java::install_java_on_arch_linux("https://download.java.net/java/early_access/jdk24/13/GPL/openjdk-24-ea+13_linux-x64_bin.tar.gz", "java-24-ea.tar.gz", "24"),
-                                "latest" => java::install_java_on_arch_linux("https://download.java.net/java/early_access/jdk24/13/GPL/openjdk-24-ea+13_linux-x64_bin.tar.gz", "java-24-ea.tar.gz", "24"),
+                                "9" => java::install_java_on_arch_linux(&self.env_confs, "https://download.java.net/java/GA/jdk9/9.0.4/binaries/openjdk-9.0.4_linux-x64_bin.tar.gz", "jdk-9.tar.gz", "9"),
+                                "10" => java::install_java_on_arch_linux(&self.env_confs, "https://download.java.net/java/GA/jdk10/10.0.2/19aef61b38124481863b1413dce1855f/13/openjdk-10.0.2_linux-x64_bin.tar.gz", "jdk-10.tar.gz", "10"),
+                                "11" => java::install_java_on_arch_linux(&self.env_confs, "https://download.java.net/java/GA/jdk11/9/GPL/openjdk-11.0.2_linux-x64_bin.tar.gz", "jdk-11.tar.gz", "11"),
+                                "12" => java::install_java_on_arch_linux(&self.env_confs, "https://download.java.net/java/GA/jdk12.0.2/e482c34c86bd4bf8b56c0b35558996b9/10/GPL/openjdk-12.0.2_linux-x64_bin.tar.gz", "jdk-12.tar.gz", "12"),
+                                "13" => java::install_java_on_arch_linux(&self.env_confs, "https://download.java.net/java/GA/jdk13.0.2/d4173c853231432d94f001e99d882ca7/8/GPL/openjdk-13.0.2_linux-x64_bin.tar.gz", "jdk-13.tar.gz", "13"),
+                                "14" => java::install_java_on_arch_linux(&self.env_confs, "https://download.java.net/java/GA/jdk14.0.2/205943a0976c4ed48cb16f1043c5c647/12/GPL/openjdk-14.0.2_linux-x64_bin.tar.gz", "jdk-14.tar.gz", "14"),
+                                "15" => java::install_java_on_arch_linux(&self.env_confs, "https://download.java.net/java/GA/jdk15.0.2/0d1cfde4252546c6931946de8db48ee2/7/GPL/openjdk-15.0.2_linux-x64_bin.tar.gz", "jdk-15.tar.gz", "15"),
+                                "16" => java::install_java_on_arch_linux(&self.env_confs, "https://download.java.net/java/GA/jdk16.0.2/d4a915d82b4c4fbb9bde534da945d746/7/GPL/openjdk-16.0.2_linux-x64_bin.tar.gz", "jdk-16.tar.gz", "16"),
+                                "17" => java::install_java_on_arch_linux(&self.env_confs, "https://download.java.net/java/GA/jdk17.0.2/dfd4a8d0985749f896bed50d7138ee7f/8/GPL/openjdk-17.0.2_linux-x64_bin.tar.gz", "jdk-17.tar.gz", "17"),
+                                "18" => java::install_java_on_arch_linux(&self.env_confs, "https://download.java.net/java/GA/jdk18.0.2/f6ad4b4450fd4d298113270ec84f30ee/9/GPL/openjdk-18.0.2_linux-x64_bin.tar.gz", "jdk-18.tar.gz", "18"),
+                                "19" => java::install_java_on_arch_linux(&self.env_confs, "https://download.java.net/java/GA/jdk19.0.1/afdd2e245b014143b62ccb916125e3ce/10/GPL/openjdk-19.0.1_linux-x64_bin.tar.gz", "jdk-19.tar.gz", "19"),
+                                "20" => java::install_java_on_arch_linux(&self.env_confs, "https://download.java.net/java/GA/jdk20.0.2/6e380f22cbe7469fa75fb448bd903d8e/9/GPL/openjdk-20.0.2_linux-x64_bin.tar.gz", "jdk-20.tar.gz", "20"),
+                                "21" => java::install_java_on_arch_linux(&self.env_confs, "https://download.java.net/java/GA/jdk21.0.2/f2283984656d49d69e91c558476027ac/13/GPL/openjdk-21.0.2_linux-x64_bin.tar.gz", "jdk-21.tar.gz", "21"),
+                                "" => java::install_java_on_arch_linux(&self.env_confs, "https://download.java.net/java/GA/jdk21.0.2/f2283984656d49d69e91c558476027ac/13/GPL/openjdk-21.0.2_linux-x64_bin.tar.gz", "jdk-21.tar.gz", "21"),
+                                "lts" => java::install_java_on_arch_linux(&self.env_confs, "https://download.java.net/java/GA/jdk21.0.2/f2283984656d49d69e91c558476027ac/13/GPL/openjdk-21.0.2_linux-x64_bin.tar.gz", "jdk-21.tar.gz", "21"),
+                                "22" => java::install_java_on_arch_linux(&self.env_confs, "https://download.java.net/java/GA/jdk22.0.1/c7ec1332f7bb44aeba2eb341ae18aca4/8/GPL/openjdk-22.0.1_linux-x64_bin.tar.gz", "jdk-22.tar.gz", "22"),
+                                "23" => java::install_java_on_arch_linux(&self.env_confs, "https://download.java.net/java/GA/jdk23/3c5b90190c68498b986a97f276efd28a/37/GPL/openjdk-23_linux-x64_bin.tar.gz", "jdk-23.tar.gz", "23"),
+                                "24" => java::install_java_on_arch_linux(&self.env_confs, "https://download.java.net/java/early_access/jdk24/13/GPL/openjdk-24-ea+13_linux-x64_bin.tar.gz", "java-24-ea.tar.gz", "24"),
+                                "latest" => java::install_java_on_arch_linux(&self.env_confs, "https://download.java.net/java/early_access/jdk24/13/GPL/openjdk-24-ea+13_linux-x64_bin.tar.gz", "java-24-ea.tar.gz", "24"),
                                 &_ => ()
                             }
                         }
@@ -523,27 +523,27 @@ impl Execution for UserAction {
     fn install_gradle(&self) -> &Self {
         if self.first_arg == CommandType::Install && self.second_arg == "gradle".to_string() {
             match self.os_type {
-                OsType::Windows => gradle::install_gradle_on_windows(&self.third_arg),
+                OsType::Windows => gradle::install_gradle_on_windows(&self.env_confs, &self.third_arg),
                 OsType::Linux => {
                     let linux_dist = utils::return_linux_dist_etc_os_release();
                     let mut null_var = "".to_string();
 
                     match linux_dist {
-                        "ubuntu" => gradle::install_gradle_on_debian_based_distros(&self.third_arg),
-                        "debian" => gradle::install_gradle_on_debian_based_distros(&self.third_arg),
-                        "kali linux" => gradle::install_gradle_on_debian_based_distros(&self.third_arg),
-                        "pardus" => gradle::install_gradle_on_debian_based_distros(&self.third_arg),
-                        "arch wsl" => gradle::install_gradle_on_arch_linux(&self.third_arg),
-                        "alma linux" => gradle::install_gradle_on_alma_linux(&self.third_arg),
-                        "centos" => gradle::install_gradle_on_centos_and_fedora(&self.third_arg),
-                        "fedora" => gradle::install_gradle_on_centos_and_fedora(&self.third_arg),
-                        "rocky" => gradle::install_gradle_on_rocky_linux(&self.third_arg),
+                        "ubuntu" => gradle::install_gradle_on_debian_based_distros(&self.env_confs, &self.third_arg),
+                        "debian" => gradle::install_gradle_on_debian_based_distros(&self.env_confs, &self.third_arg),
+                        "kali linux" => gradle::install_gradle_on_debian_based_distros(&self.env_confs, &self.third_arg),
+                        "pardus" => gradle::install_gradle_on_debian_based_distros(&self.env_confs, &self.third_arg),
+                        "arch wsl" => gradle::install_gradle_on_arch_linux(&self.env_confs, &self.third_arg),
+                        "alma linux" => gradle::install_gradle_on_alma_linux(&self.env_confs, &self.third_arg),
+                        "centos" => gradle::install_gradle_on_centos_and_fedora(&self.env_confs, &self.third_arg),
+                        "fedora" => gradle::install_gradle_on_centos_and_fedora(&self.env_confs, &self.third_arg),
+                        "rocky" => gradle::install_gradle_on_rocky_linux(&self.env_confs, &self.third_arg),
                         &_ => null_var = "none".to_string()
                     }
 
                     if null_var == "none".to_string() {
                         if utils::check_if_linux_dist_is_arch_linux() {
-                            gradle::install_gradle_on_arch_linux(&self.third_arg)
+                            gradle::install_gradle_on_arch_linux(&self.env_confs, &self.third_arg)
                         }
                     }
                 },
@@ -633,27 +633,27 @@ impl Execution for UserAction {
             println!("generated download link: {}", generate_download_link);
 
             match self.os_type {
-                OsType::Windows => maven::install_maven_on_windows(&generate_download_link, &generate_file_name, &generate_version),
+                OsType::Windows => maven::install_maven_on_windows(&self.env_confs, &generate_download_link, &generate_file_name, &generate_version),
                 OsType::Linux => {
                     let linux_dist = utils::return_linux_dist_etc_os_release();
                     let mut null_var = "".to_string();
 
                     match linux_dist {
-                        "ubuntu" => maven::install_maven_on_debian_based_distros(&generate_download_link, &generate_file_name, &generate_version),
-                        "debian" => maven::install_maven_on_debian_based_distros(&generate_download_link, &generate_file_name, &generate_version),
-                        "kali linux" => maven::install_maven_on_debian_based_distros(&generate_download_link, &generate_file_name, &generate_version),
-                        "pardus" => maven::install_maven_on_debian_based_distros(&generate_download_link, &generate_file_name, &generate_version),
-                        "arch wsl" => maven::install_maven_on_arch_linux(&generate_download_link, &generate_file_name, &generate_version),
-                        "alma linux" => maven::install_maven_on_alma_linux(&generate_download_link, &generate_file_name, &generate_version),
-                        "centos" => maven::install_maven_on_centos_and_fedora(&generate_download_link, &generate_file_name, &generate_version),
-                        "fedora" => maven::install_maven_on_centos_and_fedora(&generate_download_link, &generate_file_name, &generate_version),
-                        "rocky" => maven::install_maven_on_rocky_linux(&generate_download_link, &generate_file_name, &generate_version),
+                        "ubuntu" => maven::install_maven_on_debian_based_distros(&self.env_confs, &generate_download_link, &generate_file_name, &generate_version),
+                        "debian" => maven::install_maven_on_debian_based_distros(&self.env_confs, &generate_download_link, &generate_file_name, &generate_version),
+                        "kali linux" => maven::install_maven_on_debian_based_distros(&self.env_confs, &generate_download_link, &generate_file_name, &generate_version),
+                        "pardus" => maven::install_maven_on_debian_based_distros(&self.env_confs, &generate_download_link, &generate_file_name, &generate_version),
+                        "arch wsl" => maven::install_maven_on_arch_linux(&self.env_confs, &generate_download_link, &generate_file_name, &generate_version),
+                        "alma linux" => maven::install_maven_on_alma_linux(&self.env_confs, &generate_download_link, &generate_file_name, &generate_version),
+                        "centos" => maven::install_maven_on_centos_and_fedora(&self.env_confs, &generate_download_link, &generate_file_name, &generate_version),
+                        "fedora" => maven::install_maven_on_centos_and_fedora(&self.env_confs, &generate_download_link, &generate_file_name, &generate_version),
+                        "rocky" => maven::install_maven_on_rocky_linux(&self.env_confs, &generate_download_link, &generate_file_name, &generate_version),
                         &_ => null_var = "none".to_string()
                     }
 
                     if null_var == "none".to_string() {
                         if utils::check_if_linux_dist_is_arch_linux() {
-                            maven::install_maven_on_arch_linux(&generate_download_link, &generate_file_name, &generate_version)
+                            maven::install_maven_on_arch_linux(&self.env_confs, &generate_download_link, &generate_file_name, &generate_version)
                         }
                     }
                 },
@@ -669,9 +669,9 @@ impl Execution for UserAction {
             match self.os_type {
                 OsType::Windows => {
                     match self.third_arg.as_str() {
-                        "lts" => node::install_nodejs_on_windows("https://nodejs.org/dist/v22.12.0/node-v22.12.0-x64.msi", "node-v22.12.0-x64.msi"),
-                        "" => node::install_nodejs_on_windows("https://nodejs.org/dist/v22.12.0/node-v22.12.0-x64.msi", "node-v22.12.0-x64.msi"),
-                        "latest" => node::install_nodejs_on_windows("https://nodejs.org/dist/v23.4.0/node-v23.4.0-x64.msi", "node-v23.4.0-x64.msi"),
+                        "lts" => node::install_nodejs_on_windows(&self.env_confs, "https://nodejs.org/dist/v22.12.0/node-v22.12.0-x64.msi", "node-v22.12.0-x64.msi"),
+                        "" => node::install_nodejs_on_windows(&self.env_confs, "https://nodejs.org/dist/v22.12.0/node-v22.12.0-x64.msi", "node-v22.12.0-x64.msi"),
+                        "latest" => node::install_nodejs_on_windows(&self.env_confs, "https://nodejs.org/dist/v23.4.0/node-v23.4.0-x64.msi", "node-v23.4.0-x64.msi"),
                         &_ => node::install_nodejs_error()
                     };
                 },
@@ -682,86 +682,86 @@ impl Execution for UserAction {
                     match linux_dist {
                         "ubuntu" => {
                             match self.third_arg.as_str() {
-                                "lts" => node::install_nodejs_on_debian_based_distros("https://nodejs.org/dist/v22.12.0/node-v22.12.0-linux-x64.tar.xz", "node-v22.12.0-linux-x64.tar.xz"),
-                                "" => node::install_nodejs_on_debian_based_distros("https://nodejs.org/dist/v22.12.0/node-v22.12.0-linux-x64.tar.xz", "node-v22.12.0-linux-x64.tar.xz"),
-                                "latest" => node::install_nodejs_on_debian_based_distros("https://nodejs.org/dist/v23.4.0/node-v23.4.0-linux-x64.tar.xz", "node-v23.4.0-linux-x64.tar.xz"),
+                                "lts" => node::install_nodejs_on_debian_based_distros(&self.env_confs, "https://nodejs.org/dist/v22.12.0/node-v22.12.0-linux-x64.tar.xz", "node-v22.12.0-linux-x64.tar.xz"),
+                                "" => node::install_nodejs_on_debian_based_distros(&self.env_confs, "https://nodejs.org/dist/v22.12.0/node-v22.12.0-linux-x64.tar.xz", "node-v22.12.0-linux-x64.tar.xz"),
+                                "latest" => node::install_nodejs_on_debian_based_distros(&self.env_confs, "https://nodejs.org/dist/v23.4.0/node-v23.4.0-linux-x64.tar.xz", "node-v23.4.0-linux-x64.tar.xz"),
                                 &_ => node::install_nodejs_error()
                             }
                         },
                         "debian" => {
                             match self.third_arg.as_str() {
-                                "lts" => node::install_nodejs_on_debian_based_distros("https://nodejs.org/dist/v22.12.0/node-v22.12.0-linux-x64.tar.xz", "node-v22.12.0-linux-x64.tar.xz"),
-                                "" => node::install_nodejs_on_debian_based_distros("https://nodejs.org/dist/v22.12.0/node-v22.12.0-linux-x64.tar.xz", "node-v22.12.0-linux-x64.tar.xz"),
-                                "latest" => node::install_nodejs_on_debian_based_distros("https://nodejs.org/dist/v23.4.0/node-v23.4.0-linux-x64.tar.xz", "node-v23.4.0-linux-x64.tar.xz"),
+                                "lts" => node::install_nodejs_on_debian_based_distros(&self.env_confs, "https://nodejs.org/dist/v22.12.0/node-v22.12.0-linux-x64.tar.xz", "node-v22.12.0-linux-x64.tar.xz"),
+                                "" => node::install_nodejs_on_debian_based_distros(&self.env_confs, "https://nodejs.org/dist/v22.12.0/node-v22.12.0-linux-x64.tar.xz", "node-v22.12.0-linux-x64.tar.xz"),
+                                "latest" => node::install_nodejs_on_debian_based_distros(&self.env_confs, "https://nodejs.org/dist/v23.4.0/node-v23.4.0-linux-x64.tar.xz", "node-v23.4.0-linux-x64.tar.xz"),
                                 &_ => node::install_nodejs_error()
                             }
                         },
                         "pardus" => {
                             match self.third_arg.as_str() {
-                                "lts" => node::install_nodejs_on_debian_based_distros("https://nodejs.org/dist/v22.12.0/node-v22.12.0-linux-x64.tar.xz", "node-v22.12.0-linux-x64.tar.xz"),
-                                "" => node::install_nodejs_on_debian_based_distros("https://nodejs.org/dist/v22.12.0/node-v22.12.0-linux-x64.tar.xz", "node-v22.12.0-linux-x64.tar.xz"),
-                                "latest" => node::install_nodejs_on_debian_based_distros("https://nodejs.org/dist/v23.4.0/node-v23.4.0-linux-x64.tar.xz", "node-v23.4.0-linux-x64.tar.xz"),
+                                "lts" => node::install_nodejs_on_debian_based_distros(&self.env_confs, "https://nodejs.org/dist/v22.12.0/node-v22.12.0-linux-x64.tar.xz", "node-v22.12.0-linux-x64.tar.xz"),
+                                "" => node::install_nodejs_on_debian_based_distros(&self.env_confs, "https://nodejs.org/dist/v22.12.0/node-v22.12.0-linux-x64.tar.xz", "node-v22.12.0-linux-x64.tar.xz"),
+                                "latest" => node::install_nodejs_on_debian_based_distros(&self.env_confs, "https://nodejs.org/dist/v23.4.0/node-v23.4.0-linux-x64.tar.xz", "node-v23.4.0-linux-x64.tar.xz"),
                                 &_ => node::install_nodejs_error()
                             }
                         },
                         "arch wsl" => {
                             match self.third_arg.as_str() {
-                                "lts" => node::install_nodejs_on_arch_linux("https://nodejs.org/dist/v22.12.0/node-v22.12.0-linux-x64.tar.xz", "node-v22.12.0-linux-x64.tar.xz"),
-                                "" => node::install_nodejs_on_arch_linux("https://nodejs.org/dist/v22.12.0/node-v22.12.0-linux-x64.tar.xz", "node-v22.12.0-linux-x64.tar.xz"),
-                                "latest" => node::install_nodejs_on_arch_linux("https://nodejs.org/dist/v23.4.0/node-v23.4.0-linux-x64.tar.xz", "node-v23.4.0-linux-x64.tar.xz"),
+                                "lts" => node::install_nodejs_on_arch_linux(&self.env_confs, "https://nodejs.org/dist/v22.12.0/node-v22.12.0-linux-x64.tar.xz", "node-v22.12.0-linux-x64.tar.xz"),
+                                "" => node::install_nodejs_on_arch_linux(&self.env_confs, "https://nodejs.org/dist/v22.12.0/node-v22.12.0-linux-x64.tar.xz", "node-v22.12.0-linux-x64.tar.xz"),
+                                "latest" => node::install_nodejs_on_arch_linux(&self.env_confs, "https://nodejs.org/dist/v23.4.0/node-v23.4.0-linux-x64.tar.xz", "node-v23.4.0-linux-x64.tar.xz"),
                                 &_ => node::install_nodejs_error()
                             }
                         }
                         "kali linux" => {
                             match self.third_arg.as_str() {
-                                "lts" => node::install_nodejs_on_debian_based_distros("https://nodejs.org/dist/v22.12.0/node-v22.12.0-linux-x64.tar.xz", "node-v22.12.0-linux-x64.tar.xz"),
-                                "" => node::install_nodejs_on_debian_based_distros("https://nodejs.org/dist/v22.12.0/node-v22.12.0-linux-x64.tar.xz", "node-v22.12.0-linux-x64.tar.xz"),
-                                "latest" => node::install_nodejs_on_debian_based_distros("https://nodejs.org/dist/v23.4.0/node-v23.4.0-linux-x64.tar.xz", "node-v23.4.0-linux-x64.tar.xz"),
+                                "lts" => node::install_nodejs_on_debian_based_distros(&self.env_confs, "https://nodejs.org/dist/v22.12.0/node-v22.12.0-linux-x64.tar.xz", "node-v22.12.0-linux-x64.tar.xz"),
+                                "" => node::install_nodejs_on_debian_based_distros(&self.env_confs, "https://nodejs.org/dist/v22.12.0/node-v22.12.0-linux-x64.tar.xz", "node-v22.12.0-linux-x64.tar.xz"),
+                                "latest" => node::install_nodejs_on_debian_based_distros(&self.env_confs, "https://nodejs.org/dist/v23.4.0/node-v23.4.0-linux-x64.tar.xz", "node-v23.4.0-linux-x64.tar.xz"),
                                 &_ => node::install_nodejs_error()
                             }
                         },
                         "fedora" => {
                             match self.third_arg.as_str() {
-                                "lts" => node::install_nodejs_on_centos_and_fedora("https://nodejs.org/dist/v22.12.0/node-v22.12.0-linux-x64.tar.xz", "node-v22.12.0-linux-x64.tar.xz"),
-                                "" => node::install_nodejs_on_centos_and_fedora("https://nodejs.org/dist/v22.12.0/node-v22.12.0-linux-x64.tar.xz", "node-v22.12.0-linux-x64.tar.xz"),
-                                "latest" => node::install_nodejs_on_centos_and_fedora("https://nodejs.org/dist/v23.4.0/node-v23.4.0-linux-x64.tar.xz", "node-v23.4.0-linux-x64.tar.xz"),
+                                "lts" => node::install_nodejs_on_centos_and_fedora(&self.env_confs, "https://nodejs.org/dist/v22.12.0/node-v22.12.0-linux-x64.tar.xz", "node-v22.12.0-linux-x64.tar.xz"),
+                                "" => node::install_nodejs_on_centos_and_fedora(&self.env_confs, "https://nodejs.org/dist/v22.12.0/node-v22.12.0-linux-x64.tar.xz", "node-v22.12.0-linux-x64.tar.xz"),
+                                "latest" => node::install_nodejs_on_centos_and_fedora(&self.env_confs, "https://nodejs.org/dist/v23.4.0/node-v23.4.0-linux-x64.tar.xz", "node-v23.4.0-linux-x64.tar.xz"),
                                 &_ => node::install_nodejs_error()
                             }
                         },
                         "centos" => {
                             match self.third_arg.as_str() {
-                                "lts" => node::install_nodejs_on_centos_and_fedora("https://nodejs.org/dist/v22.12.0/node-v22.12.0-linux-x64.tar.xz", "node-v22.12.0-linux-x64.tar.xz"),
-                                "" => node::install_nodejs_on_centos_and_fedora("https://nodejs.org/dist/v22.12.0/node-v22.12.0-linux-x64.tar.xz", "node-v22.12.0-linux-x64.tar.xz"),
-                                "latest" => node::install_nodejs_on_centos_and_fedora("https://nodejs.org/dist/v23.4.0/node-v23.4.0-linux-x64.tar.xz", "node-v23.4.0-linux-x64.tar.xz"),
+                                "lts" => node::install_nodejs_on_centos_and_fedora(&self.env_confs, "https://nodejs.org/dist/v22.12.0/node-v22.12.0-linux-x64.tar.xz", "node-v22.12.0-linux-x64.tar.xz"),
+                                "" => node::install_nodejs_on_centos_and_fedora(&self.env_confs, "https://nodejs.org/dist/v22.12.0/node-v22.12.0-linux-x64.tar.xz", "node-v22.12.0-linux-x64.tar.xz"),
+                                "latest" => node::install_nodejs_on_centos_and_fedora(&self.env_confs, "https://nodejs.org/dist/v23.4.0/node-v23.4.0-linux-x64.tar.xz", "node-v23.4.0-linux-x64.tar.xz"),
                                 &_ => node::install_nodejs_error()
                             }
                         },
                         "rocky" => {
                             match self.third_arg.as_str() {
-                                "lts" => node::install_nodejs_on_rocky_linux("https://nodejs.org/dist/v22.12.0/node-v22.12.0-linux-x64.tar.xz", "node-v22.12.0-linux-x64.tar.xz"),
-                                "" => node::install_nodejs_on_rocky_linux("https://nodejs.org/dist/v22.12.0/node-v22.12.0-linux-x64.tar.xz", "node-v22.12.0-linux-x64.tar.xz"),
-                                "latest" => node::install_nodejs_on_rocky_linux("https://nodejs.org/dist/v23.4.0/node-v23.4.0-linux-x64.tar.xz", "node-v23.4.0-linux-x64.tar.xz"),
+                                "lts" => node::install_nodejs_on_rocky_linux(&self.env_confs, "https://nodejs.org/dist/v22.12.0/node-v22.12.0-linux-x64.tar.xz", "node-v22.12.0-linux-x64.tar.xz"),
+                                "" => node::install_nodejs_on_rocky_linux(&self.env_confs, "https://nodejs.org/dist/v22.12.0/node-v22.12.0-linux-x64.tar.xz", "node-v22.12.0-linux-x64.tar.xz"),
+                                "latest" => node::install_nodejs_on_rocky_linux(&self.env_confs, "https://nodejs.org/dist/v23.4.0/node-v23.4.0-linux-x64.tar.xz", "node-v23.4.0-linux-x64.tar.xz"),
                                 &_ => node::install_nodejs_error()
                             }
                         },
                         "alma linux" => {
                             match self.third_arg.as_str() {
-                                "lts" => node::install_nodejs_on_alma_linux("https://nodejs.org/dist/v22.12.0/node-v22.12.0-linux-x64.tar.xz", "node-v22.12.0-linux-x64.tar.xz"),
-                                "" => node::install_nodejs_on_alma_linux("https://nodejs.org/dist/v22.12.0/node-v22.12.0-linux-x64.tar.xz", "node-v22.12.0-linux-x64.tar.xz"),
-                                "latest" => node::install_nodejs_on_alma_linux("https://nodejs.org/dist/v23.4.0/node-v23.4.0-linux-x64.tar.xz", "node-v23.4.0-linux-x64.tar.xz"),
+                                "lts" => node::install_nodejs_on_alma_linux(&self.env_confs, "https://nodejs.org/dist/v22.12.0/node-v22.12.0-linux-x64.tar.xz", "node-v22.12.0-linux-x64.tar.xz"),
+                                "" => node::install_nodejs_on_alma_linux(&self.env_confs, "https://nodejs.org/dist/v22.12.0/node-v22.12.0-linux-x64.tar.xz", "node-v22.12.0-linux-x64.tar.xz"),
+                                "latest" => node::install_nodejs_on_alma_linux(&self.env_confs, "https://nodejs.org/dist/v23.4.0/node-v23.4.0-linux-x64.tar.xz", "node-v23.4.0-linux-x64.tar.xz"),
                                 &_ => node::install_nodejs_error()
                             }
                         },
-                        "alpine" => node::install_node_on_alpine_linux(),
+                        "alpine" => (),
                         &_ => null_var = "none".to_string()
                     }
 
                     if null_var == "none".to_string() {
                         if utils::check_if_linux_dist_is_arch_linux() {
                             match self.third_arg.as_str() {
-                                "lts" => node::install_nodejs_on_arch_linux("https://nodejs.org/dist/v22.12.0/node-v22.12.0-linux-x64.tar.xz", "node-v22.12.0-linux-x64.tar.xz"),
-                                "" => node::install_nodejs_on_arch_linux("https://nodejs.org/dist/v22.12.0/node-v22.12.0-linux-x64.tar.xz", "node-v22.12.0-linux-x64.tar.xz"),
-                                "latest" => node::install_nodejs_on_arch_linux("https://nodejs.org/dist/v23.4.0/node-v23.4.0-linux-x64.tar.xz", "node-v23.4.0-linux-x64.tar.xz"),
+                                "lts" => node::install_nodejs_on_arch_linux(&self.env_confs, "https://nodejs.org/dist/v22.12.0/node-v22.12.0-linux-x64.tar.xz", "node-v22.12.0-linux-x64.tar.xz"),
+                                "" => node::install_nodejs_on_arch_linux(&self.env_confs, "https://nodejs.org/dist/v22.12.0/node-v22.12.0-linux-x64.tar.xz", "node-v22.12.0-linux-x64.tar.xz"),
+                                "latest" => node::install_nodejs_on_arch_linux(&self.env_confs, "https://nodejs.org/dist/v23.4.0/node-v23.4.0-linux-x64.tar.xz", "node-v23.4.0-linux-x64.tar.xz"),
                                 &_ => node::install_nodejs_error()
                             }
                         }

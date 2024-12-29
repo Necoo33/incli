@@ -19,7 +19,7 @@ mod maven;
 // Third Layer, both depend first and second layers.
 mod user_action;
 
-// Fourth And Last Layer
+// Fourth And Last Layer. Depends all before layers under the hood.
 use models::{CommandType, EnvConfiguration, Execution, Help, OsType, UserSession, Version};
 use sys_info_extended::{os_release, os_type, get_current_user, get_home_dir_and_shell};
 use std::env::args;
@@ -65,6 +65,7 @@ fn main() {
         }
     };
 
+    // define what user wants to do from program
     let user_action = user_session.action(arg1, arg2, arg3, arg4); 
 
     match user_action.first_arg {

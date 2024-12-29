@@ -1,11 +1,12 @@
 use crate::utils;
+use crate::models;
 use std::process::{Command, exit};
 use std::fs;
 use std::io;
 use std::path::Path;
 use sys_info_extended::{get_current_user, get_user_env_var, get_system_env_var, set_env, EnvOptions};
 
-pub fn install_maven_on_windows(url: &str, file_name: &str, version: &str) {
+pub fn install_maven_on_windows(env_confs: &models::EnvConfiguration, url: &str, file_name: &str, version: &str) {
     println!("Welcome to incli, your request to install Maven on Windows reached. Please wait until it finish...");
     println!("Keep pressing any of your keys when you focused on your terminal in regular time period, otherwise your installation may not run correctly.");
 
@@ -150,7 +151,7 @@ pub fn install_maven_on_windows(url: &str, file_name: &str, version: &str) {
     exit(0)
 }
 
-pub fn install_maven_on_debian_based_distros(url: &str, file_name: &str, version: &str) {
+pub fn install_maven_on_debian_based_distros(env_confs: &models::EnvConfiguration, url: &str, file_name: &str, version: &str) {
     println!("Welcome to incli. Your request to install Maven on a debian based distro reached.");
     println!("Be sure you have installed wget on your pc, otherwise installation won't work.");
 
@@ -337,7 +338,7 @@ pub fn install_maven_on_debian_based_distros(url: &str, file_name: &str, version
     // ondan sonraki versiyonlar "apache-maven-(versiyon numarası)" şeklinde formatlanıyor.
 }
 
-pub fn install_maven_on_arch_linux(url: &str, file_name: &str, version: &str) {
+pub fn install_maven_on_arch_linux(env_confs: &models::EnvConfiguration, url: &str, file_name: &str, version: &str) {
     println!("Welcome to incli. Your request to Install Maven on Arch Linux Reached. Please wait until installation finish.");
 
     let current_user = get_current_user();
@@ -510,7 +511,7 @@ pub fn install_maven_on_arch_linux(url: &str, file_name: &str, version: &str) {
 
     if !check_if_incli_paths_exist.exists() {
         println!("You don't have incli_envs.sh file yet. We're configuring it...");
-        utils::configure_incli_envs_file(&current_user, true)
+        utils::configure_incli_envs_file(env_confs, &current_user, true)
     }
 
     let get_incli_envs_path = format!("{}/incli-envs.sh", get_incli_paths_path);
@@ -550,7 +551,7 @@ pub fn install_maven_on_arch_linux(url: &str, file_name: &str, version: &str) {
     }
 }
 
-pub fn install_maven_on_alma_linux(url: &str, file_name: &str, version: &str) {
+pub fn install_maven_on_alma_linux(env_confs: &models::EnvConfiguration, url: &str, file_name: &str, version: &str) {
     println!("Welcome to incli. Your request to install Maven on Alma Linux Reached.");
         
     let current_user = get_current_user();
@@ -699,7 +700,7 @@ pub fn install_maven_on_alma_linux(url: &str, file_name: &str, version: &str) {
     let check_if_incli_paths_exist = Path::new(&incli_paths_path);
         
     if !check_if_incli_paths_exist.exists() {
-        utils::configure_incli_envs_file(&current_user, true)
+        utils::configure_incli_envs_file(env_confs, &current_user, true)
     }
         
     let incli_envs_path = format!("{}/incli-envs.sh", incli_paths_path);
@@ -738,7 +739,7 @@ pub fn install_maven_on_alma_linux(url: &str, file_name: &str, version: &str) {
     }
 }
 
-pub fn install_maven_on_centos_and_fedora(url: &str, file_name: &str, version: &str) {
+pub fn install_maven_on_centos_and_fedora(env_confs: &models::EnvConfiguration, url: &str, file_name: &str, version: &str) {
     println!("Welcome to incli. Your request to install Maven on a Red Hat Based Distro Reached.");
 
     let check_if_maven_installed = std::process::Command::new("mvn")
@@ -896,7 +897,7 @@ pub fn install_maven_on_centos_and_fedora(url: &str, file_name: &str, version: &
     let check_if_incli_paths_exist = Path::new(&incli_paths_path);
         
     if !check_if_incli_paths_exist.exists() {
-        utils::configure_incli_envs_file(&current_user, true)
+        utils::configure_incli_envs_file(env_confs, &current_user, true)
     }
         
     let incli_envs_path = format!("{}/incli-envs.sh", incli_paths_path);
@@ -935,7 +936,7 @@ pub fn install_maven_on_centos_and_fedora(url: &str, file_name: &str, version: &
     }
 }
 
-pub fn install_maven_on_rocky_linux(url: &str, file_name: &str, version: &str) {
+pub fn install_maven_on_rocky_linux(env_confs: &models::EnvConfiguration, url: &str, file_name: &str, version: &str) {
     println!("Welcome to incli. Your request to install Maven on Rocky Linux Reached.");
 
     let check_if_maven_installed = std::process::Command::new("mvn")
@@ -1085,7 +1086,7 @@ pub fn install_maven_on_rocky_linux(url: &str, file_name: &str, version: &str) {
     let check_if_incli_paths_exist = Path::new(&incli_paths_path);
         
     if !check_if_incli_paths_exist.exists() {
-        utils::configure_incli_envs_file(&current_user, true)
+        utils::configure_incli_envs_file(env_confs, &current_user, true)
     }
         
     let incli_envs_path = format!("{}/incli-envs.sh", incli_paths_path);

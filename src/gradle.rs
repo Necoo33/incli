@@ -1,4 +1,5 @@
 use crate::utils;
+use crate::models;
 use std::fmt::format;
 use std::process::{Command, exit};
 use std::fs;
@@ -11,7 +12,7 @@ use sys_info_extended::get_current_user;
 // "https://services.gradle.org/distributions/gradle-8.10.2-bin.zip"
 // "C:\Users\necdet\Downloads\gradle-8.10.2.zip"
 
-pub fn install_gradle_on_windows(version: &str) {
+pub fn install_gradle_on_windows(env_confs: &models::EnvConfiguration, version: &str) {
     println!("Welcome to incli, your request to install gradle on Windows reached. Please wait until it finish...");
     println!("Keep pressing any of your keys when you focused on your terminal in regular time period, otherwise your installation may not run correctly.");
 
@@ -85,7 +86,7 @@ pub fn install_gradle_on_windows(version: &str) {
     exit(0)
 }
 
-pub fn install_gradle_on_debian_based_distros(version: &str) {
+pub fn install_gradle_on_debian_based_distros(env_confs: &models::EnvConfiguration, version: &str) {
     println!("Welcome to incli. Your request to install Gradle on a debian based distro reached.");
     println!("Be sure you have installed wget on your pc, otherwise installation won't work.");
 
@@ -286,7 +287,7 @@ pub fn install_gradle_on_debian_based_distros(version: &str) {
     }
 }
 
-pub fn install_gradle_on_arch_linux(version: &str) {
+pub fn install_gradle_on_arch_linux(env_confs: &models::EnvConfiguration, version: &str) {
     println!("Welcome to incli. Your request to Install Gradle on Arch Linux Reached. Please wait until installation finish.");
     
     let version_input: String;
@@ -435,7 +436,7 @@ pub fn install_gradle_on_arch_linux(version: &str) {
 
     if !check_if_incli_paths_exist.exists() {
         println!("You don't have incli_envs.sh file yet. We're configuring it...");
-        utils::configure_incli_envs_file(&current_user, true)
+        utils::configure_incli_envs_file(env_confs, &current_user, true)
     }
 
     let get_incli_envs_path = format!("{}/incli-envs.sh", get_incli_paths_path);
@@ -477,7 +478,7 @@ pub fn install_gradle_on_arch_linux(version: &str) {
     }
 }
 
-pub fn install_gradle_on_alma_linux(version: &str) {
+pub fn install_gradle_on_alma_linux(env_confs: &models::EnvConfiguration, version: &str) {
     println!("Welcome to incli. Your request to install Gradle on Alma Linux Reached.");
 
     let version_input: String;
@@ -621,7 +622,7 @@ pub fn install_gradle_on_alma_linux(version: &str) {
     let check_if_incli_paths_exist = Path::new(&incli_paths_path);
 
     if !check_if_incli_paths_exist.exists() {
-        utils::configure_incli_envs_file(&current_user, true)
+        utils::configure_incli_envs_file(env_confs, &current_user, true)
     }
 
     let incli_envs_path = format!("{}/incli-envs.sh", incli_paths_path);
@@ -663,7 +664,7 @@ pub fn install_gradle_on_alma_linux(version: &str) {
     }
 }
 
-pub fn install_gradle_on_centos_and_fedora(version: &str) {
+pub fn install_gradle_on_centos_and_fedora(env_confs: &models::EnvConfiguration, version: &str) {
     println!("Welcome to incli. Your request to install Gradle on a Red Hat Based Distro Reached.");
 
     let version_input: String;
@@ -801,7 +802,7 @@ pub fn install_gradle_on_centos_and_fedora(version: &str) {
     let check_if_incli_paths_exist = Path::new(&incli_paths_path);
 
     if !check_if_incli_paths_exist.exists() {
-        utils::configure_incli_envs_file(&current_user, true)
+        utils::configure_incli_envs_file(env_confs, &current_user, true)
     }
 
     let incli_envs_path = format!("{}/incli-envs.sh", incli_paths_path);
@@ -843,7 +844,7 @@ pub fn install_gradle_on_centos_and_fedora(version: &str) {
     }
 }
 
-pub fn install_gradle_on_rocky_linux(version: &str) {
+pub fn install_gradle_on_rocky_linux(env_confs: &models::EnvConfiguration, version: &str) {
     println!("Welcome to incli. Your request to install Go on Rocky Linux Reached.");
 
     let version_input: String;
@@ -977,7 +978,7 @@ pub fn install_gradle_on_rocky_linux(version: &str) {
     let check_if_incli_paths_exist = Path::new(&incli_paths_path);
 
     if !check_if_incli_paths_exist.exists() {
-        utils::configure_incli_envs_file(&current_user, true)
+        utils::configure_incli_envs_file(env_confs, &current_user, true)
     }
 
     let incli_envs_path = format!("{}/incli-envs.sh", incli_paths_path);
