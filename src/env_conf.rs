@@ -24,7 +24,7 @@ pub fn detect_shell(user: &str) -> std::result::Result<ShellType, ShellError> {
                                 if line.starts_with(user) {
                                     let mut split_the_line = line.split(":");
         
-                                    let _ = match split_the_line.nth(6) {
+                                    return match split_the_line.nth(6) {
                                         Some(shell_path) => match shell_path {
                                             "/bin/bash" => Ok(ShellType::Bash),
                                             "/usr/bin/bash" => Ok(ShellType::Bash),
@@ -43,7 +43,7 @@ pub fn detect_shell(user: &str) -> std::result::Result<ShellType, ShellError> {
                                             "/bin/tcsh" => Ok(ShellType::Tcsh),
                                             _ => Err(ShellError::UnknownShell)
                                         },
-                                        None => return Err(ShellError::FileMalformed)
+                                        None => Err(ShellError::FileMalformed)
                                     };
                                 };
         
