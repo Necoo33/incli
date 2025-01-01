@@ -2,7 +2,9 @@
 
 ## v1.0.0
 
-Project Structure changed, switched to layered architecture.
+Project Structure changed, switched to layered architecture. Now almost every struct has it's own module.
+Added `EnvConfiguration` struct. That struct responsible for adding new env's or appending new values to PATH env.
+Added support for Zsh and Fish shells alongside Bash. Zsh and Fish shell supports both tested on Ubuntu 24 And Fedora 41.
 
 ## v0.10.0
 
