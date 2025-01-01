@@ -1,5 +1,9 @@
+use crate::models::EnvConfiguration;
+use crate::models::EnvConfigurationError;
 use crate::utils;
 use crate::models;
+use crate::env_conf;
+use core::error;
 use std::process::{Command, exit};
 use std::fs;
 use std::io;
@@ -29,6 +33,8 @@ pub fn install_nodejs_on_debian_based_distros(env_confs: &models::EnvConfigurati
                                     .arg(file_name)
                                     .output()
                                     .expect("Some Error Happened");
+
+    let mut env_path;
 
     match current_user.as_str() {
         "root" => {
@@ -88,25 +94,7 @@ pub fn install_nodejs_on_debian_based_distros(env_confs: &models::EnvConfigurati
     
             let new_path = format!("/root/{}", slice_of_file_name);
     
-            let env_path = format!("{}/bin", new_path);
-    
-            let line_for_append = format!("export PATH=\"{}:$PATH\"\n", env_path);
-                    
-            let line_for_append = line_for_append.as_bytes();
-                        
-            let bashrc_file = fs::OpenOptions::new().append(true).open("/root/.bashrc");
-                    
-            match bashrc_file {
-                Ok(mut file) => {
-                    let add_env = io::Write::write_all(&mut file, line_for_append);
-                    
-                    match add_env {
-                        Ok(_) => println!("Node.js successfully added on env's. You can try it by restarting your computer and typing 'node --version' on command line."),
-                        Err(error) => println!("And error occured: {}", error)
-                    }
-                },
-                Err(_) => println!("there is no .bashrc file on current folder, we cannot set env's. You can do it manually, Node.js installed on: {}", env_path)
-            }
+            env_path = format!("{}/bin", new_path);
         },
         &_ => {
             if !install_nodejs.status.success() {
@@ -176,29 +164,45 @@ pub fn install_nodejs_on_debian_based_distros(env_confs: &models::EnvConfigurati
     
             let new_path = format!("{}/{}", user_path, slice_of_file_name);
     
-            let env_path = format!("{}/bin", new_path);
-    
-            let line_for_append = format!("\nexport PATH=\"{}:$PATH\"\n", env_path);
-                    
-            let line_for_append = line_for_append.as_bytes();
-    
-            let create_bashrc_path = format!("{}/.bashrc", user_path);
-                        
-            let bashrc_file = fs::OpenOptions::new().append(true).open(create_bashrc_path);
-                    
-            match bashrc_file {
-                Ok(mut file) => {
-                    let add_env = io::Write::write_all(&mut file, line_for_append);
-                    
-                    match add_env {
-                        Ok(_) => println!("Node.js successfully added on env's. You can try it by restarting your computer and typing 'node --version' on command line."),
-                        Err(error) => println!("And error occured: {}", error)
-                    }
-                },
-                Err(_) => println!("there is no .bashrc file on current folder, we cannot set env's. You can do it manually, Node.js installed on: {}", env_path)
-            }
+            env_path = format!("{}/bin", new_path);
         }
     }
+
+    match env_confs.configure_debian_path_var(&env_path) {
+        Ok(_) => {
+            println!("Envs's successfully configured for node.js.");
+            
+            exit(0)
+        },
+        Err(error) => {
+            match error {
+                EnvConfigurationError::UnableToOpenUserShellFile(err) => println!("That error occured when we try to set your env's: {}", err),
+                EnvConfigurationError::UnableToWriteUserShellFile(err) => println!("That error occured when we try to set your env's: {}", err),
+                EnvConfigurationError::UnableToOpenSystemShellFile(err) => println!("That error occured when we try to set your env's: {}", err),
+                EnvConfigurationError::UnableToWriteSystemShellFile(err) => println!("That error occured when we try to set your env's: {}", err),
+                _ => println!("There is a bug!")
+            }
+
+            exit(1)
+        }
+    }
+    /*let line_for_append = format!("export PATH=\"{}:$PATH\"\n", env_path);
+                    
+    let line_for_append = line_for_append.as_bytes();
+                
+    let bashrc_file = fs::OpenOptions::new().append(true).open("/root/.bashrc");
+            
+    match bashrc_file {
+        Ok(mut file) => {
+            let add_env = io::Write::write_all(&mut file, line_for_append);
+            
+            match add_env {
+                Ok(_) => println!("Node.js successfully added on env's. You can try it by restarting your computer and typing 'node --version' on command line."),
+                Err(error) => println!("And error occured: {}", error)
+            }
+        },
+        Err(_) => println!("there is no .bashrc file on current folder, we cannot set env's. You can do it manually, Node.js installed on: {}", env_path)
+    }*/
 }
 
 pub fn install_nodejs_on_arch_linux(env_confs: &models::EnvConfiguration, url: &str, file_name: &str){
@@ -361,7 +365,26 @@ pub fn install_nodejs_on_arch_linux(env_confs: &models::EnvConfiguration, url: &
 
     println!("Source Files Downloaded Successfully");
 
-    let get_incli_paths_path = format!("{}/INCLI_PATHS", current_user_path);
+    match env_confs.configure_arch_linux_path_var(&current_user, &env_path) {
+        Ok(_) => {
+            println!("Envs's successfully configured for node.js.");
+            
+            exit(0)
+        },
+        Err(error) => {
+            match error {
+                EnvConfigurationError::UnableToOpenUserShellFile(err) => println!("That error occured when we try to set your env's: {}", err),
+                EnvConfigurationError::UnableToWriteUserShellFile(err) => println!("That error occured when we try to set your env's: {}", err),
+                EnvConfigurationError::UnableToOpenSystemShellFile(err) => println!("That error occured when we try to set your env's: {}", err),
+                EnvConfigurationError::UnableToWriteSystemShellFile(err) => println!("That error occured when we try to set your env's: {}", err),
+                _ => println!("There is a bug!")
+            }
+
+            exit(1)
+        }
+    }
+
+    /*let get_incli_paths_path = format!("{}/INCLI_PATHS", current_user_path);
 
     let check_if_incli_paths_exist = Command::new("cd").arg(&get_incli_paths_path).output();
 
@@ -392,7 +415,7 @@ pub fn install_nodejs_on_arch_linux(env_confs: &models::EnvConfiguration, url: &
         Err(err) => {
             eprintln!("Cannot open incli_envs.sh file for that reason: {}", err)
         }
-    }
+    }*/
     
 }
 
@@ -535,10 +558,29 @@ pub fn install_nodejs_on_alma_linux(env_confs: &models::EnvConfiguration, url: &
 
     println!("Source Files Downloaded Successfully");
 
+    match env_confs.configure_alma_linux_path_var(&current_user, &env_path) {
+        Ok(_) => {
+            println!("Envs's successfully configured for node.js.");
+            
+            exit(0)
+        },
+        Err(error) => {
+            match error {
+                EnvConfigurationError::UnableToOpenUserShellFile(err) => println!("That error occured when we try to set your env's: {}", err),
+                EnvConfigurationError::UnableToWriteUserShellFile(err) => println!("That error occured when we try to set your env's: {}", err),
+                EnvConfigurationError::UnableToOpenSystemShellFile(err) => println!("That error occured when we try to set your env's: {}", err),
+                EnvConfigurationError::UnableToWriteSystemShellFile(err) => println!("That error occured when we try to set your env's: {}", err),
+                _ => println!("There is a bug!")
+            }
+
+            exit(1)
+        }
+    }
+
     // in alma linux 9, terminal commands for checking existence of a folder always return success value.
     // because of that, we have to use std::path::PATH api.
 
-    let incli_paths_path = format!("{}/INCLI_PATHS", current_user_path);
+    /*let incli_paths_path = format!("{}/INCLI_PATHS", current_user_path);
 
     let check_if_incli_paths_exist = Path::new(&incli_paths_path);
 
@@ -565,7 +607,7 @@ pub fn install_nodejs_on_alma_linux(env_confs: &models::EnvConfiguration, url: &
         Err(err) => {
             eprintln!("Cannot open incli_envs.sh file for that reason: {}", err)
         }
-    }
+    }*/
 }
 
 pub fn install_nodejs_on_centos_and_fedora(env_confs: &models::EnvConfiguration, url: &str, file_name: &str) {
@@ -701,7 +743,26 @@ pub fn install_nodejs_on_centos_and_fedora(env_confs: &models::EnvConfiguration,
         }
     }
 
-    let incli_paths_path = format!("{}/INCLI_PATHS", current_user_path);
+    match env_confs.configure_centos_and_fedora_path_var(&current_user, &env_path) {
+        Ok(_) => {
+            println!("Envs's successfully configured for node.js.");
+            
+            exit(0)
+        },
+        Err(error) => {
+            match error {
+                EnvConfigurationError::UnableToOpenUserShellFile(err) => println!("That error occured when we try to set your env's: {}", err),
+                EnvConfigurationError::UnableToWriteUserShellFile(err) => println!("That error occured when we try to set your env's: {}", err),
+                EnvConfigurationError::UnableToOpenSystemShellFile(err) => println!("That error occured when we try to set your env's: {}", err),
+                EnvConfigurationError::UnableToWriteSystemShellFile(err) => println!("That error occured when we try to set your env's: {}", err),
+                _ => println!("There is a bug!")
+            }
+
+            exit(1)
+        }
+    }
+
+    /*let incli_paths_path = format!("{}/INCLI_PATHS", current_user_path);
 
     let check_if_incli_paths_exist = Path::new(&incli_paths_path);
 
@@ -728,7 +789,7 @@ pub fn install_nodejs_on_centos_and_fedora(env_confs: &models::EnvConfiguration,
         Err(err) => {
             eprintln!("Cannot open incli_envs.sh file for that reason: {}", err)
         }
-    }
+    }*/
 }
 
 pub fn install_nodejs_on_rocky_linux(env_confs: &models::EnvConfiguration, url: &str, file_name: &str) {
@@ -856,7 +917,26 @@ pub fn install_nodejs_on_rocky_linux(env_confs: &models::EnvConfiguration, url: 
         }
     }
 
-    let incli_paths_path = format!("{}/INCLI_PATHS", current_user_path);
+    match env_confs.configure_rocky_linux_path_var(&current_user, &env_path) {
+        Ok(_) => {
+            println!("Envs's successfully configured for node.js.");
+            
+            exit(0)
+        },
+        Err(error) => {
+            match error {
+                EnvConfigurationError::UnableToOpenUserShellFile(err) => println!("That error occured when we try to set your env's: {}", err),
+                EnvConfigurationError::UnableToWriteUserShellFile(err) => println!("That error occured when we try to set your env's: {}", err),
+                EnvConfigurationError::UnableToOpenSystemShellFile(err) => println!("That error occured when we try to set your env's: {}", err),
+                EnvConfigurationError::UnableToWriteSystemShellFile(err) => println!("That error occured when we try to set your env's: {}", err),
+                _ => println!("There is a bug!")
+            }
+
+            exit(1)
+        }
+    }
+
+    /*let incli_paths_path = format!("{}/INCLI_PATHS", current_user_path);
 
     let check_if_incli_paths_exist = Path::new(&incli_paths_path);
 
@@ -883,7 +963,7 @@ pub fn install_nodejs_on_rocky_linux(env_confs: &models::EnvConfiguration, url: 
         Err(err) => {
             eprintln!("Cannot open incli_envs.sh file for that reason: {}", err)
         }
-    }
+    }*/
 }
 
 pub fn install_node_on_alpine_linux() {
