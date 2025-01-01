@@ -1,3 +1,4 @@
+use crate::models::EnvConfigurationError;
 use crate::utils;
 use crate::models;
 use std::process::{Command, exit};
@@ -248,8 +249,7 @@ pub fn install_java_on_debian_based_distros(env_confs: &models::EnvConfiguration
        version == "23" ||
        version == "24" {
             let current_user = get_current_user();
-
-            let user_path = format!("/home/{}", current_user);
+            let env_path;
         
             let install_java = Command::new("wget")
                                             .arg(url)
@@ -334,34 +334,7 @@ pub fn install_java_on_debian_based_distros(env_confs: &models::EnvConfiguration
                                 .output()
                                 .unwrap();
             
-                    let env_path = format!("/root/{}", format_jvm_folder_name);
-            
-                    let line_for_append_1 = format!("\nexport PATH=\"{}/bin:$PATH\"\n", env_path);
-                    let line_for_append_1 = line_for_append_1.as_bytes();
-
-                    let line_for_append_2 = format!("\nexport JAVA_HOME=\"{}\"\n", env_path);
-                    let line_for_append_2 = line_for_append_2.as_bytes();
-                                
-                    let bashrc_file = fs::OpenOptions::new().append(true).open("/root/.bashrc");
-                            
-                    match bashrc_file {
-                        Ok(mut file) => {
-                            let add_env = io::Write::write_all(&mut file, line_for_append_2);
-
-                            match add_env {
-                                Ok(_) => println!("JAVA_HOME env successfully added on your user's envs."),
-                                Err(error) => println!("An error ocured when we try to set JAVA_HOME env: {}", error)
-                            }
-
-                            let add_env = io::Write::write_all(&mut file, line_for_append_1);
-                            
-                            match add_env {
-                                Ok(_) => println!("Java successfully added on env's. You can try it by restarting your computer and typing 'java -version' on command line."),
-                                Err(error) => println!("And error occured: {}", error)
-                            }
-                        },
-                        Err(_) => println!("cannot installed go for that reason: {}", env_path)
-                    }
+                    env_path = format!("/root/{}", format_jvm_folder_name);
                 },
                 &_ => {
                     if !install_java.status.success() {
@@ -373,9 +346,9 @@ pub fn install_java_on_debian_based_distros(env_confs: &models::EnvConfiguration
             
                     let file_for_moving = format!("{}/{}", std::str::from_utf8(&get_current_file_command.stdout).unwrap().trim(), file_name);
             
-                    Command::new("mv").arg(&file_for_moving).arg(&user_path).output().unwrap();
+                    Command::new("mv").arg(&file_for_moving).arg(&env_confs.home_dir.to_string()).output().unwrap();
             
-                    let file_path = format!("{}/{}", user_path, file_name);
+                    let file_path = format!("{}/{}", env_confs.home_dir.to_string(), file_name);
             
                     Command::new("sudo")
                                 .arg("chmod")
@@ -427,42 +400,72 @@ pub fn install_java_on_debian_based_distros(env_confs: &models::EnvConfiguration
                     Command::new("sudo")
                                 .arg("mv")
                                 .arg(format_current_folder_again)
-                                .arg(&user_path)
+                                .arg(&env_confs.home_dir.to_string())
                                 .output()
                                 .unwrap();
             
-                    let env_path = format!("{}/{}", user_path, format_jvm_folder_name);
-            
-                    let line_for_append_1 = format!("\nexport PATH=\"{}/bin:$PATH\"\n", env_path);
-                    let line_for_append_1 = line_for_append_1.as_bytes();
+                    env_path = format!("{}/{}", env_confs.home_dir.to_string(), format_jvm_folder_name);
+                }
+            }
 
-                    let line_for_append_2 = format!("\nexport JAVA_HOME=\"{}\"\n", env_path);
-                    let line_for_append_2 = line_for_append_2.as_bytes();
-            
-                    let create_bashrc_path = format!("{}/.bashrc", user_path);
-                                
-                    let bashrc_file = fs::OpenOptions::new().append(true).open(create_bashrc_path);
-                            
-                    match bashrc_file {
-                        Ok(mut file) => {
-                            let add_env = io::Write::write_all(&mut file, line_for_append_2);
-
-                            match add_env {
-                                Ok(_) => println!("JAVA_HOME env successfully added on your user's envs."),
-                                Err(error) => println!("An error ocured when we try to set JAVA_HOME env: {}", error)
-                            }
-
-                            let add_env = io::Write::write_all(&mut file, line_for_append_1);
-                            
-                            match add_env {
-                                Ok(_) => println!("Java successfully added on env's. You can try it by restarting your computer and typing 'java -version' on command line."),
-                                Err(error) => println!("And error occured: {}", error)
-                            }
-                        },
-                        Err(_) => println!("cannot installed go for that reason: {}", env_path)
+            match env_confs.add_debian_env_var("JAVA_HOME", &env_path) {
+                Ok(_) => println!("JAVA_HOME env successfully added."),
+                Err(error) => {
+                    match error {
+                        EnvConfigurationError::UnableToOpenUserShellFile(err) => println!("That error occured when we try to set your env's: {}", err),
+                        EnvConfigurationError::UnableToWriteUserShellFile(err) => println!("That error occured when we try to set your env's: {}", err),
+                        EnvConfigurationError::UnableToOpenSystemShellFile(err) => println!("That error occured when we try to set your env's: {}", err),
+                        EnvConfigurationError::UnableToWriteSystemShellFile(err) => println!("That error occured when we try to set your env's: {}", err),
+                        _ => println!("There is a bug!")
                     }
                 }
             }
+
+            match env_confs.configure_debian_path_var(&format!("{}/bin", env_path)) {
+                Ok(_) => {
+                    println!("PATH env successfully configured for Java.");
+                    
+                    exit(0)
+                },
+                Err(error) => {
+                    match error {
+                        EnvConfigurationError::UnableToOpenUserShellFile(err) => println!("That error occured when we try to set your env's: {}", err),
+                        EnvConfigurationError::UnableToWriteUserShellFile(err) => println!("That error occured when we try to set your env's: {}", err),
+                        EnvConfigurationError::UnableToOpenSystemShellFile(err) => println!("That error occured when we try to set your env's: {}", err),
+                        EnvConfigurationError::UnableToWriteSystemShellFile(err) => println!("That error occured when we try to set your env's: {}", err),
+                        _ => println!("There is a bug!")
+                    }
+        
+                    exit(1)
+                }
+            }
+      
+            /*let line_for_append_1 = format!("\nexport PATH=\"{}/bin:$PATH\"\n", env_path);
+            let line_for_append_1 = line_for_append_1.as_bytes();
+
+            let line_for_append_2 = format!("\nexport JAVA_HOME=\"{}\"\n", env_path);
+            let line_for_append_2 = line_for_append_2.as_bytes();
+                        
+            let bashrc_file = fs::OpenOptions::new().append(true).open("/root/.bashrc");
+                    
+            match bashrc_file {
+                Ok(mut file) => {
+                    let add_env = io::Write::write_all(&mut file, line_for_append_2);
+
+                    match add_env {
+                        Ok(_) => println!("JAVA_HOME env successfully added on your user's envs."),
+                        Err(error) => println!("An error ocured when we try to set JAVA_HOME env: {}", error)
+                    }
+
+                    let add_env = io::Write::write_all(&mut file, line_for_append_1);
+                    
+                    match add_env {
+                        Ok(_) => println!("Java successfully added on env's. You can try it by restarting your computer and typing 'java -version' on command line."),
+                        Err(error) => println!("And error occured: {}", error)
+                    }
+                },
+                Err(_) => println!("cannot installed go for that reason: {}", env_path)
+            }*/
       }
 }
 
@@ -471,7 +474,6 @@ pub fn install_java_on_arch_linux(env_confs: &models::EnvConfiguration, url: &st
     
     let current_user = get_current_user();
     let env_path;
-    let current_user_path;
 
     let format_jvm_folder_name = match version {
         "9" => "jdk-9.0.4",
@@ -514,8 +516,6 @@ pub fn install_java_on_arch_linux(env_confs: &models::EnvConfiguration, url: &st
 
     match current_user.as_str() {
         "root" => {
-            current_user_path = "/root".to_string();
-
             let current_folder_path = Command::new("pwd").output().unwrap();
             let current_folder_path = std::str::from_utf8(&current_folder_path.stdout).unwrap().trim();
 
@@ -568,8 +568,6 @@ pub fn install_java_on_arch_linux(env_confs: &models::EnvConfiguration, url: &st
             env_path = format!("/root/{}", format_jvm_folder_name)
         },
         &_ => {
-            current_user_path = format!("/home/{}", current_user);
-
             let current_folder_path = Command::new("pwd").output().unwrap();
             let current_folder_path = std::str::from_utf8(&current_folder_path.stdout).unwrap().trim();
 
@@ -607,8 +605,6 @@ pub fn install_java_on_arch_linux(env_confs: &models::EnvConfiguration, url: &st
 
             let format_the_source_files_path = format!("{}/{}", current_folder_path, format_jvm_folder_name);
 
-            //println!("source files path: {}", format_the_source_files_path);
-
             let give_permissions_to_source_files = Command::new("sudo")
                                                                                     .arg("chmod")
                                                                                     .arg("777")
@@ -627,7 +623,7 @@ pub fn install_java_on_arch_linux(env_confs: &models::EnvConfiguration, url: &st
             let move_the_source_files_to_root = Command::new("sudo")
                                                                                     .arg("mv")
                                                                                     .arg(format_the_source_files_path)
-                                                                                    .arg(&current_user_path)
+                                                                                    .arg(&env_confs.home_dir.to_string())
                                                                                     .output();
 
             match move_the_source_files_to_root {
@@ -638,13 +634,45 @@ pub fn install_java_on_arch_linux(env_confs: &models::EnvConfiguration, url: &st
                 }
             }
 
-            env_path = format!("{}/{}", current_user_path, format_jvm_folder_name)
+            env_path = format!("{}/{}", env_confs.home_dir.to_string(), format_jvm_folder_name)
         }
     }
 
     println!("Source Files Downloaded Successfully");
 
-    let get_incli_paths_path = format!("{}/INCLI_PATHS", current_user_path);
+    match env_confs.add_arch_linux_env_var("JAVA_HOME", &env_path) {
+        Ok(_) => println!("JAVA_HOME env successfully added."),
+        Err(error) => {
+            match error {
+                EnvConfigurationError::UnableToOpenUserShellFile(err) => println!("That error occured when we try to set your env's: {}", err),
+                EnvConfigurationError::UnableToWriteUserShellFile(err) => println!("That error occured when we try to set your env's: {}", err),
+                EnvConfigurationError::UnableToOpenSystemShellFile(err) => println!("That error occured when we try to set your env's: {}", err),
+                EnvConfigurationError::UnableToWriteSystemShellFile(err) => println!("That error occured when we try to set your env's: {}", err),
+                _ => println!("There is a bug!")
+            }
+        }
+    }
+
+    match env_confs.configure_arch_linux_path_var(&current_user, &format!("{}/bin", env_path)) {
+        Ok(_) => {
+            println!("PATH env successfully configured for Java.");
+            
+            exit(0)
+        },
+        Err(error) => {
+            match error {
+                EnvConfigurationError::UnableToOpenUserShellFile(err) => println!("That error occured when we try to set your env's: {}", err),
+                EnvConfigurationError::UnableToWriteUserShellFile(err) => println!("That error occured when we try to set your env's: {}", err),
+                EnvConfigurationError::UnableToOpenSystemShellFile(err) => println!("That error occured when we try to set your env's: {}", err),
+                EnvConfigurationError::UnableToWriteSystemShellFile(err) => println!("That error occured when we try to set your env's: {}", err),
+                _ => println!("There is a bug!")
+            }
+
+            exit(1)
+        }
+    }
+
+    /*let get_incli_paths_path = format!("{}/INCLI_PATHS", env_confs.home_dir.to_string());
 
     let check_if_incli_paths_exist = Command::new("cd").arg(&get_incli_paths_path).output();
 
@@ -690,7 +718,7 @@ pub fn install_java_on_arch_linux(env_confs: &models::EnvConfiguration, url: &st
             println!("Because of that, we cannot set env's. You can set your env's manually.");
             exit(1)
         }
-    }
+    }*/
 }
 
 pub fn install_java_on_alma_linux(env_confs: &models::EnvConfiguration, url: &str, file_name: &str, version: &str) {
@@ -732,159 +760,186 @@ pub fn install_java_on_alma_linux(env_confs: &models::EnvConfiguration, url: &st
        version == "22" ||
        version == "23" ||
        version == "24" {
-            let format_jvm_folder_name = match version {
-                "9" => "jdk-9.0.4",
-                "10" => "jdk-10.0.2",
-                "11" => "jdk-11.0.2",
-                "12" => "jdk-12.0.2",
-                "13" => "jdk-13.0.2",
-                "14" => "jdk-14.0.2",
-                "15" => "jdk-15.0.2",
-                "16" => "jdk-16.0.2",
-                "17" => "jdk-17.0.2",
-                "18" => "jdk-18.0.2",
-                "19" => "jdk-19.0.1",
-                "20" => "jdk-20.0.2",
-                "21" => "jdk-21.0.2",
-                "22" => "jdk-22.0.1",
-                "23" => "jdk-23",
-                "24" => "jdk-24",
-                &_ => ""
-            };
+        let format_jvm_folder_name = match version {
+            "9" => "jdk-9.0.4",
+            "10" => "jdk-10.0.2",
+            "11" => "jdk-11.0.2",
+            "12" => "jdk-12.0.2",
+            "13" => "jdk-13.0.2",
+            "14" => "jdk-14.0.2",
+            "15" => "jdk-15.0.2",
+            "16" => "jdk-16.0.2",
+            "17" => "jdk-17.0.2",
+            "18" => "jdk-18.0.2",
+            "19" => "jdk-19.0.1",
+            "20" => "jdk-20.0.2",
+            "21" => "jdk-21.0.2",
+            "22" => "jdk-22.0.1",
+            "23" => "jdk-23",
+            "24" => "jdk-24",
+            &_ => ""
+        };
         
-            let current_user = get_current_user();
-            let env_path;
-            let current_user_path;
+        let current_user = get_current_user();
+        let env_path;
         
-            let install_java = Command::new("wget")
+        let install_java = Command::new("wget")
                                             .arg(url)
                                             .arg("-O")
                                             .arg(file_name)
                                             .output()
                                             .expect("Some Error Happened");
         
-            if !install_java.status.success() {
-                println!("Couldn't install Java Source Files Because Of Whatever reason.");
-                exit(1);
-            }
+        if !install_java.status.success() {
+            println!("Couldn't install Java Source Files Because Of Whatever reason.");
+            exit(1);
+        }
         
-            match current_user.as_str() {
-                "root" => {
-                    current_user_path = "/root".to_string();
+        match current_user.as_str() {
+            "root" => {
+                let current_folder_path = Command::new("pwd").output().unwrap();
+                let current_folder_path = std::str::from_utf8(&current_folder_path.stdout).unwrap().trim();
         
-                    let current_folder_path = Command::new("pwd").output().unwrap();
-                    let current_folder_path = std::str::from_utf8(&current_folder_path.stdout).unwrap().trim();
+                let format_the_whole_file_path = format!("{}/{}", current_folder_path, file_name);
         
-                    let format_the_whole_file_path = format!("{}/{}", current_folder_path, file_name);
-        
-                    Command::new("sudo")
+                Command::new("sudo")
                                 .arg("chmod")
                                 .arg("755")
                                 .arg(&format_the_whole_file_path)
                                 .output()
                                 .expect("couldn't give 755 permission to source code.");
         
-                    let extract_the_archive = Command::new("sudo")
+                let extract_the_archive = Command::new("sudo")
                                                         .arg("tar")
                                                         .arg("xzvf")
                                                         .arg(&format_the_whole_file_path)
                                                         .output();
         
-                    match extract_the_archive {
-                        Ok(_) => println!("archive file successfully extracted"),
-                        Err(error) => {
-                            println!("that error occured when extracting archive file: {}", error);
-                            exit(1)
-                        }
+                match extract_the_archive {
+                    Ok(_) => println!("archive file successfully extracted"),
+                    Err(error) => {
+                        println!("that error occured when extracting archive file: {}", error);
+                        exit(1)
                     }
+                }
         
-                    Command::new("sudo")
+                Command::new("sudo")
                                 .arg("rm")
                                 .arg("-rf")
                                 .arg(format_the_whole_file_path)
                                 .output()
                                 .unwrap();
         
-                    let source_files_path = format!("{}/{}", current_folder_path, format_jvm_folder_name);
+                let source_files_path = format!("{}/{}", current_folder_path, format_jvm_folder_name);
         
-                    let move_the_source_files = Command::new("sudo")
+                let move_the_source_files = Command::new("sudo")
                                                                                 .arg("mv")
                                                                                 .arg(source_files_path)
-                                                                                .arg(&current_user_path)
+                                                                                .arg(&env_confs.home_dir.to_string())
                                                                                 .output();
         
-                    match move_the_source_files {
-                        Ok(_) => (),
-                        Err(error) => {
-                            eprintln!("cannot move the source file for this reason: {}", error);
-                            exit(1)
-                        }
+                match move_the_source_files {
+                    Ok(_) => (),
+                    Err(error) => {
+                        eprintln!("cannot move the source file for this reason: {}", error);
+                        exit(1)
                     }
+                }
         
-                    env_path = format!("/root/{}", format_jvm_folder_name);
-                },
-                &_ => {
-                    current_user_path = format!("/home/{}", current_user);
+                env_path = format!("/root/{}", format_jvm_folder_name);
+            },
+            &_ => {
+                let current_folder_path = Command::new("pwd").output().unwrap();
+                let current_folder_path = std::str::from_utf8(&current_folder_path.stdout).unwrap().trim();
         
-                    let current_folder_path = Command::new("pwd").output().unwrap();
-                    let current_folder_path = std::str::from_utf8(&current_folder_path.stdout).unwrap().trim();
+                let format_the_whole_file_path = format!("{}/{}", current_folder_path, file_name);
         
-                    let format_the_whole_file_path = format!("{}/{}", current_folder_path, file_name);
-        
-                    Command::new("sudo")
+                Command::new("sudo")
                                 .arg("chmod")
                                 .arg("755")
                                 .arg(&format_the_whole_file_path)
                                 .output()
                                 .expect("couldn't give 755 permission to source code.");
         
-                    let extract_the_archive = Command::new("sudo")
+                let extract_the_archive = Command::new("sudo")
                                                                                 .arg("tar")
                                                                                 .arg("xzvf")
                                                                                 .arg(&format_the_whole_file_path)
                                                                                 .output();
         
-                    match extract_the_archive {
-                        Ok(_) => println!("archive file successfully extracted"),
-                        Err(error) => {
-                            println!("that error occured when extracting archive file: {}", error);
-                            exit(1)
-                        }
+                match extract_the_archive {
+                    Ok(_) => println!("archive file successfully extracted"),
+                    Err(error) => {
+                        println!("that error occured when extracting archive file: {}", error);
+                        exit(1)
                     }
+                }
         
-                    Command::new("sudo")
+                Command::new("sudo")
                                 .arg("rm")
                                 .arg("-rf")
                                 .arg(format_the_whole_file_path)
                                 .output()
                                 .unwrap();
         
-                    let source_files_path = format!("{}/{}", current_folder_path, format_jvm_folder_name);
+                let source_files_path = format!("{}/{}", current_folder_path, format_jvm_folder_name);
         
-                    let move_the_source_files = Command::new("sudo")
+                let move_the_source_files = Command::new("sudo")
                                                                                 .arg("mv")
                                                                                 .arg(source_files_path)
-                                                                                .arg(&current_user_path)
+                                                                                .arg(&env_confs.home_dir.to_string())
                                                                                 .output();
         
-                    match move_the_source_files {
-                        Ok(_) => (),
-                        Err(error) => {
-                            eprintln!("cannot move the source file for this reason: {}", error);
-                            exit(1)
-                        }
+                match move_the_source_files {
+                    Ok(_) => (),
+                    Err(error) => {
+                        eprintln!("cannot move the source file for this reason: {}", error);
+                        exit(1)
                     }
+                }
         
-                    env_path = format!("{}/{}", current_user_path, format_jvm_folder_name)
+                env_path = format!("{}/{}", env_confs.home_dir.to_string(), format_jvm_folder_name)
+            }
+        }
+        
+        println!("Source Files Downloaded Successfully");
+
+        match env_confs.add_alma_linux_env_var("JAVA_HOME", &env_path) {
+            Ok(_) => println!("JAVA_HOME env successfully added."),
+            Err(error) => {
+                match error {
+                    EnvConfigurationError::UnableToOpenUserShellFile(err) => println!("That error occured when we try to set your env's: {}", err),
+                    EnvConfigurationError::UnableToWriteUserShellFile(err) => println!("That error occured when we try to set your env's: {}", err),
+                    EnvConfigurationError::UnableToOpenSystemShellFile(err) => println!("That error occured when we try to set your env's: {}", err),
+                    EnvConfigurationError::UnableToWriteSystemShellFile(err) => println!("That error occured when we try to set your env's: {}", err),
+                    _ => println!("There is a bug!")
                 }
             }
+        }
         
-            println!("Source Files Downloaded Successfully");
+        match env_confs.configure_alma_linux_path_var(&current_user, &format!("{}/bin", env_path)) {
+             Ok(_) => {
+                println!("PATH env successfully configured for Java.");
+                    
+                exit(0)
+            },
+            Err(error) => {
+                match error {
+                    EnvConfigurationError::UnableToOpenUserShellFile(err) => println!("That error occured when we try to set your env's: {}", err),
+                    EnvConfigurationError::UnableToWriteUserShellFile(err) => println!("That error occured when we try to set your env's: {}", err),
+                    EnvConfigurationError::UnableToOpenSystemShellFile(err) => println!("That error occured when we try to set your env's: {}", err),
+                    EnvConfigurationError::UnableToWriteSystemShellFile(err) => println!("That error occured when we try to set your env's: {}", err),
+                    _ => println!("There is a bug!")
+                }
+        
+                exit(1)
+            }
+        }
         
             // in alma linux 9, terminal commands for checking existence of a folder always return success value.
             // because of that, we have to use std::path::PATH api.
         
-            let incli_paths_path = format!("{}/INCLI_PATHS", current_user_path);
+            /*let incli_paths_path = format!("{}/INCLI_PATHS", env_confs.home_dir.to_string());
         
             let check_if_incli_paths_exist = Path::new(&incli_paths_path);
         
@@ -925,7 +980,7 @@ pub fn install_java_on_alma_linux(env_confs: &models::EnvConfiguration, url: &st
                     eprintln!("Cannot open incli_envs.sh file for that reason: {}", err);
                     println!("Because of that we couldn't set env's. You can set your env's manually if you want.")
                 }
-            }
+            }*/
     }
 }
 
@@ -1004,8 +1059,7 @@ pub fn install_java_on_centos_and_fedora(env_confs: &models::EnvConfiguration, u
 
             let current_user = get_current_user();
             let env_path;
-            let current_user_path;
-        
+
             let install_nodejs = Command::new("wget")
                                                         .arg(url)
                                                         .arg("-O")
@@ -1020,8 +1074,6 @@ pub fn install_java_on_centos_and_fedora(env_confs: &models::EnvConfiguration, u
         
             match current_user.as_str() {
                 "root" => {
-                    current_user_path = "root".to_string();
-        
                     let current_folder_path = Command::new("pwd").output().unwrap();
                     let current_folder_path = std::str::from_utf8(&current_folder_path.stdout).unwrap().trim();
         
@@ -1060,7 +1112,7 @@ pub fn install_java_on_centos_and_fedora(env_confs: &models::EnvConfiguration, u
                     let move_the_source_files = Command::new("sudo")
                                                                                 .arg("mv")
                                                                                 .arg(source_files_path)
-                                                                                .arg(&current_user_path)
+                                                                                .arg(&env_confs.home_dir.to_string())
                                                                                 .output();
         
                     match move_the_source_files {
@@ -1074,8 +1126,6 @@ pub fn install_java_on_centos_and_fedora(env_confs: &models::EnvConfiguration, u
                     env_path = format!("/root/{}", format_jvm_folder_name)
                 },
                 &_ => {
-                    current_user_path = format!("/home/{}", current_user);
-        
                     let current_folder_path = Command::new("pwd").output().unwrap();
                     let current_folder_path = std::str::from_utf8(&current_folder_path.stdout).unwrap().trim();
         
@@ -1114,7 +1164,7 @@ pub fn install_java_on_centos_and_fedora(env_confs: &models::EnvConfiguration, u
                     let move_the_source_files = Command::new("sudo")
                                                                                 .arg("mv")
                                                                                 .arg(source_files_path)
-                                                                                .arg(&current_user_path)
+                                                                                .arg(&env_confs.home_dir.to_string())
                                                                                 .output();
         
                     match move_the_source_files {
@@ -1125,11 +1175,43 @@ pub fn install_java_on_centos_and_fedora(env_confs: &models::EnvConfiguration, u
                         }
                     }
         
-                    env_path = format!("{}/{}", current_user_path, format_jvm_folder_name);
+                    env_path = format!("{}/{}", env_confs.home_dir.to_string(), format_jvm_folder_name);
+                }
+            }
+
+            match env_confs.add_alma_linux_env_var("JAVA_HOME", &env_path) {
+                Ok(_) => println!("JAVA_HOME env successfully added."),
+                Err(error) => {
+                    match error {
+                        EnvConfigurationError::UnableToOpenUserShellFile(err) => println!("That error occured when we try to set your env's: {}", err),
+                        EnvConfigurationError::UnableToWriteUserShellFile(err) => println!("That error occured when we try to set your env's: {}", err),
+                        EnvConfigurationError::UnableToOpenSystemShellFile(err) => println!("That error occured when we try to set your env's: {}", err),
+                        EnvConfigurationError::UnableToWriteSystemShellFile(err) => println!("That error occured when we try to set your env's: {}", err),
+                        _ => println!("There is a bug!")
+                    }
+                }
+            }
+            
+            match env_confs.configure_alma_linux_path_var(&current_user, &format!("{}/bin", env_path)) {
+                 Ok(_) => {
+                    println!("PATH env successfully configured for Java.");
+                        
+                    exit(0)
+                },
+                Err(error) => {
+                    match error {
+                        EnvConfigurationError::UnableToOpenUserShellFile(err) => println!("That error occured when we try to set your env's: {}", err),
+                        EnvConfigurationError::UnableToWriteUserShellFile(err) => println!("That error occured when we try to set your env's: {}", err),
+                        EnvConfigurationError::UnableToOpenSystemShellFile(err) => println!("That error occured when we try to set your env's: {}", err),
+                        EnvConfigurationError::UnableToWriteSystemShellFile(err) => println!("That error occured when we try to set your env's: {}", err),
+                        _ => println!("There is a bug!")
+                    }
+            
+                    exit(1)
                 }
             }
         
-            let incli_paths_path = format!("{}/INCLI_PATHS", current_user_path);
+            /*let incli_paths_path = format!("{}/INCLI_PATHS", env_confs.home_dir.to_string());
         
             let check_if_incli_paths_exist = Path::new(&incli_paths_path);
         
@@ -1170,7 +1252,7 @@ pub fn install_java_on_centos_and_fedora(env_confs: &models::EnvConfiguration, u
                     eprintln!("Cannot open incli_envs.sh file for that reason: {}", err);
                     println!("We couldn't set env's due to the previously printed reason. You can set it manually.")
                 }
-            }
+            }*/
     }
 }
 
@@ -1249,7 +1331,6 @@ pub fn install_java_on_rocky_linux(env_confs: &models::EnvConfiguration, url: &s
 
             let current_user = get_current_user();
             let env_path;
-            let current_user_path;
         
             let install_java = Command::new("wget")
                                                         .arg(url)
@@ -1265,8 +1346,6 @@ pub fn install_java_on_rocky_linux(env_confs: &models::EnvConfiguration, url: &s
         
             match current_user.as_str() {
                 "root" => {
-                    current_user_path = "/root".to_string();
-        
                     let current_folder_path = Command::new("pwd").output().unwrap();
                     let current_folder_path = std::str::from_utf8(&current_folder_path.stdout).unwrap().trim();
         
@@ -1301,7 +1380,7 @@ pub fn install_java_on_rocky_linux(env_confs: &models::EnvConfiguration, url: &s
         
                     let move_the_source_files = Command::new("mv")
                                                                                     .arg(source_files_path)
-                                                                                    .arg(&current_user_path)
+                                                                                    .arg(&env_confs.home_dir.to_string())
                                                                                     .output();
                     
                     match move_the_source_files {
@@ -1315,8 +1394,6 @@ pub fn install_java_on_rocky_linux(env_confs: &models::EnvConfiguration, url: &s
                     env_path = format!("/root/{}", format_jvm_folder_name);
                 },
                 &_ => {
-                    current_user_path = format!("/home/{}", current_user);
-        
                     let current_folder_path = Command::new("pwd").output().unwrap();
                     let current_folder_path = std::str::from_utf8(&current_folder_path.stdout).unwrap().trim();
         
@@ -1351,7 +1428,7 @@ pub fn install_java_on_rocky_linux(env_confs: &models::EnvConfiguration, url: &s
         
                     let move_the_source_files = Command::new("mv")
                                                                                 .arg(source_files_path)
-                                                                                .arg(&current_user_path)
+                                                                                .arg(&env_confs.home_dir.to_string())
                                                                                 .output();
         
                     match move_the_source_files {
@@ -1362,11 +1439,42 @@ pub fn install_java_on_rocky_linux(env_confs: &models::EnvConfiguration, url: &s
                         }
                     }
         
-                    env_path = format!("{}/{}", current_user_path, format_jvm_folder_name);
+                    env_path = format!("{}/{}", env_confs.home_dir.to_string(), format_jvm_folder_name);
                 }
             }
         
-            let incli_paths_path = format!("{}/INCLI_PATHS", current_user_path);
+            match env_confs.add_rocky_linux_env_var("JAVA_HOME", &env_path) {
+                Ok(_) => println!("JAVA_HOME successfully added to your env's."),
+                Err(error) => {
+                    match error {
+                        EnvConfigurationError::UnableToOpenUserShellFile(err) => println!("That error occured when we try to set your env's: {}", err),
+                        EnvConfigurationError::UnableToWriteUserShellFile(err) => println!("That error occured when we try to set your env's: {}", err),
+                        EnvConfigurationError::UnableToOpenSystemShellFile(err) => println!("That error occured when we try to set your env's: {}", err),
+                        EnvConfigurationError::UnableToWriteSystemShellFile(err) => println!("That error occured when we try to set your env's: {}", err),
+                        _ => println!("There is a bug!")
+                    }
+                }
+            }
+
+            match env_confs.configure_rocky_linux_path_var(&current_user, &format!("{}/bin",env_path)) {
+                Ok(_) => {
+                    println!("Envs's successfully configured for node.js.");
+                    
+                    exit(0)
+                },
+                Err(error) => {
+                    match error {
+                        EnvConfigurationError::UnableToOpenUserShellFile(err) => println!("That error occured when we try to set your env's: {}", err),
+                        EnvConfigurationError::UnableToWriteUserShellFile(err) => println!("That error occured when we try to set your env's: {}", err),
+                        EnvConfigurationError::UnableToOpenSystemShellFile(err) => println!("That error occured when we try to set your env's: {}", err),
+                        EnvConfigurationError::UnableToWriteSystemShellFile(err) => println!("That error occured when we try to set your env's: {}", err),
+                        _ => println!("There is a bug!")
+                    }
+        
+                    exit(1)
+                }
+            }
+            /*let incli_paths_path = format!("{}/INCLI_PATHS", env_confs.home_dir.to_string());
         
             let check_if_incli_paths_exist = Path::new(&incli_paths_path);
         
@@ -1407,7 +1515,7 @@ pub fn install_java_on_rocky_linux(env_confs: &models::EnvConfiguration, url: &s
                     eprintln!("Cannot open incli_envs.sh file for that reason: {}", err);
                     println!("We couldn't set env's due to the previously printed reason. You can set it manually.")
                 }
-            }
+            }*/
 
 
     }
