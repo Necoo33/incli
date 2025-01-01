@@ -3,7 +3,7 @@ use std::fmt::Display;
 pub enum EnvConfigurationError {
     NotConfigured, UnableToOpenUserShellFile(String), 
     UnableToWriteUserShellFile(String), UnableToOpenSystemShellFile(String), 
-    UnableToWriteSystemShellFile(String), InvalidValueToPass
+    UnableToWriteSystemShellFile(String), InvalidValueToPass, AnotherShell
 }
 
 #[derive(PartialEq, Clone)]

@@ -1,10 +1,9 @@
 use crate::models;
 use crate::utils;
 use std::{fs::OpenOptions, io::{Read, Write}, path::Path, process::exit};
-use sys_info_extended::{get_home_dir_and_shell, os_type, EnvOptions};
+use sys_info_extended::{get_home_dir_and_shell, EnvOptions};
 
 use models::{ShellType, ShellError, EnvConfiguration, EnvConfigurationError, EnvConfigurationOpts, OsType};
-use utils::configure_incli_envs_file;
 
 pub fn detect_shell(user: &str) -> std::result::Result<ShellType, ShellError> {
     let etc_passwd = Path::new("/etc/passwd");
@@ -138,6 +137,10 @@ impl EnvConfiguration {
                         Err(error) => Err(EnvConfigurationError::UnableToOpenUserShellFile(error.to_string()))
                     }
                 },
+                ShellType::Fish => match self.configure_path_var_for_fish(value) {
+                    Ok(_) => Ok(()),
+                    Err(error) => Err(error)
+                },
                 _ => Err(EnvConfigurationError::NotConfigured)
             },
             EnvConfigurationOpts::Initial => Err(EnvConfigurationError::InvalidValueToPass),
@@ -178,6 +181,10 @@ impl EnvConfiguration {
                         },
                         Err(error) => Err(EnvConfigurationError::UnableToOpenUserShellFile(error.to_string()))
                     }
+                },
+                ShellType::Fish => match self.add_env_for_fish(name, value) {
+                    Ok(_) => Ok(()),
+                    Err(error) => Err(error)
                 },
                 _ => Err(EnvConfigurationError::NotConfigured)
             },
@@ -228,9 +235,15 @@ impl EnvConfiguration {
                         }
                     }
                 } else {
-                    println!("The shell you were using is not supported.");
+                    match self.configure_path_var_for_fish(value) {
+                        Ok(_) => (),
+                        Err(error) => match error {
+                            EnvConfigurationError::AnotherShell => (),
+                            _ => return Err(error)
+                        }
+                    }
 
-                    Err(EnvConfigurationError::NotConfigured)
+                    return Ok(())
                 }
             },
             EnvConfigurationOpts::Initial => Err(EnvConfigurationError::InvalidValueToPass),
@@ -279,9 +292,15 @@ impl EnvConfiguration {
                         }
                     }
                 } else {
-                    println!("The shell you were using is not supported.");
+                    match self.add_env_for_fish(name, value) {
+                        Ok(_) => (),
+                        Err(err) => match err {
+                            EnvConfigurationError::AnotherShell => (),
+                            _ => return Err(err)
+                        }
+                    }
 
-                    Err(EnvConfigurationError::NotConfigured)
+                    return Ok(())
                 }
             },
             EnvConfigurationOpts::Initial => Err(EnvConfigurationError::InvalidValueToPass),
@@ -330,9 +349,15 @@ impl EnvConfiguration {
                         }
                     }
                 } else {
-                    println!("The shell you were using is not supported.");
+                    match self.configure_path_var_for_fish(value) {
+                        Ok(_) => (),
+                        Err(error) => match error {
+                            EnvConfigurationError::AnotherShell => (),
+                            _ => return Err(error)
+                        }
+                    }
 
-                    Err(EnvConfigurationError::NotConfigured)
+                    return Ok(())
                 }
             },
             EnvConfigurationOpts::Initial => Err(EnvConfigurationError::InvalidValueToPass),
@@ -381,9 +406,15 @@ impl EnvConfiguration {
                         }
                     }
                 } else {
-                    println!("The shell you were using is not supported.");
+                    match self.add_env_for_fish(name, value) {
+                        Ok(_) => (),
+                        Err(err) => match err {
+                            EnvConfigurationError::AnotherShell => (),
+                            _ => return Err(err)
+                        }
+                    }
 
-                    Err(EnvConfigurationError::NotConfigured)
+                    return Ok(())
                 }
             },
             EnvConfigurationOpts::Initial => Err(EnvConfigurationError::InvalidValueToPass),
@@ -432,9 +463,15 @@ impl EnvConfiguration {
                         }
                     }
                 } else {
-                    println!("The shell you were using is not supported.");
+                    match self.configure_path_var_for_fish(value) {
+                        Ok(_) => (),
+                        Err(error) => match error {
+                            EnvConfigurationError::AnotherShell => (),
+                            _ => return Err(error)
+                        }
+                    }
 
-                    Err(EnvConfigurationError::NotConfigured)
+                    return Ok(())
                 }
             },
             EnvConfigurationOpts::Initial => Err(EnvConfigurationError::InvalidValueToPass),
@@ -483,9 +520,15 @@ impl EnvConfiguration {
                         }
                     }
                 } else {
-                    println!("The shell you were using is not supported.");
+                    match self.add_env_for_fish(name, value) {
+                        Ok(_) => (),
+                        Err(err) => match err {
+                            EnvConfigurationError::AnotherShell => (),
+                            _ => return Err(err)
+                        }
+                    }
 
-                    Err(EnvConfigurationError::NotConfigured)
+                    return Ok(())
                 }
             },
             EnvConfigurationOpts::Initial => Err(EnvConfigurationError::InvalidValueToPass),
@@ -534,9 +577,15 @@ impl EnvConfiguration {
                         }
                     }
                 } else {
-                    println!("The shell you were using is not supported.");
+                    match self.configure_path_var_for_fish(value) {
+                        Ok(_) => (),
+                        Err(error) => match error {
+                            EnvConfigurationError::AnotherShell => (),
+                            _ => return Err(error)
+                        }
+                    }
 
-                    Err(EnvConfigurationError::NotConfigured)
+                    return Ok(())
                 }
             },
             EnvConfigurationOpts::Initial => Err(EnvConfigurationError::InvalidValueToPass),
@@ -585,13 +634,59 @@ impl EnvConfiguration {
                         }
                     }
                 } else {
-                    println!("The shell you were using is not supported.");
+                    match self.add_env_for_fish(name, value) {
+                        Ok(_) => (),
+                        Err(err) => match err {
+                            EnvConfigurationError::AnotherShell => (),
+                            _ => return Err(err)
+                        }
+                    }
 
-                    Err(EnvConfigurationError::NotConfigured)
+                    return Ok(())
                 }
             },
             EnvConfigurationOpts::Initial => Err(EnvConfigurationError::InvalidValueToPass),
             EnvConfigurationOpts::Specific(_) => Err(EnvConfigurationError::InvalidValueToPass)
+        }
+    }
+
+    fn configure_path_var_for_fish(&self, value: &str) -> std::result::Result<(), EnvConfigurationError>{
+        if matches!(self.shell, EnvConfigurationOpts::Shell(ShellType::Fish)) {
+            match OpenOptions::new().append(true).open(format!("{}/.config/fish/config.fish", self.home_dir)) {
+                Ok(mut config_fish_file) => {
+                    let format_value = format!("\nset -Ux fish_user_paths {} $fish_user_paths", value);
+
+                    let add_env = Write::write_all(&mut config_fish_file, format_value.as_bytes());
+            
+                    match add_env {
+                        Ok(_) => Ok(()),
+                        Err(error) => Err(EnvConfigurationError::UnableToWriteUserShellFile(error.to_string()))
+                    }
+                },
+                Err(error) => Err(EnvConfigurationError::UnableToOpenUserShellFile(error.to_string()))
+            }
+        } else {
+            Err(EnvConfigurationError::AnotherShell)
+        }
+    }
+
+    fn add_env_for_fish(&self, name: &str, value: &str) -> std::result::Result<(), EnvConfigurationError>{
+        if matches!(self.shell, EnvConfigurationOpts::Shell(ShellType::Fish)) {
+            match OpenOptions::new().append(true).open(format!("{}/.config/fish/config.fish", self.home_dir)) {
+                Ok(mut config_fish_file) => {
+                    let format_value = format!("\nset -Ux {} \"{}\"", name, value);
+
+                    let add_env = Write::write_all(&mut config_fish_file, format_value.as_bytes());
+            
+                    match add_env {
+                        Ok(_) => Ok(()),
+                        Err(error) => Err(EnvConfigurationError::UnableToWriteUserShellFile(error.to_string()))
+                    }
+                },
+                Err(error) => Err(EnvConfigurationError::UnableToOpenUserShellFile(error.to_string()))
+            }
+        } else {
+            Err(EnvConfigurationError::AnotherShell)
         }
     }
 }
