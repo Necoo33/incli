@@ -1,3 +1,4 @@
+use crate::models::EnvConfigurationError;
 use crate::utils;
 use crate::models;
 use std::process::{Command, exit};
@@ -51,8 +52,6 @@ pub fn install_go_on_debian_based_distros(env_confs: &models::EnvConfiguration, 
 
     let current_user = get_current_user();
 
-    let user_path = format!("/home/{}", current_user);
-
     let install_go = Command::new("wget")
                                     .arg(url)
                                     .arg("-O")
@@ -64,6 +63,8 @@ pub fn install_go_on_debian_based_distros(env_confs: &models::EnvConfiguration, 
         println!("Couldn't download Go Source Files Because Of Whatever reason.");
         exit(1);
     }
+
+    let mut env_path;
 
     match current_user.as_str() {
         "root" => {
@@ -116,34 +117,16 @@ pub fn install_go_on_debian_based_distros(env_confs: &models::EnvConfiguration, 
                         .output()
                         .unwrap();
     
-            let env_path = format!("/root/go/bin");
-    
-            let line_for_append = format!("export PATH=\"{}:$PATH\"\n", env_path);
-                    
-            let line_for_append = line_for_append.as_bytes();
-                        
-            let bashrc_file = fs::OpenOptions::new().append(true).open("/root/.bashrc");
-                    
-            match bashrc_file {
-                Ok(mut file) => {
-                    let add_env = io::Write::write_all(&mut file, line_for_append);
-                    
-                    match add_env {
-                        Ok(_) => println!("Go successfully added on env's. You can try it by restarting your computer and typing 'go version' on command line."),
-                        Err(error) => println!("And error occured: {}", error)
-                    }
-                },
-                Err(_) => println!("cannot installed go for that reason: {}", env_path)
-            }
+            env_path = format!("/root/go/bin");
         },
         &_ => {
             let get_current_file_command = Command::new("pwd").output().unwrap();
     
             let file_for_moving = format!("{}/{}", std::str::from_utf8(&get_current_file_command.stdout).unwrap().trim(), file_name);
     
-            Command::new("mv").arg(&file_for_moving).arg(&user_path).output().unwrap();
+            Command::new("mv").arg(&file_for_moving).arg(&env_confs.home_dir.to_string()).output().unwrap();
     
-            let file_path = format!("{}/{}", user_path, file_name);
+            let file_path = format!("{}/{}", env_confs.home_dir.to_string(), file_name);
     
             Command::new("sudo")
                         .arg("chmod")
@@ -190,33 +173,50 @@ pub fn install_go_on_debian_based_distros(env_confs: &models::EnvConfiguration, 
             Command::new("sudo")
                         .arg("mv")
                         .arg(format_current_folder_again)
-                        .arg(&user_path)
+                        .arg(&env_confs.home_dir.to_string())
                         .output()
                         .unwrap();
     
-            let env_path = format!("{}/go/bin", user_path);
-    
-            let line_for_append = format!("export PATH=\"{}:$PATH\"\n", env_path);
-                    
-            let line_for_append = line_for_append.as_bytes();
-    
-            let create_bashrc_path = format!("{}/.bashrc", user_path);
-                        
-            let bashrc_file = fs::OpenOptions::new().append(true).open(create_bashrc_path);
-                    
-            match bashrc_file {
-                Ok(mut file) => {
-                    let add_env = io::Write::write_all(&mut file, line_for_append);
-                    
-                    match add_env {
-                        Ok(_) => println!("Golang successfully added on env's. You can try it by restarting your computer and typing 'go version' on command line."),
-                        Err(error) => println!("And error occured: {}", error)
-                    }
-                },
-                Err(_) => println!("cannot installed go for that reason: {}", env_path)
-            }
+            env_path = format!("{}/go/bin", env_confs.home_dir.to_string());
         }
     }
+
+    match env_confs.configure_debian_path_var(&env_path) {
+        Ok(_) => {
+            println!("Envs's successfully configured for go.");
+            
+            exit(0)
+        },
+        Err(error) => {
+            match error {
+                EnvConfigurationError::UnableToOpenUserShellFile(err) => println!("That error occured when we try to set your env's: {}", err),
+                EnvConfigurationError::UnableToWriteUserShellFile(err) => println!("That error occured when we try to set your env's: {}", err),
+                EnvConfigurationError::UnableToOpenSystemShellFile(err) => println!("That error occured when we try to set your env's: {}", err),
+                EnvConfigurationError::UnableToWriteSystemShellFile(err) => println!("That error occured when we try to set your env's: {}", err),
+                _ => println!("There is a bug!")
+            }
+
+            exit(1)
+        }
+    }
+
+    /*let line_for_append = format!("export PATH=\"{}:$PATH\"\n", env_path);
+                    
+    let line_for_append = line_for_append.as_bytes();
+                
+    let bashrc_file = fs::OpenOptions::new().append(true).open("/root/.bashrc");
+            
+    match bashrc_file {
+        Ok(mut file) => {
+            let add_env = io::Write::write_all(&mut file, line_for_append);
+            
+            match add_env {
+                Ok(_) => println!("Go successfully added on env's. You can try it by restarting your computer and typing 'go version' on command line."),
+                Err(error) => println!("And error occured: {}", error)
+            }
+        },
+        Err(_) => println!("cannot installed go for that reason: {}", env_path)
+    }*/
 }
 
 pub fn install_go_on_arch_linux(env_confs: &models::EnvConfiguration, url: &str, file_name: &str) {
@@ -224,7 +224,6 @@ pub fn install_go_on_arch_linux(env_confs: &models::EnvConfiguration, url: &str,
     
     let current_user = get_current_user();
     let env_path;
-    let current_user_path;
 
     let install_go = Command::new("wget")
                                                 .arg(url)
@@ -247,8 +246,6 @@ pub fn install_go_on_arch_linux(env_confs: &models::EnvConfiguration, url: &str,
 
     match current_user.as_str() {
         "root" => {
-            current_user_path = "/root".to_string();
-
             let current_folder_path = Command::new("pwd").output().unwrap();
             let current_folder_path = std::str::from_utf8(&current_folder_path.stdout).unwrap().trim();
 
@@ -301,8 +298,6 @@ pub fn install_go_on_arch_linux(env_confs: &models::EnvConfiguration, url: &str,
             env_path = format!("/root/go/bin")
         },
         &_ => {
-            current_user_path = format!("/home/{}", current_user);
-
             let current_folder_path = Command::new("pwd").output().unwrap();
             let current_folder_path = std::str::from_utf8(&current_folder_path.stdout).unwrap().trim();
 
@@ -360,7 +355,7 @@ pub fn install_go_on_arch_linux(env_confs: &models::EnvConfiguration, url: &str,
             let move_the_source_files_to_root = Command::new("sudo")
                                                                                     .arg("mv")
                                                                                     .arg(format_the_source_files_path)
-                                                                                    .arg(&current_user_path)
+                                                                                    .arg(&env_confs.home_dir.to_string())
                                                                                     .output();
 
             match move_the_source_files_to_root {
@@ -371,13 +366,32 @@ pub fn install_go_on_arch_linux(env_confs: &models::EnvConfiguration, url: &str,
                 }
             }
 
-            env_path = format!("{}/go/bin", current_user_path)
+            env_path = format!("{}/go/bin", env_confs.home_dir.to_string())
         }
     }
 
     println!("Source Files Downloaded Successfully");
 
-    let get_incli_paths_path = format!("{}/INCLI_PATHS", current_user_path);
+    match env_confs.configure_arch_linux_path_var(&current_user, &env_path) {
+        Ok(_) => {
+            println!("Envs's successfully configured for go.");
+            
+            exit(0)
+        },
+        Err(error) => {
+            match error {
+                EnvConfigurationError::UnableToOpenUserShellFile(err) => println!("That error occured when we try to set your env's: {}", err),
+                EnvConfigurationError::UnableToWriteUserShellFile(err) => println!("That error occured when we try to set your env's: {}", err),
+                EnvConfigurationError::UnableToOpenSystemShellFile(err) => println!("That error occured when we try to set your env's: {}", err),
+                EnvConfigurationError::UnableToWriteSystemShellFile(err) => println!("That error occured when we try to set your env's: {}", err),
+                _ => println!("There is a bug!")
+            }
+
+            exit(1)
+        }
+    }   
+
+    /*let get_incli_paths_path = format!("{}/INCLI_PATHS", env_confs.home_dir.to_string());
 
     let check_if_incli_paths_exist = Command::new("cd").arg(&get_incli_paths_path).output();
 
@@ -413,7 +427,7 @@ pub fn install_go_on_arch_linux(env_confs: &models::EnvConfiguration, url: &str,
             println!("Because of that, we cannot set env's. You can set your env's manually.");
             exit(1)
         }
-    }
+    }*/
 }
 
 pub fn install_go_on_alma_linux(env_confs: &models::EnvConfiguration, url: &str, file_name: &str) {
@@ -421,7 +435,6 @@ pub fn install_go_on_alma_linux(env_confs: &models::EnvConfiguration, url: &str,
 
     let current_user = get_current_user();
     let env_path;
-    let current_user_path;
 
     let install_go = Command::new("wget")
                                     .arg(url)
@@ -437,8 +450,6 @@ pub fn install_go_on_alma_linux(env_confs: &models::EnvConfiguration, url: &str,
 
     match current_user.as_str() {
         "root" => {
-            current_user_path = "/root".to_string();
-
             let current_folder_path = Command::new("pwd").output().unwrap();
             let current_folder_path = std::str::from_utf8(&current_folder_path.stdout).unwrap().trim();
 
@@ -477,7 +488,7 @@ pub fn install_go_on_alma_linux(env_confs: &models::EnvConfiguration, url: &str,
             let move_the_source_files = Command::new("sudo")
                                                                         .arg("mv")
                                                                         .arg(source_files_path)
-                                                                        .arg(&current_user_path)
+                                                                        .arg(&env_confs.home_dir.to_string())
                                                                         .output();
 
             match move_the_source_files {
@@ -491,8 +502,6 @@ pub fn install_go_on_alma_linux(env_confs: &models::EnvConfiguration, url: &str,
             env_path = "/root/go/bin".to_string();
         },
         &_ => {
-            current_user_path = format!("/home/{}", current_user);
-
             let current_folder_path = Command::new("pwd").output().unwrap();
             let current_folder_path = std::str::from_utf8(&current_folder_path.stdout).unwrap().trim();
 
@@ -531,7 +540,7 @@ pub fn install_go_on_alma_linux(env_confs: &models::EnvConfiguration, url: &str,
             let move_the_source_files = Command::new("sudo")
                                                                         .arg("mv")
                                                                         .arg(source_files_path)
-                                                                        .arg(&current_user_path)
+                                                                        .arg(&env_confs.home_dir.to_string())
                                                                         .output();
 
             match move_the_source_files {
@@ -542,16 +551,35 @@ pub fn install_go_on_alma_linux(env_confs: &models::EnvConfiguration, url: &str,
                 }
             }
 
-            env_path = format!("{}/go/bin", current_user_path)
+            env_path = format!("{}/go/bin", env_confs.home_dir.to_string())
         }
     }
 
     println!("Source Files Downloaded Successfully");
 
+    match env_confs.configure_alma_linux_path_var(&current_user, &env_path) {
+        Ok(_) => {
+            println!("Envs's successfully configured for node.js.");
+            
+            exit(0)
+        },
+        Err(error) => {
+            match error {
+                EnvConfigurationError::UnableToOpenUserShellFile(err) => println!("That error occured when we try to set your env's: {}", err),
+                EnvConfigurationError::UnableToWriteUserShellFile(err) => println!("That error occured when we try to set your env's: {}", err),
+                EnvConfigurationError::UnableToOpenSystemShellFile(err) => println!("That error occured when we try to set your env's: {}", err),
+                EnvConfigurationError::UnableToWriteSystemShellFile(err) => println!("That error occured when we try to set your env's: {}", err),
+                _ => println!("There is a bug!")
+            }
+
+            exit(1)
+        }
+    }
+
     // in alma linux 9, terminal commands for checking existence of a folder always return success value.
     // because of that, we have to use std::path::PATH api.
 
-    let incli_paths_path = format!("{}/INCLI_PATHS", current_user_path);
+    /*let incli_paths_path = format!("{}/INCLI_PATHS", env_confs.home_dir.to_string());
 
     let check_if_incli_paths_exist = Path::new(&incli_paths_path);
 
@@ -582,7 +610,7 @@ pub fn install_go_on_alma_linux(env_confs: &models::EnvConfiguration, url: &str,
             eprintln!("Cannot open incli_envs.sh file for that reason: {}", err);
             println!("Because of that we couldn't set env's. You can set your env's manually if you want.")
         }
-    }
+    }*/
 }
 
 pub fn install_go_on_centos_and_fedora(env_confs: &models::EnvConfiguration, url: &str, file_name: &str) {
@@ -590,7 +618,6 @@ pub fn install_go_on_centos_and_fedora(env_confs: &models::EnvConfiguration, url
 
     let current_user = get_current_user();
     let env_path;
-    let current_user_path;
 
     let install_go = Command::new("wget")
                                                 .arg(url)
@@ -606,8 +633,6 @@ pub fn install_go_on_centos_and_fedora(env_confs: &models::EnvConfiguration, url
 
     match current_user.as_str() {
         "root" => {
-            current_user_path = "/root".to_string();
-
             let current_folder_path = Command::new("pwd").output().unwrap();
             let current_folder_path = std::str::from_utf8(&current_folder_path.stdout).unwrap().trim();
 
@@ -646,7 +671,7 @@ pub fn install_go_on_centos_and_fedora(env_confs: &models::EnvConfiguration, url
             let move_the_source_files = Command::new("sudo")
                                                                         .arg("mv")
                                                                         .arg(source_files_path)
-                                                                        .arg(&current_user_path)
+                                                                        .arg(&env_confs.home_dir.to_string())
                                                                         .output();
 
             match move_the_source_files {
@@ -660,8 +685,6 @@ pub fn install_go_on_centos_and_fedora(env_confs: &models::EnvConfiguration, url
             env_path = "/root/go/bin".to_string();
         },
         &_ => {
-            current_user_path = format!("/home/{}", current_user);
-
             let current_folder_path = Command::new("pwd").output().unwrap();
             let current_folder_path = std::str::from_utf8(&current_folder_path.stdout).unwrap().trim();
 
@@ -700,7 +723,7 @@ pub fn install_go_on_centos_and_fedora(env_confs: &models::EnvConfiguration, url
             let move_the_source_files = Command::new("sudo")
                                                                         .arg("mv")
                                                                         .arg(source_files_path)
-                                                                        .arg(&current_user_path)
+                                                                        .arg(&env_confs.home_dir.to_string())
                                                                         .output();
 
             match move_the_source_files {
@@ -711,11 +734,30 @@ pub fn install_go_on_centos_and_fedora(env_confs: &models::EnvConfiguration, url
                 }
             }
 
-            env_path = format!("{}/go/bin", current_user_path);
+            env_path = format!("{}/go/bin", env_confs.home_dir.to_string());
         }
     }
 
-    let incli_paths_path = format!("{}/INCLI_PATHS", current_user_path);
+    match env_confs.configure_centos_and_fedora_path_var(&current_user, &env_path) {
+        Ok(_) => {
+            println!("Envs's successfully configured for node.js.");
+            
+            exit(0)
+        },
+        Err(error) => {
+            match error {
+                EnvConfigurationError::UnableToOpenUserShellFile(err) => println!("That error occured when we try to set your env's: {}", err),
+                EnvConfigurationError::UnableToWriteUserShellFile(err) => println!("That error occured when we try to set your env's: {}", err),
+                EnvConfigurationError::UnableToOpenSystemShellFile(err) => println!("That error occured when we try to set your env's: {}", err),
+                EnvConfigurationError::UnableToWriteSystemShellFile(err) => println!("That error occured when we try to set your env's: {}", err),
+                _ => println!("There is a bug!")
+            }
+
+            exit(1)
+        }
+    }
+
+    /*let incli_paths_path = format!("{}/INCLI_PATHS", env_confs.home_dir.to_string());
 
     let check_if_incli_paths_exist = Path::new(&incli_paths_path);
 
@@ -746,7 +788,7 @@ pub fn install_go_on_centos_and_fedora(env_confs: &models::EnvConfiguration, url
             eprintln!("Cannot open incli_envs.sh file for that reason: {}", err);
             println!("We couldn't set env's due to the previously printed reason. You can set it manually.")
         }
-    }
+    }*/
 }
 
 pub fn install_go_on_rocky_linux(env_confs: &models::EnvConfiguration, url: &str, file_name: &str) {
@@ -754,7 +796,6 @@ pub fn install_go_on_rocky_linux(env_confs: &models::EnvConfiguration, url: &str
 
     let current_user = get_current_user();
     let env_path;
-    let current_user_path;
 
     let install_go = Command::new("wget")
                                                 .arg(url)
@@ -770,8 +811,6 @@ pub fn install_go_on_rocky_linux(env_confs: &models::EnvConfiguration, url: &str
 
     match current_user.as_str() {
         "root" => {
-            current_user_path = "/root".to_string();
-
             let current_folder_path = Command::new("pwd").output().unwrap();
             let current_folder_path = std::str::from_utf8(&current_folder_path.stdout).unwrap().trim();
 
@@ -805,8 +844,6 @@ pub fn install_go_on_rocky_linux(env_confs: &models::EnvConfiguration, url: &str
             env_path = "/root/go/bin".to_string();
         },
         &_ => {
-            current_user_path = format!("/home/{}", current_user);
-
             let current_folder_path = Command::new("pwd").output().unwrap();
             let current_folder_path = std::str::from_utf8(&current_folder_path.stdout).unwrap().trim();
 
@@ -841,7 +878,7 @@ pub fn install_go_on_rocky_linux(env_confs: &models::EnvConfiguration, url: &str
 
             let move_the_source_files = Command::new("mv")
                                                                         .arg(source_files_path)
-                                                                        .arg(&current_user_path)
+                                                                        .arg(&env_confs.home_dir.to_string())
                                                                         .output();
 
             match move_the_source_files {
@@ -852,11 +889,30 @@ pub fn install_go_on_rocky_linux(env_confs: &models::EnvConfiguration, url: &str
                 }
             }
 
-            env_path = format!("{}/go/bin", current_user_path);
+            env_path = format!("{}/go/bin", env_confs.home_dir.to_string());
         }
     }
 
-    let incli_paths_path = format!("{}/INCLI_PATHS", current_user_path);
+    match env_confs.configure_rocky_linux_path_var(&current_user, &env_path) {
+        Ok(_) => {
+            println!("Envs's successfully configured for node.js.");
+            
+            exit(0)
+        },
+        Err(error) => {
+            match error {
+                EnvConfigurationError::UnableToOpenUserShellFile(err) => println!("That error occured when we try to set your env's: {}", err),
+                EnvConfigurationError::UnableToWriteUserShellFile(err) => println!("That error occured when we try to set your env's: {}", err),
+                EnvConfigurationError::UnableToOpenSystemShellFile(err) => println!("That error occured when we try to set your env's: {}", err),
+                EnvConfigurationError::UnableToWriteSystemShellFile(err) => println!("That error occured when we try to set your env's: {}", err),
+                _ => println!("There is a bug!")
+            }
+
+            exit(1)
+        }
+    }
+
+    /*let incli_paths_path = format!("{}/INCLI_PATHS", env_confs.home_dir.to_string());
 
     let check_if_incli_paths_exist = Path::new(&incli_paths_path);
 
@@ -887,7 +943,7 @@ pub fn install_go_on_rocky_linux(env_confs: &models::EnvConfiguration, url: &str
             eprintln!("Cannot open incli_envs.sh file for that reason: {}", err);
             println!("We couldn't set env's due to the previously printed reason. You can set it manually.")
         }
-    }
+    }*/
 }
 
 pub fn install_go_on_alpine_linux(_url: &str, _file_name: &str) {

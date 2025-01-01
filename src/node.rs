@@ -3,7 +3,6 @@ use crate::models::EnvConfigurationError;
 use crate::utils;
 use crate::models;
 use crate::env_conf;
-use core::error;
 use std::process::{Command, exit};
 use std::fs;
 use std::io;
@@ -24,8 +23,6 @@ pub fn install_nodejs_on_debian_based_distros(env_confs: &models::EnvConfigurati
     let current_user = get_current_user();
 
     let slice_of_file_name = &file_name[0..file_name.len() - 7];
-
-    let user_path = format!("/home/{}", current_user);
 
     let install_nodejs = Command::new("wget")
                                     .arg(url)
@@ -106,9 +103,9 @@ pub fn install_nodejs_on_debian_based_distros(env_confs: &models::EnvConfigurati
     
             let file_for_moving = format!("{}/{}", std::str::from_utf8(&get_current_file_command.stdout).unwrap().trim(), file_name);
     
-            Command::new("mv").arg(&file_for_moving).arg(&user_path).output().unwrap();
+            Command::new("mv").arg(&file_for_moving).arg(env_confs.home_dir.to_string()).output().unwrap();
     
-            let file_path = format!("{}/{}", user_path, file_name);
+            let file_path = format!("{}/{}", env_confs.home_dir, file_name);
     
             Command::new("sudo")
                         .arg("chmod")
@@ -158,11 +155,11 @@ pub fn install_nodejs_on_debian_based_distros(env_confs: &models::EnvConfigurati
             Command::new("sudo")
                         .arg("mv")
                         .arg(format_current_folder_again)
-                        .arg(&user_path)
+                        .arg(env_confs.home_dir.to_string())
                         .output()
                         .unwrap();
     
-            let new_path = format!("{}/{}", user_path, slice_of_file_name);
+            let new_path = format!("{}/{}", env_confs.home_dir, slice_of_file_name);
     
             env_path = format!("{}/bin", new_path);
         }
@@ -186,23 +183,6 @@ pub fn install_nodejs_on_debian_based_distros(env_confs: &models::EnvConfigurati
             exit(1)
         }
     }
-    /*let line_for_append = format!("export PATH=\"{}:$PATH\"\n", env_path);
-                    
-    let line_for_append = line_for_append.as_bytes();
-                
-    let bashrc_file = fs::OpenOptions::new().append(true).open("/root/.bashrc");
-            
-    match bashrc_file {
-        Ok(mut file) => {
-            let add_env = io::Write::write_all(&mut file, line_for_append);
-            
-            match add_env {
-                Ok(_) => println!("Node.js successfully added on env's. You can try it by restarting your computer and typing 'node --version' on command line."),
-                Err(error) => println!("And error occured: {}", error)
-            }
-        },
-        Err(_) => println!("there is no .bashrc file on current folder, we cannot set env's. You can do it manually, Node.js installed on: {}", env_path)
-    }*/
 }
 
 pub fn install_nodejs_on_arch_linux(env_confs: &models::EnvConfiguration, url: &str, file_name: &str){
@@ -210,7 +190,6 @@ pub fn install_nodejs_on_arch_linux(env_confs: &models::EnvConfiguration, url: &
 
     let current_user = get_current_user();
     let env_path;
-    let current_user_path;
 
     let slice_of_file_name = &file_name[0..file_name.len() - 7];
 
@@ -235,8 +214,6 @@ pub fn install_nodejs_on_arch_linux(env_confs: &models::EnvConfiguration, url: &
 
     match current_user.as_str() {
         "root" => {
-            current_user_path = "/root".to_string();
-
             let current_folder_path = Command::new("pwd").output().unwrap();
             let current_folder_path = std::str::from_utf8(&current_folder_path.stdout).unwrap().trim();
 
@@ -289,8 +266,6 @@ pub fn install_nodejs_on_arch_linux(env_confs: &models::EnvConfiguration, url: &
             env_path = format!("/root/{}/bin", slice_of_file_name)
         },
         &_ => {
-            current_user_path = format!("/home/{}", current_user);
-
             let current_folder_path = Command::new("pwd").output().unwrap();
             let current_folder_path = std::str::from_utf8(&current_folder_path.stdout).unwrap().trim();
 
@@ -348,7 +323,7 @@ pub fn install_nodejs_on_arch_linux(env_confs: &models::EnvConfiguration, url: &
             let move_the_source_files_to_root = Command::new("sudo")
                                                                                     .arg("mv")
                                                                                     .arg(format_the_source_files_path)
-                                                                                    .arg(&current_user_path)
+                                                                                    .arg(&env_confs.home_dir.to_string())
                                                                                     .output();
 
             match move_the_source_files_to_root {
@@ -359,7 +334,7 @@ pub fn install_nodejs_on_arch_linux(env_confs: &models::EnvConfiguration, url: &
                 }
             }
 
-            env_path = format!("{}/{}/bin", current_user_path, slice_of_file_name)
+            env_path = format!("{}/{}/bin", env_confs.home_dir.to_string(), slice_of_file_name)
         }
     }
 
@@ -382,46 +357,8 @@ pub fn install_nodejs_on_arch_linux(env_confs: &models::EnvConfiguration, url: &
 
             exit(1)
         }
-    }
-
-    /*let get_incli_paths_path = format!("{}/INCLI_PATHS", current_user_path);
-
-    let check_if_incli_paths_exist = Command::new("cd").arg(&get_incli_paths_path).output();
-
-    match check_if_incli_paths_exist {
-        Ok(_) => (),
-        Err(_) => {
-            println!("You don't have incli_envs.sh file yet. We're configuring it...");
-            utils::configure_incli_envs_file(env_confs, &current_user, true)
-        }
-    }
-
-    let get_incli_envs_path = format!("{}/incli-envs.sh", get_incli_paths_path);
-
-    let incli_envs_file = fs::OpenOptions::new().append(true).open(get_incli_envs_path);
-
-    match incli_envs_file {
-        Ok(mut file) => {
-            let line_for_append = format!("\nexport PATH=$PATH:{}\n", env_path);
-            let line_for_append = line_for_append.as_bytes();
-        
-            let add_env_file_dest = io::Write::write_all(&mut file, line_for_append);
-
-            match add_env_file_dest {
-                Ok(_) => println!("envs successfully added on your user."),
-                Err(err) => eprintln!("This error occured: {}", err)
-            }
-        },
-        Err(err) => {
-            eprintln!("Cannot open incli_envs.sh file for that reason: {}", err)
-        }
-    }*/
-    
+    }    
 }
-
-// bu dosyada "configure_incli_envs_file" ufulesini kullanarak bu dosyayı ekleyebilir ve env'leri bu vasıtayla ekleyebilirsin.
-// mesela incli-envs.sh dosyasının içine şunu yazarsan: PATH="$HOME/incli_path:$PATH" home directory'deki "incli_path" dosyasını
-// env'lere ekleyecekdir. 
 
 pub fn install_nodejs_on_alma_linux(env_confs: &models::EnvConfiguration, url: &str, file_name: &str){
     println!("Welcome to incli. Your request to install Node.js on Alma Linux Reached.");
@@ -429,7 +366,6 @@ pub fn install_nodejs_on_alma_linux(env_confs: &models::EnvConfiguration, url: &
 
     let current_user = get_current_user();
     let env_path;
-    let current_user_path;
 
     let slice_of_file_name = &file_name[0..file_name.len() - 7];
 
@@ -447,8 +383,6 @@ pub fn install_nodejs_on_alma_linux(env_confs: &models::EnvConfiguration, url: &
 
     match current_user.as_str() {
         "root" => {
-            current_user_path = "/root".to_string();
-
             let current_folder_path = Command::new("pwd").output().unwrap();
             let current_folder_path = std::str::from_utf8(&current_folder_path.stdout).unwrap().trim();
 
@@ -487,7 +421,7 @@ pub fn install_nodejs_on_alma_linux(env_confs: &models::EnvConfiguration, url: &
             let move_the_source_files = Command::new("sudo")
                                                                         .arg("mv")
                                                                         .arg(source_files_path)
-                                                                        .arg(&current_user_path)
+                                                                        .arg(&env_confs.home_dir.to_string())
                                                                         .output();
 
             match move_the_source_files {
@@ -501,8 +435,6 @@ pub fn install_nodejs_on_alma_linux(env_confs: &models::EnvConfiguration, url: &
             env_path = format!("/root/{}/bin", slice_of_file_name);
         },
         &_ => {
-            current_user_path = format!("/home/{}", current_user);
-
             let current_folder_path = Command::new("pwd").output().unwrap();
             let current_folder_path = std::str::from_utf8(&current_folder_path.stdout).unwrap().trim();
 
@@ -541,7 +473,7 @@ pub fn install_nodejs_on_alma_linux(env_confs: &models::EnvConfiguration, url: &
             let move_the_source_files = Command::new("sudo")
                                                                         .arg("mv")
                                                                         .arg(source_files_path)
-                                                                        .arg(&current_user_path)
+                                                                        .arg(&env_confs.home_dir.to_string())
                                                                         .output();
 
             match move_the_source_files {
@@ -552,7 +484,7 @@ pub fn install_nodejs_on_alma_linux(env_confs: &models::EnvConfiguration, url: &
                 }
             }
 
-            env_path = format!("{}/{}/bin", current_user_path, slice_of_file_name)
+            env_path = format!("{}/{}/bin", env_confs.home_dir.to_string(), slice_of_file_name)
         }
     }
 
@@ -576,47 +508,13 @@ pub fn install_nodejs_on_alma_linux(env_confs: &models::EnvConfiguration, url: &
             exit(1)
         }
     }
-
-    // in alma linux 9, terminal commands for checking existence of a folder always return success value.
-    // because of that, we have to use std::path::PATH api.
-
-    /*let incli_paths_path = format!("{}/INCLI_PATHS", current_user_path);
-
-    let check_if_incli_paths_exist = Path::new(&incli_paths_path);
-
-    if !check_if_incli_paths_exist.exists() {
-        utils::configure_incli_envs_file(env_confs, &current_user, true)
-    }
-
-    let incli_envs_path = format!("{}/incli-envs.sh", incli_paths_path);
-
-    let incli_envs_file = fs::OpenOptions::new().append(true).open(incli_envs_path);
-
-    match incli_envs_file {
-        Ok(mut file) => {
-            let line_for_append = format!("\nPATH=\"{}:$PATH\"\n", env_path);
-            let line_for_append = line_for_append.as_bytes();
-        
-            let add_env_file_dest = io::Write::write_all(&mut file, line_for_append);
-
-            match add_env_file_dest {
-                Ok(_) => println!("envs successfully added on your user."),
-                Err(err) => eprintln!("This error occured: {}", err)
-            }
-        },
-        Err(err) => {
-            eprintln!("Cannot open incli_envs.sh file for that reason: {}", err)
-        }
-    }*/
 }
 
 pub fn install_nodejs_on_centos_and_fedora(env_confs: &models::EnvConfiguration, url: &str, file_name: &str) {
     println!("Welcome to incli. Your request to install Node.js on a Red Hat Based Distro Reached.");
-    println!("Be sure you're running that installation on your user's root directory, otherwise you have to set your env's manually.");
 
     let current_user = get_current_user();
     let env_path;
-    let current_user_path;
 
     let slice_of_file_name = &file_name[0..file_name.len() - 7];
 
@@ -634,8 +532,6 @@ pub fn install_nodejs_on_centos_and_fedora(env_confs: &models::EnvConfiguration,
 
     match current_user.as_str() {
         "root" => {
-            current_user_path = "root".to_string();
-
             let current_folder_path = Command::new("pwd").output().unwrap();
             let current_folder_path = std::str::from_utf8(&current_folder_path.stdout).unwrap().trim();
 
@@ -674,7 +570,7 @@ pub fn install_nodejs_on_centos_and_fedora(env_confs: &models::EnvConfiguration,
             let move_the_source_files = Command::new("sudo")
                                                                         .arg("mv")
                                                                         .arg(source_files_path)
-                                                                        .arg(&current_user_path)
+                                                                        .arg(&env_confs.home_dir.to_string())
                                                                         .output();
 
             match move_the_source_files {
@@ -688,8 +584,6 @@ pub fn install_nodejs_on_centos_and_fedora(env_confs: &models::EnvConfiguration,
             env_path = format!("/root/{}/bin", slice_of_file_name);
         },
         &_ => {
-            current_user_path = format!("/home/{}", current_user);
-
             let current_folder_path = Command::new("pwd").output().unwrap();
             let current_folder_path = std::str::from_utf8(&current_folder_path.stdout).unwrap().trim();
 
@@ -728,7 +622,7 @@ pub fn install_nodejs_on_centos_and_fedora(env_confs: &models::EnvConfiguration,
             let move_the_source_files = Command::new("sudo")
                                                                         .arg("mv")
                                                                         .arg(source_files_path)
-                                                                        .arg(&current_user_path)
+                                                                        .arg(&env_confs.home_dir.to_string())
                                                                         .output();
 
             match move_the_source_files {
@@ -739,7 +633,7 @@ pub fn install_nodejs_on_centos_and_fedora(env_confs: &models::EnvConfiguration,
                 }
             }
 
-            env_path = format!("{}/{}/bin", current_user_path, slice_of_file_name);
+            env_path = format!("{}/{}/bin", env_confs.home_dir.to_string(), slice_of_file_name);
         }
     }
 
@@ -761,35 +655,6 @@ pub fn install_nodejs_on_centos_and_fedora(env_confs: &models::EnvConfiguration,
             exit(1)
         }
     }
-
-    /*let incli_paths_path = format!("{}/INCLI_PATHS", current_user_path);
-
-    let check_if_incli_paths_exist = Path::new(&incli_paths_path);
-
-    if !check_if_incli_paths_exist.exists() {
-        utils::configure_incli_envs_file(env_confs, &current_user, true)
-    }
-
-    let incli_envs_path = format!("{}/incli-envs.sh", incli_paths_path);
-
-    let incli_envs_file = fs::OpenOptions::new().append(true).open(incli_envs_path);
-
-    match incli_envs_file {
-        Ok(mut file) => {
-            let line_for_append = format!("\nexport PATH=\"{}:$PATH\"\n", env_path);
-            let line_for_append = line_for_append.as_bytes();
-        
-            let add_env_file_dest = io::Write::write_all(&mut file, line_for_append);
-
-            match add_env_file_dest {
-                Ok(_) => println!("envs successfully added on your user."),
-                Err(err) => eprintln!("This error occured: {}", err)
-            }
-        },
-        Err(err) => {
-            eprintln!("Cannot open incli_envs.sh file for that reason: {}", err)
-        }
-    }*/
 }
 
 pub fn install_nodejs_on_rocky_linux(env_confs: &models::EnvConfiguration, url: &str, file_name: &str) {
@@ -798,7 +663,6 @@ pub fn install_nodejs_on_rocky_linux(env_confs: &models::EnvConfiguration, url: 
 
     let current_user = get_current_user();
     let env_path;
-    let current_user_path;
 
     let slice_of_file_name = &file_name[0..file_name.len() - 7];
 
@@ -816,8 +680,6 @@ pub fn install_nodejs_on_rocky_linux(env_confs: &models::EnvConfiguration, url: 
 
     match current_user.as_str() {
         "root" => {
-            current_user_path = "/root".to_string();
-
             let current_folder_path = Command::new("pwd").output().unwrap();
             let current_folder_path = std::str::from_utf8(&current_folder_path.stdout).unwrap().trim();
 
@@ -852,7 +714,7 @@ pub fn install_nodejs_on_rocky_linux(env_confs: &models::EnvConfiguration, url: 
 
             let move_the_source_files = Command::new("mv")
                                                                         .arg(source_files_path)
-                                                                        .arg(&current_user_path)
+                                                                        .arg(&env_confs.home_dir.to_string())
                                                                         .output();
 
             match move_the_source_files {
@@ -866,8 +728,6 @@ pub fn install_nodejs_on_rocky_linux(env_confs: &models::EnvConfiguration, url: 
             env_path = format!("/root/{}/bin", slice_of_file_name);
         },
         &_ => {
-            current_user_path = format!("/home/{}", current_user);
-
             let current_folder_path = Command::new("pwd").output().unwrap();
             let current_folder_path = std::str::from_utf8(&current_folder_path.stdout).unwrap().trim();
 
@@ -902,7 +762,7 @@ pub fn install_nodejs_on_rocky_linux(env_confs: &models::EnvConfiguration, url: 
 
             let move_the_source_files = Command::new("mv")
                                                                         .arg(source_files_path)
-                                                                        .arg(&current_user_path)
+                                                                        .arg(&env_confs.home_dir.to_string())
                                                                         .output();
 
             match move_the_source_files {
@@ -913,7 +773,7 @@ pub fn install_nodejs_on_rocky_linux(env_confs: &models::EnvConfiguration, url: 
                 }
             }
 
-            env_path = format!("{}/{}/bin", current_user_path, slice_of_file_name);
+            env_path = format!("{}/{}/bin", env_confs.home_dir.to_string(), slice_of_file_name);
         }
     }
 
@@ -935,35 +795,6 @@ pub fn install_nodejs_on_rocky_linux(env_confs: &models::EnvConfiguration, url: 
             exit(1)
         }
     }
-
-    /*let incli_paths_path = format!("{}/INCLI_PATHS", current_user_path);
-
-    let check_if_incli_paths_exist = Path::new(&incli_paths_path);
-
-    if !check_if_incli_paths_exist.exists() {
-        utils::configure_incli_envs_file(env_confs, &current_user, true)
-    }
-
-    let incli_envs_path = format!("{}/incli-envs.sh", incli_paths_path);
-
-    let incli_envs_file = fs::OpenOptions::new().append(true).open(incli_envs_path);
-
-    match incli_envs_file {
-        Ok(mut file) => {
-            let line_for_append = format!("\nexport PATH=\"$PATH:{}\"\n", env_path);
-            let line_for_append = line_for_append.as_bytes();
-        
-            let add_env_file_dest = io::Write::write_all(&mut file, line_for_append);
-
-            match add_env_file_dest {
-                Ok(_) => println!("envs successfully added on your user."),
-                Err(err) => eprintln!("This error occured: {}", err)
-            }
-        },
-        Err(err) => {
-            eprintln!("Cannot open incli_envs.sh file for that reason: {}", err)
-        }
-    }*/
 }
 
 pub fn install_node_on_alpine_linux() {
