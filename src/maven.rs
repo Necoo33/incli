@@ -1,3 +1,6 @@
+use crate::env_conf;
+use crate::maven;
+use crate::models::EnvConfigurationError;
 use crate::utils;
 use crate::models;
 use std::process::{Command, exit};
@@ -185,12 +188,8 @@ pub fn install_maven_on_debian_based_distros(env_confs: &models::EnvConfiguratio
         false => &file_name[..file_name.len() - 7]
     };
 
-    let user_path;
-
     match current_user.as_str() {
         "root" => {
-            user_path = "/root".to_string();
-
             let get_current_file_command = Command::new("pwd").output().unwrap();
             
             let file_for_moving = format!("{}/{}", std::str::from_utf8(&get_current_file_command.stdout).unwrap().trim(), file_name);
@@ -241,15 +240,13 @@ pub fn install_maven_on_debian_based_distros(env_confs: &models::EnvConfiguratio
                         .unwrap();
         },
         _ => {
-            user_path = format!("/home/{}", current_user);
-
             let get_current_file_command = Command::new("pwd").output().unwrap();
             
             let file_for_moving = format!("{}/{}", std::str::from_utf8(&get_current_file_command.stdout).unwrap().trim(), file_name);
     
-            Command::new("mv").arg(&file_for_moving).arg(&user_path).output().unwrap();
+            Command::new("mv").arg(&file_for_moving).arg(&env_confs.home_dir.to_string()).output().unwrap();
     
-            let file_path = format!("{}/{}", user_path, file_name);
+            let file_path = format!("{}/{}", env_confs.home_dir.to_string(), file_name);
     
             Command::new("sudo")
                         .arg("chmod")
@@ -296,21 +293,53 @@ pub fn install_maven_on_debian_based_distros(env_confs: &models::EnvConfiguratio
             Command::new("sudo")
                         .arg("mv")
                         .arg(format_current_folder_again)
-                        .arg(&user_path)
+                        .arg(&env_confs.home_dir.to_string())
                         .output()
                         .unwrap();
         }
     }
 
-    let maven_home = format!("{}/{}", user_path, format_maven_folder_name);
+    let maven_home = format!("{}/{}", env_confs.home_dir.to_string(), format_maven_folder_name);
 
-    let line_for_append_1 = format!("\nexport MAVEN_HOME=\"{}\"\n", maven_home);
+    match env_confs.add_debian_env_var("MAVEN_HOME", &maven_home) {
+        Ok(_) => println!("MAVEN_HOME env successfully added."),
+        Err(error) => {
+            match error {
+                EnvConfigurationError::UnableToOpenUserShellFile(err) => println!("That error occured when we try to set your env's: {}", err),
+                EnvConfigurationError::UnableToWriteUserShellFile(err) => println!("That error occured when we try to set your env's: {}", err),
+                EnvConfigurationError::UnableToOpenSystemShellFile(err) => println!("That error occured when we try to set your env's: {}", err),
+                EnvConfigurationError::UnableToWriteSystemShellFile(err) => println!("That error occured when we try to set your env's: {}", err),
+                _ => println!("There is a bug!")
+            }
+        }
+    }
+    
+    match env_confs.configure_debian_path_var(&format!("{}/bin", maven_home)) {
+        Ok(_) => {
+            println!("PATH env successfully configured for Maven.");
+            
+            exit(0)
+        },
+        Err(error) => {
+            match error {
+                EnvConfigurationError::UnableToOpenUserShellFile(err) => println!("That error occured when we try to set your env's: {}", err),
+                EnvConfigurationError::UnableToWriteUserShellFile(err) => println!("That error occured when we try to set your env's: {}", err),
+                EnvConfigurationError::UnableToOpenSystemShellFile(err) => println!("That error occured when we try to set your env's: {}", err),
+                EnvConfigurationError::UnableToWriteSystemShellFile(err) => println!("That error occured when we try to set your env's: {}", err),
+                _ => println!("There is a bug!")
+            }
+
+            exit(1)
+        }
+    }
+
+    /*let line_for_append_1 = format!("\nexport MAVEN_HOME=\"{}\"\n", maven_home);
     let line_for_append_1 = line_for_append_1.as_bytes();
 
     let line_for_append_2 = format!("\nexport PATH=\"{}/bin:$PATH\"\n", maven_home);
     let line_for_append_2 = line_for_append_2.as_bytes();
 
-    let bashrc_path = format!("{}/.bashrc", user_path);
+    let bashrc_path = format!("{}/.bashrc", env_confs.home_dir.to_string());
 
     let bashrc_file = fs::OpenOptions::new().append(true).open(&bashrc_path);
                             
@@ -331,11 +360,7 @@ pub fn install_maven_on_debian_based_distros(env_confs: &models::EnvConfiguratio
             }
         },
         Err(error) => println!("couldn't open {} file for that reason: {}", bashrc_path, error)
-    }
-
-    // sanırım buraya kadarki kısmı doğru bir şekilde ayarlayabildim, artık gerisine evde bak.
-    // env'lerin doğru bir şekilde ayarlanması lazım. 2.0.7'ye kadarki versiyonlar "maven-(versiyon numarası)" iken
-    // ondan sonraki versiyonlar "apache-maven-(versiyon numarası)" şeklinde formatlanıyor.
+    }*/
 }
 
 pub fn install_maven_on_arch_linux(env_confs: &models::EnvConfiguration, url: &str, file_name: &str, version: &str) {
@@ -369,14 +394,10 @@ pub fn install_maven_on_arch_linux(env_confs: &models::EnvConfiguration, url: &s
         false => &file_name[..file_name.len() - 7]
     };
 
-    let user_path;
-
     let maven_home;
 
     match current_user.as_str() {
         "root" => {
-            user_path = "/root".to_string();
-
             let current_folder_path = Command::new("pwd").output().unwrap();
             let current_folder_path = std::str::from_utf8(&current_folder_path.stdout).unwrap().trim();
 
@@ -429,14 +450,10 @@ pub fn install_maven_on_arch_linux(env_confs: &models::EnvConfiguration, url: &s
             maven_home = format!("/root/{}", format_maven_folder_name)
         },
         &_ => {
-            user_path = format!("/home/{}", current_user);
-
             let current_folder_path = Command::new("pwd").output().unwrap();
             let current_folder_path = std::str::from_utf8(&current_folder_path.stdout).unwrap().trim();
 
             let format_the_whole_file_path = format!("{}/{}", current_folder_path, file_name);
-
-            println!("your whole file path: {}", format_the_whole_file_path);
 
             Command::new("sudo")
                         .arg("chmod")
@@ -488,7 +505,7 @@ pub fn install_maven_on_arch_linux(env_confs: &models::EnvConfiguration, url: &s
             let move_the_source_files_to_root = Command::new("sudo")
                                                                                     .arg("mv")
                                                                                     .arg(format_the_source_files_path)
-                                                                                    .arg(&user_path)
+                                                                                    .arg(&env_confs.home_dir.to_string())
                                                                                     .output();
 
             match move_the_source_files_to_root {
@@ -499,15 +516,47 @@ pub fn install_maven_on_arch_linux(env_confs: &models::EnvConfiguration, url: &s
                 }
             }
 
-            maven_home = format!("{}/{}", user_path, format_maven_folder_name)
+            maven_home = format!("{}/{}", env_confs.home_dir.to_string(), format_maven_folder_name)
         }
     }
 
     println!("Source Files Downloaded Successfully");
 
-    let get_incli_paths_path = format!("{}/INCLI_PATHS", user_path);
+    match env_confs.add_arch_linux_env_var("MAVEN_HOME", &maven_home) {
+        Ok(_) => println!("MAVEN_HOME env successfully added."),
+        Err(error) => {
+            match error {
+                EnvConfigurationError::UnableToOpenUserShellFile(err) => println!("That error occured when we try to set your env's: {}", err),
+                EnvConfigurationError::UnableToWriteUserShellFile(err) => println!("That error occured when we try to set your env's: {}", err),
+                EnvConfigurationError::UnableToOpenSystemShellFile(err) => println!("That error occured when we try to set your env's: {}", err),
+                EnvConfigurationError::UnableToWriteSystemShellFile(err) => println!("That error occured when we try to set your env's: {}", err),
+                _ => println!("There is a bug!")
+            }
+        }
+    }
 
-    let check_if_incli_paths_exist = /*Command::new("cd").arg(&get_incli_paths_path).output()*/Path::new(&get_incli_paths_path);
+    match env_confs.configure_arch_linux_path_var(&current_user, &format!("{}/bin", maven_home)) {
+        Ok(_) => {
+            println!("PATH env successfully configured for Maven.");
+            
+            exit(0)
+        },
+        Err(error) => {
+            match error {
+                EnvConfigurationError::UnableToOpenUserShellFile(err) => println!("That error occured when we try to set your env's: {}", err),
+                EnvConfigurationError::UnableToWriteUserShellFile(err) => println!("That error occured when we try to set your env's: {}", err),
+                EnvConfigurationError::UnableToOpenSystemShellFile(err) => println!("That error occured when we try to set your env's: {}", err),
+                EnvConfigurationError::UnableToWriteSystemShellFile(err) => println!("That error occured when we try to set your env's: {}", err),
+                _ => println!("There is a bug!")
+            }
+
+            exit(1)
+        }
+    }
+
+    /*let get_incli_paths_path = format!("{}/INCLI_PATHS", env_confs.home_dir.to_string());
+
+    let check_if_incli_paths_exist = Path::new(&get_incli_paths_path);
 
     if !check_if_incli_paths_exist.exists() {
         println!("You don't have incli_envs.sh file yet. We're configuring it...");
@@ -548,7 +597,7 @@ pub fn install_maven_on_arch_linux(env_confs: &models::EnvConfiguration, url: &s
             println!("Because of that, we cannot set env's. You can set your env's manually.");
             exit(1)
         }
-    }
+    }*/
 }
 
 pub fn install_maven_on_alma_linux(env_confs: &models::EnvConfiguration, url: &str, file_name: &str, version: &str) {
@@ -575,14 +624,10 @@ pub fn install_maven_on_alma_linux(env_confs: &models::EnvConfiguration, url: &s
         false => &file_name[..file_name.len() - 7]
     };
 
-    let user_path;
-
     let maven_home;
         
     match current_user.as_str() {
         "root" => {
-            user_path = "/root".to_string();
-        
             let current_folder_path = Command::new("pwd").output().unwrap();
             let current_folder_path = std::str::from_utf8(&current_folder_path.stdout).unwrap().trim();
         
@@ -621,7 +666,7 @@ pub fn install_maven_on_alma_linux(env_confs: &models::EnvConfiguration, url: &s
             let move_the_source_files = Command::new("sudo")
                                                                                 .arg("mv")
                                                                                 .arg(source_files_path)
-                                                                                .arg(&user_path)
+                                                                                .arg(&env_confs.home_dir.to_string())
                                                                                 .output();
         
             match move_the_source_files {
@@ -635,8 +680,6 @@ pub fn install_maven_on_alma_linux(env_confs: &models::EnvConfiguration, url: &s
             maven_home = format!("/root/{}", format_maven_folder_name);
         },
         &_ => {
-            user_path = format!("/home/{}", current_user);
-        
             let current_folder_path = Command::new("pwd").output().unwrap();
             let current_folder_path = std::str::from_utf8(&current_folder_path.stdout).unwrap().trim();
         
@@ -675,7 +718,7 @@ pub fn install_maven_on_alma_linux(env_confs: &models::EnvConfiguration, url: &s
             let move_the_source_files = Command::new("sudo")
                                                                                 .arg("mv")
                                                                                 .arg(source_files_path)
-                                                                                .arg(&user_path)
+                                                                                .arg(&env_confs.home_dir.to_string())
                                                                                 .output();
         
             match move_the_source_files {
@@ -686,16 +729,48 @@ pub fn install_maven_on_alma_linux(env_confs: &models::EnvConfiguration, url: &s
                 }
             }
         
-            maven_home = format!("{}/{}", user_path, format_maven_folder_name)
+            maven_home = format!("{}/{}", env_confs.home_dir.to_string(), format_maven_folder_name)
         }
     }
         
     println!("Source Files Downloaded Successfully");
+
+    match env_confs.add_alma_linux_env_var("MAVEN_HOME", &maven_home) {
+        Ok(_) => println!("MAVEN_HOME env successfully added."),
+        Err(error) => {
+            match error {
+                EnvConfigurationError::UnableToOpenUserShellFile(err) => println!("That error occured when we try to set your env's: {}", err),
+                EnvConfigurationError::UnableToWriteUserShellFile(err) => println!("That error occured when we try to set your env's: {}", err),
+                EnvConfigurationError::UnableToOpenSystemShellFile(err) => println!("That error occured when we try to set your env's: {}", err),
+                EnvConfigurationError::UnableToWriteSystemShellFile(err) => println!("That error occured when we try to set your env's: {}", err),
+                _ => println!("There is a bug!")
+            }
+        }
+    }
+                
+    match env_confs.configure_alma_linux_path_var(&current_user, &format!("{}/bin", maven_home)) {
+        Ok(_) => {
+        println!("PATH env successfully configured for Maven.");
+                            
+        exit(0)
+        },
+        Err(error) => {
+            match error {
+                EnvConfigurationError::UnableToOpenUserShellFile(err) => println!("That error occured when we try to set your env's: {}", err),
+                EnvConfigurationError::UnableToWriteUserShellFile(err) => println!("That error occured when we try to set your env's: {}", err),
+                EnvConfigurationError::UnableToOpenSystemShellFile(err) => println!("That error occured when we try to set your env's: {}", err),
+                EnvConfigurationError::UnableToWriteSystemShellFile(err) => println!("That error occured when we try to set your env's: {}", err),
+                _ => println!("There is a bug!")
+            }
+                    
+            exit(1)
+        }
+    }
         
     // in alma linux 9, terminal commands for checking existence of a folder always return success value.
     // because of that, we have to use std::path::PATH api.
         
-    let incli_paths_path = format!("{}/INCLI_PATHS", user_path);
+    /*let incli_paths_path = format!("{}/INCLI_PATHS", env_confs.home_dir.to_string());
         
     let check_if_incli_paths_exist = Path::new(&incli_paths_path);
         
@@ -736,7 +811,7 @@ pub fn install_maven_on_alma_linux(env_confs: &models::EnvConfiguration, url: &s
             eprintln!("Cannot open incli_envs.sh file for that reason: {}", err);
             println!("Because of that we couldn't set env's. You can set your env's manually if you want.")
         }
-    }
+    }*/
 }
 
 pub fn install_maven_on_centos_and_fedora(env_confs: &models::EnvConfiguration, url: &str, file_name: &str, version: &str) {
@@ -761,8 +836,6 @@ pub fn install_maven_on_centos_and_fedora(env_confs: &models::EnvConfiguration, 
         false => &file_name[..file_name.len() - 7]
     };
 
-    let user_path;
-
     let maven_home;
 
     let current_user = get_current_user();
@@ -783,8 +856,6 @@ pub fn install_maven_on_centos_and_fedora(env_confs: &models::EnvConfiguration, 
         
     match current_user.as_str() {
         "root" => {
-            user_path = "root".to_string();
-        
             let current_folder_path = Command::new("pwd").output().unwrap();
             let current_folder_path = std::str::from_utf8(&current_folder_path.stdout).unwrap().trim();
         
@@ -823,7 +894,7 @@ pub fn install_maven_on_centos_and_fedora(env_confs: &models::EnvConfiguration, 
             let move_the_source_files = Command::new("sudo")
                                                                                 .arg("mv")
                                                                                 .arg(source_files_path)
-                                                                                .arg(&user_path)
+                                                                                .arg(&env_confs.home_dir.to_string())
                                                                                 .output();
         
             match move_the_source_files {
@@ -837,8 +908,6 @@ pub fn install_maven_on_centos_and_fedora(env_confs: &models::EnvConfiguration, 
             maven_home = format!("/root/{}", format_maven_folder_name)
         },
         &_ => {
-            user_path = format!("/home/{}", current_user);
-        
             let current_folder_path = Command::new("pwd").output().unwrap();
             let current_folder_path = std::str::from_utf8(&current_folder_path.stdout).unwrap().trim();
         
@@ -877,7 +946,7 @@ pub fn install_maven_on_centos_and_fedora(env_confs: &models::EnvConfiguration, 
             let move_the_source_files = Command::new("sudo")
                                                                                 .arg("mv")
                                                                                 .arg(source_files_path)
-                                                                                .arg(&user_path)
+                                                                                .arg(&env_confs.home_dir.to_string())
                                                                                 .output();
         
             match move_the_source_files {
@@ -888,11 +957,43 @@ pub fn install_maven_on_centos_and_fedora(env_confs: &models::EnvConfiguration, 
                 }
             }
         
-            maven_home = format!("{}/{}", user_path, format_maven_folder_name);
+            maven_home = format!("{}/{}", env_confs.home_dir.to_string(), format_maven_folder_name);
+        }
+    }
+
+    match env_confs.add_alma_linux_env_var("MAVEN_HOME", &maven_home) {
+        Ok(_) => println!("MAVEN_HOME env successfully added."),
+        Err(error) => {
+            match error {
+                EnvConfigurationError::UnableToOpenUserShellFile(err) => println!("That error occured when we try to set your env's: {}", err),
+                EnvConfigurationError::UnableToWriteUserShellFile(err) => println!("That error occured when we try to set your env's: {}", err),
+                EnvConfigurationError::UnableToOpenSystemShellFile(err) => println!("That error occured when we try to set your env's: {}", err),
+                EnvConfigurationError::UnableToWriteSystemShellFile(err) => println!("That error occured when we try to set your env's: {}", err),
+                _ => println!("There is a bug!")
+            }
+        }
+    }
+                
+    match env_confs.configure_alma_linux_path_var(&current_user, &format!("{}/bin", maven_home)) {
+        Ok(_) => {
+            println!("PATH env successfully configured for Maven.");
+                            
+            exit(0)
+        },
+        Err(error) => {
+            match error {
+                EnvConfigurationError::UnableToOpenUserShellFile(err) => println!("That error occured when we try to set your env's: {}", err),
+                EnvConfigurationError::UnableToWriteUserShellFile(err) => println!("That error occured when we try to set your env's: {}", err),
+                EnvConfigurationError::UnableToOpenSystemShellFile(err) => println!("That error occured when we try to set your env's: {}", err),
+                EnvConfigurationError::UnableToWriteSystemShellFile(err) => println!("That error occured when we try to set your env's: {}", err),
+                _ => println!("There is a bug!")
+            }
+                
+            exit(1)
         }
     }
         
-    let incli_paths_path = format!("{}/INCLI_PATHS", user_path);
+    /*let incli_paths_path = format!("{}/INCLI_PATHS", env_confs.home_dir.to_string());
         
     let check_if_incli_paths_exist = Path::new(&incli_paths_path);
         
@@ -933,7 +1034,7 @@ pub fn install_maven_on_centos_and_fedora(env_confs: &models::EnvConfiguration, 
             eprintln!("Cannot open incli_envs.sh file for that reason: {}", err);
             println!("We couldn't set env's due to the previously printed reason. You can set it manually.")
         }
-    }
+    }*/
 }
 
 pub fn install_maven_on_rocky_linux(env_confs: &models::EnvConfiguration, url: &str, file_name: &str, version: &str) {
@@ -958,8 +1059,6 @@ pub fn install_maven_on_rocky_linux(env_confs: &models::EnvConfiguration, url: &
         false => &file_name[..file_name.len() - 7]
     };
 
-    let user_path;
-
     let maven_home;
 
     let current_user = get_current_user();
@@ -980,8 +1079,6 @@ pub fn install_maven_on_rocky_linux(env_confs: &models::EnvConfiguration, url: &
         
     match current_user.as_str() {
         "root" => {
-            user_path = "/root".to_string();
-        
             let current_folder_path = Command::new("pwd").output().unwrap();
             let current_folder_path = std::str::from_utf8(&current_folder_path.stdout).unwrap().trim();
         
@@ -1016,7 +1113,7 @@ pub fn install_maven_on_rocky_linux(env_confs: &models::EnvConfiguration, url: &
         
             let move_the_source_files = Command::new("mv")
                                                                                     .arg(source_files_path)
-                                                                                    .arg(&user_path)
+                                                                                    .arg(&env_confs.home_dir.to_string())
                                                                                     .output();
                     
             match move_the_source_files {
@@ -1030,8 +1127,6 @@ pub fn install_maven_on_rocky_linux(env_confs: &models::EnvConfiguration, url: &
             maven_home = format!("/root/{}", format_maven_folder_name);
         },
         &_ => {
-            user_path = format!("/home/{}", current_user);
-        
             let current_folder_path = Command::new("pwd").output().unwrap();
             let current_folder_path = std::str::from_utf8(&current_folder_path.stdout).unwrap().trim();
         
@@ -1066,7 +1161,7 @@ pub fn install_maven_on_rocky_linux(env_confs: &models::EnvConfiguration, url: &
         
             let move_the_source_files = Command::new("mv")
                                                                                 .arg(source_files_path)
-                                                                                .arg(&user_path)
+                                                                                .arg(&env_confs.home_dir.to_string())
                                                                                 .output();
         
             match move_the_source_files {
@@ -1077,11 +1172,43 @@ pub fn install_maven_on_rocky_linux(env_confs: &models::EnvConfiguration, url: &
                 }
             }
         
-            maven_home = format!("{}/{}", user_path, format_maven_folder_name);
+            maven_home = format!("{}/{}", env_confs.home_dir.to_string(), format_maven_folder_name);
+        }
+    }
+
+    match env_confs.add_rocky_linux_env_var("MAVEN_HOME", &maven_home) {
+        Ok(_) => println!("MAVEN_HOME successfully added to your env's."),
+        Err(error) => {
+            match error {
+                EnvConfigurationError::UnableToOpenUserShellFile(err) => println!("That error occured when we try to set your env's: {}", err),
+                EnvConfigurationError::UnableToWriteUserShellFile(err) => println!("That error occured when we try to set your env's: {}", err),
+                EnvConfigurationError::UnableToOpenSystemShellFile(err) => println!("That error occured when we try to set your env's: {}", err),
+                EnvConfigurationError::UnableToWriteSystemShellFile(err) => println!("That error occured when we try to set your env's: {}", err),
+                _ => println!("There is a bug!")
+            }
+        }
+    }
+    
+    match env_confs.configure_rocky_linux_path_var(&current_user, &format!("{}/bin",maven_home)) {
+        Ok(_) => {
+            println!("Envs's successfully configured for Maven.");
+                        
+            exit(0)
+        },
+        Err(error) => {
+            match error {
+                EnvConfigurationError::UnableToOpenUserShellFile(err) => println!("That error occured when we try to set your env's: {}", err),
+                EnvConfigurationError::UnableToWriteUserShellFile(err) => println!("That error occured when we try to set your env's: {}", err),
+                EnvConfigurationError::UnableToOpenSystemShellFile(err) => println!("That error occured when we try to set your env's: {}", err),
+                EnvConfigurationError::UnableToWriteSystemShellFile(err) => println!("That error occured when we try to set your env's: {}", err),
+                _ => println!("There is a bug!")
+            }
+            
+            exit(1)
         }
     }
         
-    let incli_paths_path = format!("{}/INCLI_PATHS", user_path);
+    /*let incli_paths_path = format!("{}/INCLI_PATHS", env_confs.home_dir.to_string());
         
     let check_if_incli_paths_exist = Path::new(&incli_paths_path);
         
@@ -1122,5 +1249,5 @@ pub fn install_maven_on_rocky_linux(env_confs: &models::EnvConfiguration, url: &
             eprintln!("Cannot open incli_envs.sh file for that reason: {}", err);
             println!("We couldn't set env's due to the previously printed reason. You can set it manually.")
         }
-    }
+    }*/
 }

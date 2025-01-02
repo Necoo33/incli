@@ -1,3 +1,4 @@
+use crate::models::EnvConfigurationError;
 use crate::utils;
 use crate::models;
 use std::fmt::format;
@@ -106,13 +107,6 @@ pub fn install_gradle_on_debian_based_distros(env_confs: &models::EnvConfigurati
 
     let current_user = get_current_user();
 
-    let user_path;
-    if &current_user == "root" {
-        user_path = "/root".to_string()
-    } else {
-        user_path = format!("/home/{}", current_user);   
-    }
-
     let install_gradle = Command::new("wget")
                                     .arg(url)
                                     .arg("-O")
@@ -124,6 +118,8 @@ pub fn install_gradle_on_debian_based_distros(env_confs: &models::EnvConfigurati
         println!("Couldn't download Gradle Source Files Because Of Whatever reason.");
         exit(1);
     }
+
+    let env_path;
 
     match current_user.as_str() {
         "root" => {
@@ -170,45 +166,16 @@ pub fn install_gradle_on_debian_based_distros(env_confs: &models::EnvConfigurati
                 }
             }
 
-            let env_path = estimated_path;
-
-            let line_for_append_1 = format!("export GRADLE_HOME=\"{}\"\n",env_path);
-            let line_for_append_2 = format!("export PATH=\"$GRADLE_HOME/bin:$PATH\"\n");
-                    
-            let line_for_append_1 = line_for_append_1.as_bytes();
-            let line_for_append_2 = line_for_append_2.as_bytes();
-                        
-            let bashrc_file = fs::OpenOptions::new().append(true).open("/root/.bashrc");
-                    
-            match bashrc_file {
-                Ok(mut file) => {
-                    let add_env_1 = io::Write::write_all(&mut file, line_for_append_1);
-                    
-                    match add_env_1 {
-                        Ok(_) => println!("GRADLE_HOME env added successfully, adding it to PATH env..."),
-                        Err(error) => println!("And error occured when we try to add GRADLE_HOME env: {}", error)
-                    }
-
-                    let add_env_2 = io::Write::write_all(&mut file, line_for_append_2);
-                    
-                    match add_env_2 {
-                        Ok(_) => {
-                            println!("PATH env updated successfully, Check it out by typing 'gradle -v' on terminal later than reopen it.")
-                        },
-                        Err(error) => println!("And error occured: {}", error)
-                    }
-                },
-                Err(_) => println!("cannot installed gradle for that reason: {}", env_path)
-            }
+            env_path = estimated_path;
         },
         &_ => {
             let get_current_file_command = Command::new("pwd").output().unwrap();
     
             let file_for_moving = format!("{}/{}.zip", std::str::from_utf8(&get_current_file_command.stdout).unwrap().trim(), file_name);
     
-            Command::new("mv").arg(&file_for_moving).arg(&user_path).output().unwrap();
+            Command::new("mv").arg(&file_for_moving).arg(&env_confs.home_dir.to_string()).output().unwrap();
     
-            let file_path = format!("{}/{}.zip", user_path, file_name);
+            let file_path = format!("{}/{}.zip", env_confs.home_dir.to_string(), file_name);
     
             Command::new("sudo")
                         .arg("chmod")
@@ -217,7 +184,7 @@ pub fn install_gradle_on_debian_based_distros(env_confs: &models::EnvConfigurati
                         .output()
                         .expect("couldn't give 755 permission to source code.");
     
-            match utils::unzip(&file_path, &format!("{}/{}", user_path, file_name)) {
+            match utils::unzip(&file_path, &format!("{}/{}",env_confs.home_dir.to_string(), file_name)) {
                 Ok(_) => {
                     println!("gradle-{}.zip file extracted successfully!", version)
                 },
@@ -235,7 +202,7 @@ pub fn install_gradle_on_debian_based_distros(env_confs: &models::EnvConfigurati
                         .output()
                         .expect("cannot delete archive");
     
-            let mut estimated_path = format!("{}/{}", user_path, file_name);
+            let mut estimated_path = format!("{}/{}", env_confs.home_dir.to_string(), file_name);
 
             for entity in fs::read_dir(estimated_path.clone()).unwrap() {
                 if entity.unwrap().path().file_name().unwrap().to_string_lossy() == file_name {
@@ -244,47 +211,70 @@ pub fn install_gradle_on_debian_based_distros(env_confs: &models::EnvConfigurati
                 }
             }
             
-            let env_path = estimated_path;
+            env_path = estimated_path;
+        }
+    }
 
-            Command::new("sudo")
-                        .arg("chmod")
-                        .arg("777")
-                        .arg(format!("{}/bin/gradle", env_path))
-                        .output()
-                        .expect("Cannot give gradle to 777 permission");
-    
-            let line_for_append_1 = format!("export GRADLE_HOME=\"{}\"\n",env_path);
-            let line_for_append_2 = format!("export PATH=\"$GRADLE_HOME/bin:$PATH\"\n");
-                    
-            let line_for_append_1 = line_for_append_1.as_bytes();
-            let line_for_append_2 = line_for_append_2.as_bytes();
-    
-            let create_bashrc_path = format!("{}/.bashrc", user_path);
-                        
-            let bashrc_file = fs::OpenOptions::new().append(true).open(&create_bashrc_path);
-                    
-            match bashrc_file {
-                Ok(mut file) => {
-                    let add_env_1 = io::Write::write_all(&mut file, line_for_append_1);
-                    
-                    match add_env_1 {
-                        Ok(_) => println!("GRADLE_HOME env added successfully, adding it to PATH env..."),
-                        Err(error) => println!("And error occured when we try to add GRADLE_HOME env: {}", error)
-                    }
-
-                    let add_env_2 = io::Write::write_all(&mut file, line_for_append_2);
-                    
-                    match add_env_2 {
-                        Ok(_) => {
-                            println!("PATH env updated successfully, Check it out by typing 'gradle -v' on terminal later than reopen it.")
-                        }
-                        Err(error) => println!("And error occured: {}", error)
-                    }
-                },
-                Err(_) => println!("cannot installed go for that reason: {}", env_path)
+    match env_confs.add_debian_env_var("GRADLE_HOME", &env_path) {
+        Ok(_) => println!("GRADLE_HOME env successfully added."),
+        Err(error) => {
+            match error {
+                EnvConfigurationError::UnableToOpenUserShellFile(err) => println!("That error occured when we try to set your env's: {}", err),
+                EnvConfigurationError::UnableToWriteUserShellFile(err) => println!("That error occured when we try to set your env's: {}", err),
+                EnvConfigurationError::UnableToOpenSystemShellFile(err) => println!("That error occured when we try to set your env's: {}", err),
+                EnvConfigurationError::UnableToWriteSystemShellFile(err) => println!("That error occured when we try to set your env's: {}", err),
+                _ => println!("There is a bug!")
             }
         }
     }
+
+    match env_confs.configure_debian_path_var(&format!("{}/bin", env_path)) {
+        Ok(_) => {
+            println!("PATH env successfully configured for Gradle.");
+            
+            exit(0)
+        },
+        Err(error) => {
+            match error {
+                EnvConfigurationError::UnableToOpenUserShellFile(err) => println!("That error occured when we try to set your env's: {}", err),
+                EnvConfigurationError::UnableToWriteUserShellFile(err) => println!("That error occured when we try to set your env's: {}", err),
+                EnvConfigurationError::UnableToOpenSystemShellFile(err) => println!("That error occured when we try to set your env's: {}", err),
+                EnvConfigurationError::UnableToWriteSystemShellFile(err) => println!("That error occured when we try to set your env's: {}", err),
+                _ => println!("There is a bug!")
+            }
+
+            exit(1)
+        }
+    }
+
+    /*let line_for_append_1 = format!("export GRADLE_HOME=\"{}\"\n",env_path);
+    let line_for_append_2 = format!("export PATH=\"$GRADLE_HOME/bin:$PATH\"\n");
+            
+    let line_for_append_1 = line_for_append_1.as_bytes();
+    let line_for_append_2 = line_for_append_2.as_bytes();
+                
+    let bashrc_file = fs::OpenOptions::new().append(true).open("/root/.bashrc");
+            
+    match bashrc_file {
+        Ok(mut file) => {
+            let add_env_1 = io::Write::write_all(&mut file, line_for_append_1);
+            
+            match add_env_1 {
+                Ok(_) => println!("GRADLE_HOME env added successfully, adding it to PATH env..."),
+                Err(error) => println!("And error occured when we try to add GRADLE_HOME env: {}", error)
+            }
+
+            let add_env_2 = io::Write::write_all(&mut file, line_for_append_2);
+            
+            match add_env_2 {
+                Ok(_) => {
+                    println!("PATH env updated successfully, Check it out by typing 'gradle -v' on terminal later than reopen it.")
+                },
+                Err(error) => println!("And error occured: {}", error)
+            }
+        },
+        Err(_) => println!("cannot installed gradle for that reason: {}", env_path)
+    }*/
 }
 
 pub fn install_gradle_on_arch_linux(env_confs: &models::EnvConfiguration, version: &str) {
@@ -305,13 +295,6 @@ pub fn install_gradle_on_arch_linux(env_confs: &models::EnvConfiguration, versio
     let file_name = format!("gradle-{}", version_input);
 
     let current_user = get_current_user();
-
-    let mut user_path;
-    if &current_user == "root" {
-        user_path = "/root".to_string()
-    } else {
-        user_path = format!("/home/{}", current_user);   
-    }
 
     let install_gradle = Command::new("wget")
                                     .arg(url)
@@ -390,7 +373,7 @@ pub fn install_gradle_on_arch_linux(env_confs: &models::EnvConfiguration, versio
                         .output()
                         .unwrap();
 
-            match utils::unzip(&format_the_whole_file_path, &user_path) {
+            match utils::unzip(&format_the_whole_file_path, &env_confs.home_dir.to_string()) {
                 Ok(_) => {
                     println!("gradle-{}.zip file extracted successfully!", version)
                 },
@@ -408,7 +391,7 @@ pub fn install_gradle_on_arch_linux(env_confs: &models::EnvConfiguration, versio
                         .output()
                         .unwrap();
 
-            let mut estimated_path = format!("{}/{}", user_path, file_name);
+            let mut estimated_path = format!("{}/{}", env_confs.home_dir.to_string(), file_name);
 
             for entity in fs::read_dir(estimated_path.clone()).unwrap() {
                 if entity.unwrap().path().file_name().unwrap().to_string_lossy() == file_name {
@@ -430,7 +413,39 @@ pub fn install_gradle_on_arch_linux(env_confs: &models::EnvConfiguration, versio
 
     println!("Source Files Downloaded Successfully");
 
-    let get_incli_paths_path = format!("{}/INCLI_PATHS", user_path);
+    match env_confs.add_arch_linux_env_var("GRADLE_HOME", &env_path) {
+        Ok(_) => println!("GRADLE_HOME env successfully added."),
+        Err(error) => {
+            match error {
+                EnvConfigurationError::UnableToOpenUserShellFile(err) => println!("That error occured when we try to set your env's: {}", err),
+                EnvConfigurationError::UnableToWriteUserShellFile(err) => println!("That error occured when we try to set your env's: {}", err),
+                EnvConfigurationError::UnableToOpenSystemShellFile(err) => println!("That error occured when we try to set your env's: {}", err),
+                EnvConfigurationError::UnableToWriteSystemShellFile(err) => println!("That error occured when we try to set your env's: {}", err),
+                _ => println!("There is a bug!")
+            }
+        }
+    }
+
+    match env_confs.configure_arch_linux_path_var(&current_user, &format!("{}/bin", env_path)) {
+        Ok(_) => {
+            println!("PATH env successfully configured for Gradle.");
+            
+            exit(0)
+        },
+        Err(error) => {
+            match error {
+                EnvConfigurationError::UnableToOpenUserShellFile(err) => println!("That error occured when we try to set your env's: {}", err),
+                EnvConfigurationError::UnableToWriteUserShellFile(err) => println!("That error occured when we try to set your env's: {}", err),
+                EnvConfigurationError::UnableToOpenSystemShellFile(err) => println!("That error occured when we try to set your env's: {}", err),
+                EnvConfigurationError::UnableToWriteSystemShellFile(err) => println!("That error occured when we try to set your env's: {}", err),
+                _ => println!("There is a bug!")
+            }
+
+            exit(1)
+        }
+    }
+
+    /*let get_incli_paths_path = format!("{}/INCLI_PATHS", env_confs.home_dir.to_string());
 
     let check_if_incli_paths_exist = Path::new(&get_incli_paths_path);
 
@@ -475,7 +490,7 @@ pub fn install_gradle_on_arch_linux(env_confs: &models::EnvConfiguration, versio
             println!("Because of that, we cannot set env's. You can set your env's manually.");
             exit(1)
         }
-    }
+    }*/
 }
 
 pub fn install_gradle_on_alma_linux(env_confs: &models::EnvConfiguration, version: &str) {
@@ -496,13 +511,6 @@ pub fn install_gradle_on_alma_linux(env_confs: &models::EnvConfiguration, versio
     let file_name = format!("gradle-{}", version_input);
 
     let current_user = get_current_user();
-
-    let mut user_path;
-    if &current_user == "root" {
-        user_path = "/root".to_string()
-    } else {
-        user_path = format!("/home/{}", current_user);   
-    }
 
     let install_gradle = Command::new("wget")
                                     .arg(url)
@@ -532,7 +540,7 @@ pub fn install_gradle_on_alma_linux(env_confs: &models::EnvConfiguration, versio
                         .output()
                         .expect("couldn't give 755 permission to source code.");
 
-            match utils::unzip(&format_the_whole_file_path, &user_path) {
+            match utils::unzip(&format_the_whole_file_path, &env_confs.home_dir.to_string()) {
                 Ok(_) => {
                     println!("gradle-{}.zip file extracted successfully!", version)
                 },
@@ -574,7 +582,7 @@ pub fn install_gradle_on_alma_linux(env_confs: &models::EnvConfiguration, versio
                         .output()
                         .expect("couldn't give 755 permission to source code.");
 
-            match utils::unzip(&format_the_whole_file_path, &user_path) {
+            match utils::unzip(&format_the_whole_file_path, &env_confs.home_dir.to_string()) {
                 Ok(_) => {
                     println!("gradle-{}.zip file extracted successfully!", version)
                 },
@@ -592,7 +600,7 @@ pub fn install_gradle_on_alma_linux(env_confs: &models::EnvConfiguration, versio
                         .output()
                         .unwrap();
 
-            let mut estimated_path = format!("{}/{}", user_path, file_name);
+            let mut estimated_path = format!("{}/{}", env_confs.home_dir.to_string(), file_name);
 
             for entity in fs::read_dir(estimated_path.clone()).unwrap() {
                 if entity.unwrap().path().file_name().unwrap().to_string_lossy() == file_name {
@@ -614,10 +622,42 @@ pub fn install_gradle_on_alma_linux(env_confs: &models::EnvConfiguration, versio
                 .output()
                 .expect("Cannot give 755 permission to gradle executable.");
 
+    match env_confs.add_alma_linux_env_var("GRADLE_HOME", &env_path) {
+        Ok(_) => println!("GRADLE_HOME env successfully added."),
+        Err(error) => {
+            match error {
+                EnvConfigurationError::UnableToOpenUserShellFile(err) => println!("That error occured when we try to set your env's: {}", err),
+                EnvConfigurationError::UnableToWriteUserShellFile(err) => println!("That error occured when we try to set your env's: {}", err),
+                EnvConfigurationError::UnableToOpenSystemShellFile(err) => println!("That error occured when we try to set your env's: {}", err),
+                EnvConfigurationError::UnableToWriteSystemShellFile(err) => println!("That error occured when we try to set your env's: {}", err),
+                _ => println!("There is a bug!")
+            }
+        }
+    }
+                
+    match env_confs.configure_alma_linux_path_var(&current_user, &format!("{}/bin", env_path)) {
+        Ok(_) => {
+        println!("PATH env successfully configured for Gradle.");
+                            
+        exit(0)
+        },
+        Err(error) => {
+            match error {
+                EnvConfigurationError::UnableToOpenUserShellFile(err) => println!("That error occured when we try to set your env's: {}", err),
+                EnvConfigurationError::UnableToWriteUserShellFile(err) => println!("That error occured when we try to set your env's: {}", err),
+                EnvConfigurationError::UnableToOpenSystemShellFile(err) => println!("That error occured when we try to set your env's: {}", err),
+                EnvConfigurationError::UnableToWriteSystemShellFile(err) => println!("That error occured when we try to set your env's: {}", err),
+                _ => println!("There is a bug!")
+            }
+                    
+            exit(1)
+        }
+    }
+
     // in alma linux 9, terminal commands for checking existence of a folder always return success value.
     // because of that, we have to use std::path::PATH api.
 
-    let incli_paths_path = format!("{}/INCLI_PATHS", user_path);
+    /*let incli_paths_path = format!("{}/INCLI_PATHS", env_confs.home_dir.to_string());
 
     let check_if_incli_paths_exist = Path::new(&incli_paths_path);
 
@@ -661,7 +701,7 @@ pub fn install_gradle_on_alma_linux(env_confs: &models::EnvConfiguration, versio
             eprintln!("Cannot open incli_envs.sh file for that reason: {}", err);
             println!("Because of that we couldn't set env's. You can set your env's manually if you want.")
         }
-    }
+    }*/
 }
 
 pub fn install_gradle_on_centos_and_fedora(env_confs: &models::EnvConfiguration, version: &str) {
@@ -682,13 +722,6 @@ pub fn install_gradle_on_centos_and_fedora(env_confs: &models::EnvConfiguration,
     let file_name = format!("gradle-{}", version_input);
 
     let current_user = get_current_user();
-
-    let mut user_path;
-    if &current_user == "root" {
-        user_path = "/root".to_string()
-    } else {
-        user_path = format!("/home/{}", current_user);   
-    }
 
     let install_gradle = Command::new("wget")
                                     .arg(url)
@@ -717,7 +750,7 @@ pub fn install_gradle_on_centos_and_fedora(env_confs: &models::EnvConfiguration,
                         .output()
                         .expect("couldn't give 755 permission to source code.");
 
-            match utils::unzip(&format_the_whole_file_path, &user_path) {
+            match utils::unzip(&format_the_whole_file_path, &env_confs.home_dir.to_string()) {
                 Ok(_) => {
                     println!("gradle-{}.zip file extracted successfully!", version)
                 },
@@ -759,7 +792,7 @@ pub fn install_gradle_on_centos_and_fedora(env_confs: &models::EnvConfiguration,
                         .output()
                         .expect("couldn't give 755 permission to source code.");
 
-            match utils::unzip(&format_the_whole_file_path, &user_path) {
+            match utils::unzip(&format_the_whole_file_path, &env_confs.home_dir.to_string()) {
                 Ok(_) => {
                     println!("gradle-{}.zip file extracted successfully!", version)
                 },
@@ -777,7 +810,7 @@ pub fn install_gradle_on_centos_and_fedora(env_confs: &models::EnvConfiguration,
                         .output()
                         .unwrap();
 
-            let mut estimated_path = format!("{}/{}", user_path, file_name);
+            let mut estimated_path = format!("{}/{}", env_confs.home_dir.to_string(), file_name);
 
             for entity in fs::read_dir(estimated_path.clone()).unwrap() {
                 if entity.unwrap().path().file_name().unwrap().to_string_lossy() == file_name {
@@ -797,7 +830,39 @@ pub fn install_gradle_on_centos_and_fedora(env_confs: &models::EnvConfiguration,
                 .output()
                 .expect("couldn't give 755 permission to gradle executable.");
 
-    let incli_paths_path = format!("{}/INCLI_PATHS", user_path);
+    match env_confs.add_alma_linux_env_var("GRADLE_HOME", &env_path) {
+        Ok(_) => println!("GRADLE_HOME env successfully added."),
+        Err(error) => {
+            match error {
+                EnvConfigurationError::UnableToOpenUserShellFile(err) => println!("That error occured when we try to set your env's: {}", err),
+                EnvConfigurationError::UnableToWriteUserShellFile(err) => println!("That error occured when we try to set your env's: {}", err),
+                EnvConfigurationError::UnableToOpenSystemShellFile(err) => println!("That error occured when we try to set your env's: {}", err),
+                EnvConfigurationError::UnableToWriteSystemShellFile(err) => println!("That error occured when we try to set your env's: {}", err),
+                _ => println!("There is a bug!")
+            }
+        }
+    }
+                
+    match env_confs.configure_alma_linux_path_var(&current_user, &format!("{}/bin", env_path)) {
+        Ok(_) => {
+            println!("PATH env successfully configured for Gradle.");
+                            
+            exit(0)
+        },
+        Err(error) => {
+            match error {
+                EnvConfigurationError::UnableToOpenUserShellFile(err) => println!("That error occured when we try to set your env's: {}", err),
+                EnvConfigurationError::UnableToWriteUserShellFile(err) => println!("That error occured when we try to set your env's: {}", err),
+                EnvConfigurationError::UnableToOpenSystemShellFile(err) => println!("That error occured when we try to set your env's: {}", err),
+                EnvConfigurationError::UnableToWriteSystemShellFile(err) => println!("That error occured when we try to set your env's: {}", err),
+                _ => println!("There is a bug!")
+            }
+                
+            exit(1)
+        }
+    }
+    
+    /*let incli_paths_path = format!("{}/INCLI_PATHS", env_confs.home_dir.to_string());
 
     let check_if_incli_paths_exist = Path::new(&incli_paths_path);
 
@@ -841,7 +906,7 @@ pub fn install_gradle_on_centos_and_fedora(env_confs: &models::EnvConfiguration,
             eprintln!("Cannot open incli_envs.sh file for that reason: {}", err);
             println!("We couldn't set env's due to the previously printed reason. You can set it manually.")
         }
-    }
+    }*/
 }
 
 pub fn install_gradle_on_rocky_linux(env_confs: &models::EnvConfiguration, version: &str) {
@@ -862,13 +927,6 @@ pub fn install_gradle_on_rocky_linux(env_confs: &models::EnvConfiguration, versi
     let file_name = format!("gradle-{}", version_input);
 
     let current_user = get_current_user();
-
-    let mut user_path;
-    if &current_user == "root" {
-        user_path = "/root".to_string()
-    } else {
-        user_path = format!("/home/{}", current_user);   
-    }
 
     let install_gradle = Command::new("wget")
                                     .arg(url)
@@ -897,7 +955,7 @@ pub fn install_gradle_on_rocky_linux(env_confs: &models::EnvConfiguration, versi
                         .output()
                         .expect("couldn't give 755 permission to source code.");
 
-            match utils::unzip(&format_the_whole_file_path, &user_path) {
+            match utils::unzip(&format_the_whole_file_path, &env_confs.home_dir.to_string()) {
                 Ok(_) => {
                     println!("gradle-{}.zip file extracted successfully!", version)
                 },
@@ -937,7 +995,7 @@ pub fn install_gradle_on_rocky_linux(env_confs: &models::EnvConfiguration, versi
                         .output()
                         .expect("couldn't give 755 permission to source code.");
 
-            match utils::unzip(&format_the_whole_file_path, &user_path) {
+            match utils::unzip(&format_the_whole_file_path, &env_confs.home_dir.to_string()) {
                 Ok(_) => {
                     println!("gradle-{}.zip file extracted successfully!", version)
                 },
@@ -954,7 +1012,7 @@ pub fn install_gradle_on_rocky_linux(env_confs: &models::EnvConfiguration, versi
                         .output()
                         .unwrap();
 
-            let mut estimated_path = format!("{}/{}", user_path, file_name);
+            let mut estimated_path = format!("{}/{}", env_confs.home_dir.to_string(), file_name);
 
             for entity in fs::read_dir(estimated_path.clone()).unwrap() {
                 if entity.unwrap().path().file_name().unwrap().to_string_lossy() == file_name {
@@ -973,7 +1031,39 @@ pub fn install_gradle_on_rocky_linux(env_confs: &models::EnvConfiguration, versi
                 .output()
                 .expect("couldn't give 755 permission to gradle executable.");
 
-    let incli_paths_path = format!("{}/INCLI_PATHS", user_path);
+    match env_confs.add_rocky_linux_env_var("GRADLE_HOME", &env_path) {
+        Ok(_) => println!("GRADLE_HOME successfully added to your env's."),
+        Err(error) => {
+            match error {
+                EnvConfigurationError::UnableToOpenUserShellFile(err) => println!("That error occured when we try to set your env's: {}", err),
+                EnvConfigurationError::UnableToWriteUserShellFile(err) => println!("That error occured when we try to set your env's: {}", err),
+                EnvConfigurationError::UnableToOpenSystemShellFile(err) => println!("That error occured when we try to set your env's: {}", err),
+                EnvConfigurationError::UnableToWriteSystemShellFile(err) => println!("That error occured when we try to set your env's: {}", err),
+                _ => println!("There is a bug!")
+            }
+        }
+    }
+    
+    match env_confs.configure_rocky_linux_path_var(&current_user, &format!("{}/bin",env_path)) {
+        Ok(_) => {
+            println!("Envs's successfully configured for Gradle.");
+                        
+            exit(0)
+        },
+        Err(error) => {
+            match error {
+                EnvConfigurationError::UnableToOpenUserShellFile(err) => println!("That error occured when we try to set your env's: {}", err),
+                EnvConfigurationError::UnableToWriteUserShellFile(err) => println!("That error occured when we try to set your env's: {}", err),
+                EnvConfigurationError::UnableToOpenSystemShellFile(err) => println!("That error occured when we try to set your env's: {}", err),
+                EnvConfigurationError::UnableToWriteSystemShellFile(err) => println!("That error occured when we try to set your env's: {}", err),
+                _ => println!("There is a bug!")
+            }
+            
+            exit(1)
+        }
+    }
+
+    /*let incli_paths_path = format!("{}/INCLI_PATHS", env_confs.home_dir.to_string());
 
     let check_if_incli_paths_exist = Path::new(&incli_paths_path);
 
@@ -1017,7 +1107,7 @@ pub fn install_gradle_on_rocky_linux(env_confs: &models::EnvConfiguration, versi
             eprintln!("Cannot open incli_envs.sh file for that reason: {}", err);
             println!("We couldn't set env's due to the previously printed reason. You can set it manually.")
         }
-    }
+    }*/
 }
 
 // 982 satır

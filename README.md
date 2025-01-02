@@ -10,13 +10,13 @@ We support 3 different command types:
 * help: it is for giving general informations.
 * version: it is for writing the version of incli.
 
-It supports that shells:
+We supports that shells:
 
 * Bash
 * Zsh
 * Fish
 
-And it supports that languages/tools:
+We supports that languages/tools:
 
 * Rust
 * Node.js
