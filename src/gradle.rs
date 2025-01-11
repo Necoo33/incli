@@ -823,26 +823,33 @@ pub fn install_gradle_on_centos_and_fedora(env_confs: &models::EnvConfiguration,
         }
     }
 
-    Command::new("sudo")
+    match Command::new("sudo")
             .arg("chmod")
             .arg("755")
             .arg(format!("{}", env_path))
-            .output()
-            .expect("couldn't give 755 permission to gradle main folder.");
+            .output() {
+        Ok(_) => (),
+        Err(error) => println!("couldn't give 755 permission to gradle main folder for that reason: {}", error)
+    };
 
-    Command::new("sudo")
+
+    match Command::new("sudo")
             .arg("chmod")
             .arg("755")
             .arg(format!("{}/bin", env_path))
-            .output()
-            .expect("couldn't give 755 permission to gradle bin folder.");
+            .output() {
+        Ok(_) => (),
+        Err(error) => println!("couldn't give 755 permission to gradle bin folder for that reason: {}", error)
+    };
 
-    Command::new("sudo")
+    match Command::new("sudo")
                 .arg("chmod")
                 .arg("755")
                 .arg(format!("{}/bin/gradle", env_path))
-                .output()
-                .expect("couldn't give 755 permission to gradle executable.");
+                .output() {
+        Ok(_) => (),
+        Err(error) => println!("couldn't give 755 permission to gradle executable for that reason: {}", error)
+    };
 
     match env_confs.add_alma_linux_env_var("GRADLE_HOME", &env_path) {
         Ok(_) => println!("GRADLE_HOME env successfully added."),
