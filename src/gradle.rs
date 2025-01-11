@@ -824,6 +824,20 @@ pub fn install_gradle_on_centos_and_fedora(env_confs: &models::EnvConfiguration,
     }
 
     Command::new("sudo")
+            .arg("chmod")
+            .arg("755")
+            .arg(format!("{}", env_path))
+            .output()
+            .expect("couldn't give 755 permission to gradle main folder.");
+
+    Command::new("sudo")
+            .arg("chmod")
+            .arg("755")
+            .arg(format!("{}/bin", env_path))
+            .output()
+            .expect("couldn't give 755 permission to gradle bin folder.");
+
+    Command::new("sudo")
                 .arg("chmod")
                 .arg("755")
                 .arg(format!("{}/bin/gradle", env_path))
