@@ -105,6 +105,13 @@ fn main() {
                 OsType::Linux => user_action.execute_linux(),
                 OsType::Darwin => user_action.execute_darwin()
             };
+        },
+        CommandType::Uninstall => {
+            match user_action.os_type {
+                OsType::Windows => user_action.execute_windows(),
+                OsType::Linux => user_action.execute_linux(),
+                OsType::Darwin => user_action.execute_darwin()
+            };
         }
     }
 }

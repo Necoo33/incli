@@ -71,7 +71,7 @@ impl Display for ShellType {
 
 #[derive(PartialEq, Clone)]
 pub enum CommandType {
-    Version, Install, Help
+    Version, Install, Help, Uninstall
 }
 
 #[derive(Clone, PartialEq)]
@@ -139,6 +139,21 @@ pub trait Version {
     fn gradle_version(&self) -> &Self;
     fn maven_version(&self) -> &Self;
     fn python_version(&self) -> &Self;
+}
+
+pub trait Uninstall {
+    fn execute_windows(&self) -> &Self;
+    fn execute_linux(&self) -> &Self;
+    fn execute_darwin(&self) -> &Self;
+    fn uninstall_rust(&self) -> &Self;
+    fn uninstall_jdk(&self) -> &Self;
+    fn uninstall_gradle(&self) -> &Self;
+    fn uninstall_maven(&self) -> &Self;
+    fn uninstall_nodejs(&self) -> &Self;
+    fn uninstall_bun(&self) -> &Self;
+    fn uninstall_yarn(&self) -> &Self;
+    fn uninstall_go(&self) -> &Self;
+    fn uninstall_python(&self) -> &Self;
 }
 
 

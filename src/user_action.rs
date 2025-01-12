@@ -10,7 +10,7 @@ use crate::java;
 use crate::gradle;
 use crate::maven;
 
-use models::{Execution, UserAction, OsType, CommandType, Help, Version};
+use models::{Execution, UserAction, OsType, CommandType, Help, Version, Uninstall};
 
 impl Execution for UserAction {
     fn execute_windows(&self) -> &Self {
@@ -997,3 +997,7 @@ impl Version for UserAction {
         return self
     }
 }
+
+/*impl Uninstall for UserAction {
+
+}*/
