@@ -998,6 +998,154 @@ impl Version for UserAction {
     }
 }
 
-/*impl Uninstall for UserAction {
+impl Uninstall for UserAction {
+    fn uninstall_rust(&self) -> &Self {
+        if self.first_arg == CommandType::Uninstall && self.second_arg == "rust" {
+            match self.os_type {
+                OsType::Windows => (),
+                OsType::Linux => (),
+                OsType::Darwin => ()
+            }
+        }
 
-}*/
+        self
+    }
+
+    fn uninstall_nodejs(&self) -> &Self {
+        if self.first_arg == CommandType::Uninstall && self.second_arg == "node" {
+            match self.os_type {
+                OsType::Windows => (),
+                OsType::Linux => (),
+                OsType::Darwin => ()
+            }
+        }
+
+        self
+    }
+
+    fn uninstall_bun(&self) -> &Self {
+        if self.first_arg == CommandType::Uninstall && self.second_arg == "bun" {
+            match self.os_type {
+                OsType::Windows => (),
+                OsType::Linux => (),
+                OsType::Darwin => ()
+            }
+        }
+        
+        self
+    }
+
+    fn uninstall_yarn(&self) -> &Self {
+        if self.first_arg == CommandType::Uninstall && self.second_arg == "yarn" {
+            match self.os_type {
+                OsType::Windows => (),
+                OsType::Linux => (),
+                OsType::Darwin => ()
+            }
+        }
+
+        self
+    }
+
+    fn uninstall_go(&self) -> &Self {
+        if self.first_arg == CommandType::Uninstall && self.second_arg == "go" {
+            match self.os_type {
+                OsType::Windows => (),
+                OsType::Linux => (),
+                OsType::Darwin => ()
+            }
+        }
+
+        self
+    }
+
+    fn uninstall_jdk(&self) -> &Self {
+        if self.first_arg == CommandType::Uninstall && self.second_arg == "java" {
+            match self.os_type {
+                OsType::Windows => (),
+                OsType::Linux => (),
+                OsType::Darwin => ()
+            }
+        }
+
+        self
+    }
+
+    fn uninstall_gradle(&self) -> &Self {
+        if self.first_arg == CommandType::Uninstall && self.second_arg == "gradle" {
+            match self.os_type {
+                OsType::Windows => (),
+                OsType::Linux => (),
+                OsType::Darwin => ()
+            }
+        }
+
+        self
+    }
+
+    fn uninstall_maven(&self) -> &Self {
+        if self.first_arg == CommandType::Uninstall && self.second_arg == "maven" {
+            match self.os_type {
+                OsType::Windows => (),
+                OsType::Linux => (),
+                OsType::Darwin => ()
+            }
+        }
+
+        self
+    }
+
+    fn uninstall_python(&self) -> &Self {
+        if self.first_arg == CommandType::Uninstall && (self.second_arg == "python2" || self.second_arg == "python3" || self.second_arg == "python") {
+            match self.os_type {
+                OsType::Windows => (),
+                OsType::Linux => (),
+                OsType::Darwin => ()
+            }
+        }
+
+        self
+    }
+
+    fn execute_windows(&self) -> &Self {
+        self.uninstall_rust()
+            .uninstall_nodejs()
+            .uninstall_yarn()
+            .uninstall_bun()
+            .uninstall_go()
+            .uninstall_jdk()
+            .uninstall_gradle()
+            .uninstall_maven()
+            .uninstall_python();
+
+        self
+    }
+
+    fn execute_linux(&self) -> &Self {
+        self.uninstall_rust()
+            .uninstall_nodejs()
+            .uninstall_yarn()
+            .uninstall_bun()
+            .uninstall_go()
+            .uninstall_jdk()
+            .uninstall_gradle()
+            .uninstall_maven()
+            .uninstall_python();
+
+        self
+    }
+
+    fn execute_darwin(&self) -> &Self {
+        self.uninstall_rust()
+            .uninstall_nodejs()
+            .uninstall_yarn()
+            .uninstall_bun()
+            .uninstall_go()
+            .uninstall_jdk()
+            .uninstall_gradle()
+            .uninstall_maven()
+            .uninstall_python();
+
+        self
+    }
+}

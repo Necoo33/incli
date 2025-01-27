@@ -319,3 +319,63 @@ pub fn log_rust_version(){
         println!("Rust isn't installed on your system.");
     }
 }
+
+pub fn uninstall_rust_version_on_windows() {
+    println!("Welcome to incli. Your request to uninstall rust from windows computer reached.");
+    println!("this will uninstall entire rust toolchain from your computer.");
+
+    let uninstall_rust = Command::new("rustup").arg("self").arg("uninstall").output();
+
+    match uninstall_rust {
+        Ok(_) => {
+            println!("rust toolchain successfully uninstalled from your computer.");
+        },
+        Err(error) => {
+            println!("cannot uninstalled rust toolchain because of that reason: {}", error);
+
+            exit(1)
+        }
+    }
+
+    exit(0)
+}
+
+pub fn uninstall_rust_on_debian_based_distros(){
+    println!("Welcome to incli. Your request to install rust on a Debian based os reached. Please wait until it finish...");
+
+    let install_rust = Command::new("sudo")
+                                .arg("apt")
+                                .arg("remove")
+                                .arg("-y")
+                                .arg("rustc")
+                                .arg("cargo")
+                                .output()
+                                .expect("Installation failed.");
+
+    if !install_rust.status.success() {
+        eprintln!("Rust uninstallation failed when installing rustc and cargo. Exiting.");
+        exit(1);
+    }
+
+    exit(0)
+}
+
+pub fn uninstall_rust_version_on_linux() {
+    println!("Welcome to incli. Your request to uninstall rust from linux computer reached.");
+    println!("this will uninstall entire rust toolchain from your computer.");
+
+    let uninstall_rust = Command::new("rustup").arg("self").arg("uninstall").output();
+
+    match uninstall_rust {
+        Ok(_) => {
+            println!("rust toolchain successfully uninstalled from your computer.");
+        },
+        Err(error) => {
+            println!("cannot uninstalled rust toolchain because of that reason: {}", error);
+
+            exit(1)
+        }
+    }
+
+    exit(0)
+}
