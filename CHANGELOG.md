@@ -6,6 +6,30 @@ Project Structure changed, switched to layered architecture. Now almost every st
 Added `EnvConfiguration` struct. That struct responsible for adding new env's or appending new values to PATH env.
 Added support for Zsh and Fish shells alongside Bash. Zsh and Fish shell supports both tested on Ubuntu 24 And Fedora 41, and most probably they'd work other distros. If you see any bug, please report it via opening an issue.
 
+## v0.10.5
+
+Upgraded Go's lts version to 1.23.6 .
+Upgraded Go's latest version to 1.24rc3 .
+
+## v0.10.4
+
+Upgraded Node.js's latest version to 23.7.0 .
+Upgraded Node.js's lts version to 22.13.1 .
+
+## v0.10.3
+
+Upgraded Go's lts version to 1.23.5 .
+Upgraded Go's latest version to 1.24rc2 .
+
+## v0.10.2
+
+Upgraded Node.js's latest version to 23.6.0 .
+Upgraded Node.js's lts version to 22.13.0 .
+
+## v0.10.1
+
+Upgraded Node.js's latest version to 23.5.0 .
+
 ## v0.10.0
 
 Added Maven Support.
