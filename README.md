@@ -74,7 +74,7 @@ For example:
 
 ### Java
 
-``(that binary) install java 11`
+`(that binary) install java 11`
 
 ### Gradle
 
