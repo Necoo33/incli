@@ -1,5 +1,10 @@
 # Incli Changelog
 
+## v0.10.12
+
+Upgraded Node.js's latest version to 24.1.0 .
+Upgraded Node.js's lts version to 22.16.0 .
+
 ## v0.10.11
 
 Upgraded Node.js's latest version to 24.0.2 .
