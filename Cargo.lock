@@ -254,7 +254,7 @@ dependencies = [
 
 [[package]]
 name = "incli"
-version = "0.10.13"
+version = "0.10.14"
 dependencies = [
  "sys-info-extended",
  "zip",
